@@ -1,0 +1,40 @@
+Use case ID:
+4
+
+Use case name:
+End match
+
+Overview:
+A user can end a current game by leaving the game, or by completing the game, either winning or losing. This ends the match for both players in that game.
+
+Primary Actors:	
+Both users in a game
+
+Pre-conditions:	
+1. The user is in an active game. 
+2. The user is registered in the system.
+
+Triggers:	
+- A player decides to leave a current game. 
+- The final move of a game is made by a player, completing that game.
+
+Main Flow:	
+1. Both players are disallowed from making more moves. 
+2. For both players, the game is removed from their active games. 
+3. The winner is notified that they won the game and the game is over. 
+4. The loser is notified that they lost the game and the game is over. 
+5. Game information and the winning player is added to each player's game history in their user profile.
+
+Alternative Flows	
+3a. If the game was ended by a player leaving, in step 3: 
+     1. The player who left the game is notified that the game has successfully ended. 
+     2. The other player is notified that player 1 left the game, and that the game is over. 
+     3. Game information is added to each player's game history in their user profile, 
+       including that the game was ended in a withdrawal.
+     4. End of use case
+
+Post-conditions	
+1. The game is no longer shown as an active game. 
+2. No more moves can be made by either players. 
+3. Both players have been notified of the game result. 
+4. The game information and result was logged to each user's profile.
