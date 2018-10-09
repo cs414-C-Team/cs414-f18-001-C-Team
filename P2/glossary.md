@@ -17,8 +17,9 @@ A Turn belongs to a user and represents a single turn in a given match.  A user'
 A Board represents the Jungle game board for a given match between two users. A board has 63 Tiles in a 7x9 grid, which can contain up to 16 **(24?)** pieces in total.
 
 ### Tile
-A Tile represents a single space on a given Jungle Board. Each tile has a `type`, which represents the different types of game tiles in the game Jungle.  These can be _trap_, _den_, _river_, or  _jungle_ (normal). Each tile has a `location` as well indicating where on the game board grid it is located.
+A Tile represents a single space on a given Jungle Board. Each tile has a `type`, which represents the different types of game tiles in the game Jungle.  These can be _river_, or  _jungle_ (normal). Each tile has a `location` as well indicating where on the game board grid it is located.
 
 ### GamePiece
 
-A GamePiece represents a Jungle game piece belonging to a user in a given Match. Each user starts a match with 8 pieces, each one a different `type`.  In the game of Jungle, these types are: _elephant_, _lion_, _tiger_, _leopard_, _dog_, _wolf_, _cat_, and _rat_.
+A GamePiece represents a Jungle game piece belonging to a user in a given Match. Each user starts a match with 12 pieces, each one a different `type`. In the game of Jungle, there are 8 movable types: _elephant_, _lion_, _tiger_, _leopard_, _dog_, _wolf_, _cat_, _rat_; and 2 non-movable types: _den_, and _trap_.
+
