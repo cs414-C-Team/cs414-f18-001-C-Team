@@ -1,8 +1,8 @@
-### RegisteredUser
-A RegisteredUser represents a user registered in the system.  Each user has the `nickname` (username), `email`, and `password` they provided when they registered.
-
 ### PreviousMatch
 A PreviousMatch represents a completed game from the past that a given user participated in.  For a given user, there is a PreviousMatch for all past games they have played, which can be viewed by any RegisteredUser. `startTime` and `endTime` contain the date and time when the match began or completed. `result` specifies the outcome of the match for that user, either win, loss, withdrawal, or abandoned. 
+
+### RegisteredUser
+A RegisteredUser represents a user registered in the system.  Each user has the `nickname` (username), `email`, and `password` they provided when they registered. A user can be part of any number of current Matches, and can send/receive any number of Invites.
 
 ### Invite
 An Invite represents an invitation sent between two users for a new game to be played. A RegisteredUser can send an Invite to another RegisteredUser, which can be accepted or denied. `date` represents the day the invitation was sent, and `status` indicates the response to the invite, whether unanswered, accepted, or rejected.
