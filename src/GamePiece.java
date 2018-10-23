@@ -1,10 +1,10 @@
 
 public class GamePiece {
-	private int y;
-	private int x;
-	private Tile[][] board;
-	private PieceType type;
-	private int team;
+	protected int y;
+	protected int x;
+	protected Tile[][] board;
+	protected PieceType type;
+	protected int team;
 
 	public GamePiece(int x, int y, Tile[][] board, PieceType type, int team) {
 		this.x = x;
@@ -38,7 +38,7 @@ public class GamePiece {
 		this.type = type;
 	}
 
-	public boolean nextTo(int x, int y) {// checks for legal move locations
+	protected boolean nextTo(int x, int y) {// checks for legal move locations
 		if (x > 8 || x < 0 || y < 0 || y > 6)
 			return false;
 		if (x == this.getX()) {
@@ -62,6 +62,10 @@ public class GamePiece {
 		Tile to = board[x][y];
 		if (to.getType().equals(TileType.WATER))
 			return false;
+		if (team == 1 && to.getType().equals(TileType.TRAP1))
+			return false;// can't move into own trap
+		if (team == 2 && to.getType().equals(TileType.TRAP2))
+			return false;// can't move into own trap
 		if (to.hasCharacter)
 			return false;// attacking requires a seperate method
 		board[this.x][this.y].removeCharacter();
@@ -77,6 +81,9 @@ public class GamePiece {
 		if (!nextTo(x, y))
 			return false;
 		Tile to = board[x][y];
+		if (board[this.getX()][this.getY()].getType().equals(TileType.TRAP1)
+				|| board[this.getX()][this.getY()].getType().equals(TileType.TRAP2))
+			return false; // can't attack from trap
 		if (to.getType().equals(TileType.WATER))// can't attack in water
 			return false;
 		if (!to.hasCharacter)// can't attack nonexistent character
@@ -84,10 +91,13 @@ public class GamePiece {
 		GamePiece gp = to.getCharacter();
 		if (gp.getTeam() == this.getTeam())// can't attack friend
 			return false;
-		if (gp.getType().ordinal() > this.getType().ordinal() && !to.getType().equals(TileType.TRAP))
+		if (gp.getType().ordinal() > this.getType().ordinal() && !to.getType().equals(TileType.TRAP1)
+				&& !to.getType().equals(TileType.TRAP2))
 			return false; // must be lower rank or trapped
 		board[x][y].removeCharacter();
 		// move, throw error if fail:
+		if (to.getType().equals(TileType.TRAP1) || to.getType().equals(TileType.TRAP2))
+			return true;// don't move
 		if (!move(x, y))
 			throw new RuntimeException("Move failed, remove character did not");
 
