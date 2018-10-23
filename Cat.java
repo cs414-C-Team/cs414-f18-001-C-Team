@@ -6,6 +6,7 @@ public class Cat extends GamePiece {
 		super (x,y,board,PieceType.CAT,team);
 		
 	}
+
 	public boolean move(int x, int y) {
 		// cannot move in water anywhere else is allowed
 		return true;
