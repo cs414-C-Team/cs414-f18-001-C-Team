@@ -1,8 +1,9 @@
-package gameJungle;
+package edu.colostate.cs.cs414.cteam.p3.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
 
 class TileTest {
 	
