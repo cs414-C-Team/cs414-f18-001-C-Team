@@ -14,8 +14,7 @@ public class Match {
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		Match m = new Match();
-		System.out.println(args[0]);
-		m.run(true, args[0]);
+		m.run(true, "cs414-f18-001-C-Team/src/main/java/edu/colostate/cs/cs414/cteam/p3/view/demo.txt");
 
 	}
 
