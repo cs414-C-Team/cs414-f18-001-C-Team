@@ -1,7 +1,6 @@
-package edu.colostate.cs.cs414.cteam.p3.model;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Match {
@@ -14,12 +13,12 @@ public class Match {
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		Match m = new Match();
-		m.run(true, "cs414-f18-001-C-Team/src/main/java/edu/colostate/cs/cs414/cteam/p3/view/demo.txt");
+		System.out.println(args[0]);
+		m.run(true, args[0]);
 
 	}
 
-	public Match() {
-		player1Pieces = player2Pieces = 8;
+	public void buildBoard() {
 		board = new Tile[9][7];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 7; j++) {
@@ -49,23 +48,47 @@ public class Match {
 		board[8][2].setType(TileType.TRAP2);
 		board[8][4].setType(TileType.TRAP2);
 		board[7][3].setType(TileType.TRAP2);
+	}
+
+	public static ArrayList<PieceConstructor> newGamePieces() {
+		ArrayList<PieceConstructor> load = new ArrayList<PieceConstructor>();
+
+		load.add(new PieceConstructor(0, 0, PieceType.LION, 1));
+		load.add(new PieceConstructor(8, 0, PieceType.LION, 2));
+		load.add(new PieceConstructor(0, 6, PieceType.TIGER, 1));
+		load.add(new PieceConstructor(8, 0, PieceType.TIGER, 2));
+		load.add(new PieceConstructor(1, 1, PieceType.DOG, 1));
+		load.add(new PieceConstructor(7, 5, PieceType.DOG, 2));
+		load.add(new PieceConstructor(1, 5, PieceType.CAT, 1));
+		load.add(new PieceConstructor(7, 1, PieceType.CAT, 2));
+		load.add(new PieceConstructor(2, 0, PieceType.RAT, 1));
+		load.add(new PieceConstructor(6, 6, PieceType.RAT, 2));
+		load.add(new PieceConstructor(2, 2, PieceType.LEOPARD, 1));
+		load.add(new PieceConstructor(6, 4, PieceType.LEOPARD, 2));
+		load.add(new PieceConstructor(2, 4, PieceType.WOLF, 1));
+		load.add(new PieceConstructor(6, 2, PieceType.WOLF, 2));
+		load.add(new PieceConstructor(2, 6, PieceType.ELEPHANT, 1));
+		load.add(new PieceConstructor(6, 0, PieceType.ELEPHANT, 2));
+
+		return load;
+	}
+
+	public Match() {
+		this(newGamePieces());
+	}
+
+	public Match(ArrayList<PieceConstructor> load) {
+		player1Pieces = player2Pieces = 0;
+		buildBoard();
+
 		// add animals
-		board[0][0].setCharacter(new Liger(0, 0, board, PieceType.LION, 1));
-		board[8][6].setCharacter(new Liger(8, 0, board, PieceType.LION, 2));
-		board[0][6].setCharacter(new Liger(0, 6, board, PieceType.TIGER, 1));
-		board[8][0].setCharacter(new Liger(8, 6, board, PieceType.TIGER, 2));
-		board[1][1].setCharacter(new GamePiece(1, 1, board, PieceType.DOG, 1));
-		board[7][5].setCharacter(new GamePiece(7, 5, board, PieceType.DOG, 2));
-		board[1][5].setCharacter(new GamePiece(1, 5, board, PieceType.CAT, 1));
-		board[7][1].setCharacter(new GamePiece(7, 1, board, PieceType.CAT, 2));
-		board[2][0].setCharacter(new Rat(2, 0, board, 1));
-		board[6][6].setCharacter(new Rat(6, 6, board, 2));
-		board[2][2].setCharacter(new GamePiece(2, 2, board, PieceType.LEOPARD, 1));
-		board[6][4].setCharacter(new GamePiece(6, 4, board, PieceType.LEOPARD, 2));
-		board[2][4].setCharacter(new GamePiece(2, 4, board, PieceType.WOLF, 1));
-		board[6][2].setCharacter(new GamePiece(6, 2, board, PieceType.WOLF, 2));
-		board[2][6].setCharacter(new GamePiece(2, 6, board, PieceType.ELEPHANT, 1));
-		board[6][0].setCharacter(new GamePiece(6, 0, board, PieceType.ELEPHANT, 2));
+		for (PieceConstructor pc : load) {
+			pc.construct(board);
+			if (pc.getTeam() == 1)
+				player1Pieces++;
+			else
+				player2Pieces++;
+		}
 	}
 
 	// use to check for a win
@@ -89,7 +112,7 @@ public class Match {
 		// you'll have to print the board after each successful turn for now
 		// make sure to decrement pieces every time someone is killed
 		Scanner scan = new Scanner(System.in);
-		if(demo)
+		if (demo)
 			scan = new Scanner(new File(file));
 		int player = 1;
 		int win = 0;
@@ -99,7 +122,7 @@ public class Match {
 			// toLocation, attack or move
 			Move move = null;
 			while (move == null) {
-				if(demo)
+				if (demo)
 					move = Ask.askDemo(player, board, "Make a move!", scan);
 				else
 					move = Ask.ask(player, board, "Make a move!");
