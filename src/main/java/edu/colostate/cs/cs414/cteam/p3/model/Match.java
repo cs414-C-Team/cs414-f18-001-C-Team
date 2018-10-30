@@ -1,3 +1,5 @@
+package edu.colostate.cs.cs414.cteam.p3.model;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
