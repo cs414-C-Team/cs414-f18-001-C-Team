@@ -1,0 +1,40 @@
+.Board {
+    width: 500px;
+    height: 600px;
+    background-image: url("boardtransparent.png");
+}
+
+#tiles {
+    position: fixed;
+    margin-top: 6px;
+    margin-left: 17px;
+    top: 0;
+    left: 0;
+}
+
+.boardRow{
+    height: 58px;
+    max-height: 58px;
+
+}
+
+.boardTile {
+    width: 58px;
+    height: 58px;
+    max-height: 58px;
+    max-width: 58px;
+    padding-right: 6px;
+    padding-bottom: 5.5px;
+    padding-left: 0px;
+    padding-top: 0px;
+}
+
+.piece {
+    width: 54px;
+    height: 58px;
+    max-height: 58px;
+    max-width: 54px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

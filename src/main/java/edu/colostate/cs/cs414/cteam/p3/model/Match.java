@@ -11,7 +11,6 @@ public class Match {
 	public static void main(String[] args) {
 		Match m = new Match();
 		m.run();
-
 	}
 
 	public Match() {
@@ -152,4 +151,9 @@ public class Match {
 		}
 		System.out.println(" ");
 	}
+
+	public Tile[][] getBoard() {
+		return board;
+	}
 }
+
