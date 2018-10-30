@@ -1,4 +1,6 @@
-package edu.colostate.cs.cs414.cteam.p3.model;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Match {
 
@@ -8,9 +10,10 @@ public class Match {
 	private int player1Pieces;
 	private int player2Pieces;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		Match m = new Match();
-		m.run();
+		System.out.println(args[0]);
+		m.run(true, args[0]);
 
 	}
 
@@ -76,7 +79,7 @@ public class Match {
 	}
 
 	// todo test
-	public void run() {
+	public void run(boolean demo, String file) throws FileNotFoundException, InterruptedException {
 		// basically just instantiate this class, then
 		// take turns asking each player for their move, trying
 		// the move, and then letting them try again if fail,
@@ -84,7 +87,9 @@ public class Match {
 		// check for a win after each move, if win, then print who won
 		// you'll have to print the board after each successful turn for now
 		// make sure to decrement pieces every time someone is killed
-
+		Scanner scan = new Scanner(System.in);
+		if(demo)
+			scan = new Scanner(new File(file));
 		int player = 1;
 		int win = 0;
 		while (win == 0) {
@@ -93,7 +98,10 @@ public class Match {
 			// toLocation, attack or move
 			Move move = null;
 			while (move == null) {
-				move = Ask.ask(player, board, "Make a move!");
+				if(demo)
+					move = Ask.askDemo(player, board, "Make a move!", scan);
+				else
+					move = Ask.ask(player, board, "Make a move!");
 			}
 
 			boolean passed = false;
@@ -122,6 +130,7 @@ public class Match {
 			win = win();
 		}
 		System.out.println("Player " + win + " wins!!!");
+		scan.close();
 	}
 
 	// todo make less terrible
