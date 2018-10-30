@@ -71,9 +71,9 @@ public class Match {
 	// use to check for a win
 	// 1 means player 1 wins, 2 means 2 wins, 0 means nobody has yet
 	public int win() {
-		if (board[0][3].getCharacter() != null || player2Pieces == 0)
+		if (board[8][3].getCharacter() != null || player2Pieces == 0)
 			return 1;
-		else if (board[8][3].getCharacter() != null || player1Pieces == 0)
+		else if (board[0][3].getCharacter() != null || player1Pieces == 0)
 			return 2;
 		else
 			return 0;
