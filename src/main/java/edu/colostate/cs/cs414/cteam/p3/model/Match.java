@@ -152,4 +152,8 @@ public class Match {
 		}
 		System.out.println(" ");
 	}
+	
+	public Tile[][] getBoard() {
+		return board;
+	}
 }
