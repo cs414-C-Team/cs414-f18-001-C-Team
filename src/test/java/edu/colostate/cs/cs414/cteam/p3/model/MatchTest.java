@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 class MatchTest {
-	   
+
 	@Test
+	// tests the game tiles and pieces of a starting match game board
 	void testMatchBoard() {
 		Match m = new Match();
 		Tile[][] board = m.getBoard();
@@ -40,18 +41,6 @@ class MatchTest {
 		assertTrue(board[6][2].getCharacter().getType() == PieceType.WOLF);
 		assertTrue(board[2][6].getCharacter().getType() == PieceType.ELEPHANT);
 		assertTrue(board[6][0].getCharacter().getType() == PieceType.ELEPHANT);
-
-	}
-
-	
-	@Test
-	void testWin() {
-		fail("Test yet implemented");
-	}
-
-	@Test
-	void testPrintBoard() {
-		fail("Test yet implemented");
 	}
 
 }

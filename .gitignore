@@ -1,3 +1,7 @@
 /bin/
+<<<<<<< HEAD
 web/node_modules/
 target/*
+=======
+/target/
+>>>>>>> branch 'master' of https://github.com/cs414-C-Team/cs414-f18-001-C-Team.git
