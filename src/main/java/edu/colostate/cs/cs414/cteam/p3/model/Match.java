@@ -29,10 +29,6 @@ public class Match {
 				board[i][j + 3].setType(TileType.WATER);
 			}
 		}
-
-		// there should really be a better way to do this, but
-		// I have no idea what that would be
-
 		// add dens
 		board[0][3].setType(TileType.DEN);
 		board[8][3].setType(TileType.DEN);
@@ -67,12 +63,37 @@ public class Match {
 	// use to check for a win
 	// 1 means player 1 wins, 2 means 2 wins, 0 means nobody has yet
 	public int win() {
-		if (board[0][3].getCharacter() != null || player2Pieces == 0)
+		if (board[0][3].hasCharacter() || player2Pieces == 0)
 			return 1;
-		else if (board[8][3].getCharacter() != null || player1Pieces == 0)
+		else if (board[8][3].hasCharacter() || player1Pieces == 0)
 			return 2;
 		else
 			return 0;
+	}
+	
+	// basically a refactoring of run() and ask(), makes a single move in the match
+	public boolean makeMove(int player, int fromX, int fromY, int toX, int toY) {
+		int win = 0;
+		boolean isAttack = board[toY][toX].hasCharacter();
+		Move move = new Move(fromX, fromY, toX, toY, isAttack);
+
+		if (!board[move.getFromY()][move.getFromX()].hasCharacter) {
+			return false;// I know it's redundant, it's just for clarity
+			
+		} else if (board[move.getFromY()][move.getFromX()].getCharacter().getTeam() != player) {
+			return false;// I know it's redundant, it's just for clarity
+			
+		} else if (move.isAttack()) {
+			boolean passed = board[move.getFromY()][move.getFromX()].getCharacter().attack(move.getToY(), move.getToX());
+			if (passed) {
+				if (player == 1)
+					player2Pieces--;
+				else
+					player1Pieces--;
+			}
+			return passed;
+		} 
+		return board[move.getFromY()][move.getFromX()].getCharacter().move(move.getToY(), move.getToX());
 	}
 
 	// todo test

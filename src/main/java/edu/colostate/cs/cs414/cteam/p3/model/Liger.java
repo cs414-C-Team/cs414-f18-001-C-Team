@@ -64,8 +64,9 @@ public class Liger extends GamePiece {
 	public boolean attack(int x, int y) {
 		if (x > 8 || x < 0 || y < 0 || y > 6)
 			return false;// have to check twice since liger doesn't rely on nextTo
+       /* what is this for?
 		if (nextTo(x, y))
-			return super.move(x, y);
+			return super.move(x, y); */
 		Tile to = board[x][y];
 		if (!to.hasCharacter)
 			return false;// can't attack empty space
