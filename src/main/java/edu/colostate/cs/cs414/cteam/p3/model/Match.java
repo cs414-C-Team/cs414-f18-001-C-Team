@@ -62,6 +62,7 @@ public class Match {
 		board[6][2].setCharacter(new GamePiece(6, 2, board, PieceType.WOLF, 2));
 		board[2][6].setCharacter(new GamePiece(2, 6, board, PieceType.ELEPHANT, 1));
 		board[6][0].setCharacter(new GamePiece(6, 0, board, PieceType.ELEPHANT, 2));
+		System.out.println("Constructor complete");
 	}
 
 	// use to check for a win
@@ -73,6 +74,34 @@ public class Match {
 			return 2;
 		else
 			return 0;
+	}
+	
+	public boolean makeMove(int player, int fromX, int fromY, int toX, int toY) {
+		int win = 0;
+		boolean isAttack = board[toY][toX].hasCharacter();
+		Move move = new Move(fromX, fromY, toX, toY, isAttack);
+
+		if (!board[move.getFromY()][move.getFromX()].hasCharacter) {
+			System.out.println("1");
+			return false;// I know it's redundant, it's just for clarity
+			
+//		} else if (board[move.getFromY()][move.getFromX()].getCharacter().getTeam() != player) {
+//			System.out.println("2");
+//			return false;// I know it's redundant, it's just for clarity
+//			
+		} else if (move.isAttack()) {
+			boolean passed = board[move.getFromY()][move.getFromX()].getCharacter().attack(move.getToY(), move.getToX());
+			if (passed) {
+				if (player == 1)
+					player2Pieces--;
+				else
+					player1Pieces--;
+			}
+			System.out.println("3");
+			return passed;
+		} 
+		System.out.println("4");
+		return board[move.getFromY()][move.getFromX()].getCharacter().move(move.getToY(), move.getToX());
 	}
 
 	// todo test
@@ -151,5 +180,9 @@ public class Match {
 			System.out.print(" " + j);
 		}
 		System.out.println(" ");
+	}
+	
+	public Tile[][] getBoard() {
+		return board;
 	}
 }
