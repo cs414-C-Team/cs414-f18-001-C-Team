@@ -43,7 +43,7 @@ class Tile extends Component {
     	}
 
     	return (
-    		<td class="boardTile" style={style} onMouseEnter={this.toggleHover.bind(this)} onMouseLeave={this.toggleHover.bind(this)}>
+    		<td className="boardTile" style={style} onMouseEnter={this.toggleHover.bind(this)} onMouseLeave={this.toggleHover.bind(this)} onClick={this.props.cum.bind(3)}>
     			{this.currentPiece()}
             </td>
     		);
@@ -57,7 +57,6 @@ class Tile extends Component {
 
     currentPiece() {
 
-    	console.log(images['elephant1']);
     	let imageSource;
     	if (this.state.piece === 'none') {
     		return (null);

@@ -34,11 +34,11 @@ class Board extends Component {
         	}
 
             tiles.push(
-              <Tile piece={currentPiece} player='none' />
+              <Tile piece={currentPiece} player='none' cum={this.cums}/>
             );
           }
         rows.push(
-            <tr class="boardRow">
+            <tr className="boardRow"> 
             {tiles}
             </tr>);
 
@@ -47,6 +47,11 @@ class Board extends Component {
         <table id="tiles">
           {rows}
         </table>);
+  }
+
+  cums(i) {
+    console.log(this.state.currentBoard);
+    console.log(i);
   }
 
 }
