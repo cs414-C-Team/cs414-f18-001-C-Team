@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class TileTest {
 	
-	GamePiece piece1 = new GamePiece(0,0,null,PieceType.RAT ,1);
+	GamePiece piece1 = new GamePiece(0,0,PieceType.RAT ,1);
 	Tile T= new Tile(TileType.BLANK,piece1);
 
 
@@ -21,8 +21,8 @@ class TileTest {
 
 	@Test
 	final void testTileTileType() {
-	Tile T1= new Tile(TileType.DEN);
-	assertTrue(T1.getType()==TileType.DEN);
+	Tile T1= new Tile(TileType.DEN1);
+	assertTrue(T1.getType()==TileType.DEN1);
 	
 	}
 
@@ -39,7 +39,8 @@ class TileTest {
 
 	@Test
 	final void testToString() {
-		 assertTrue(T.toString()=="BLANK");
+		System.out.println(T.toString());
+		assertTrue(T.toString().equals("R"));
 	}
 
 }

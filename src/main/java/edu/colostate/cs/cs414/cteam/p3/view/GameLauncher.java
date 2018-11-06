@@ -1,4 +1,6 @@
 package edu.colostate.cs.cs414.cteam.p3.view;
+import edu.colostate.cs.cs414.cteam.p3.controller.FacadeController;
+import edu.colostate.cs.cs414.cteam.p3.controller.Turn;
 import edu.colostate.cs.cs414.cteam.p3.model.*;
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ public class GameLauncher {
 	Toolkit tk;
 	
 	/** Game components **/
-	private Match game;
+	private FacadeController system;
 	private int currentPlayer;
 	private boolean moveInProgress;
 	private int fromX;
@@ -26,8 +28,10 @@ public class GameLauncher {
 	
 	
 	// starts a new game window
+	
 	public GameLauncher() {
 		moveInProgress = false;
+		system = new FacadeController(); //This is a placeholder and will be replaced once server-client relationship is set up
 		startFrame();
 		createBoard();
 		display();
@@ -97,8 +101,8 @@ public class GameLauncher {
         		tiles[i][j].clear();
         	}
         }
-		game = new Match();
-		currentPlayer = 2;  // 2 is the bottom player
+		system.newMatch();
+		currentPlayer = 1;  // 2 is the top player
 		message.setText("Player " + currentPlayer + ": Make a move");
 		setUpPieces();
 	}
@@ -139,19 +143,25 @@ public class GameLauncher {
 		tiles[6][0].setPiece(elephant2);  
 	}
 	
-	
-	public void move(int startY, int startX, int toY, int toX) {
+	public void move(int startX, int startY, int toX, int toY) {
 		
-		System.out.println(startY + ", " + startX + " to " + toY + ", " + toX);
-		boolean success = game.makeMove(currentPlayer, startX, startY, toX, toY);
-
-		if (success) {
+		System.out.println(startX + ", " + startY + " to " + toX + ", " + toY);
+		Turn turn = system.getTurn();
+		System.out.println(turn.getPlayer());
+		currentPlayer = turn.getPlayer();
+		
+		turn.moveFrom(startX, startY);
+		turn.moveTo(toX, toY);
+		int turn_result = system.processTurn(turn);
+		
+		if (turn_result != -1 ) {
+			System.out.println("updating board");
 			Icon animal = tiles[startY][startX].getIcon();
 			tiles[startY][startX].clear();
 			tiles[toY][toX].setPiece(animal);
 			System.out.println("success");
-			if (game.win() != 0) {
-				message.setText("Player " + currentPlayer + " wins!");
+			if (turn_result != 0) {
+				message.setText("Player " + turn_result + " wins!");
 				currentPlayer = 0;
 			} else {
 				currentPlayer = currentPlayer == 2 ? 1 : 2;
@@ -186,16 +196,20 @@ public class GameLauncher {
 	   // Called when a mouse button is clicked
 		@Override
 		public void mouseClicked(MouseEvent e) {
-		   int x = (e.getX() - 19) / 70;
-		   int y = (e.getY() - 8) / 65;
+		   int y = (e.getY() - 19) / 70;
+		   int x = (e.getX() - 8) / 65;
 		   // a click on a piece, starting a move
+		   System.out.println("Clicked: " + x + ", " + y);
+		   System.out.println("Move in progress: " + moveInProgress);
+		   System.out.println("Has piece: " + tiles[y][x].hasPiece());
 		   if (tiles[y][x].hasPiece() && !moveInProgress) {
 			   fromX = x;	   
 			   fromY = y;
 			   moveInProgress = true;
+			   System.out.println("Changed moveInProgress to true");
 		   // a click on a second square indicating move destination
 		   } else if (moveInProgress) {
-			   move(fromY, fromX, y, x);
+			   move(fromX, fromY, x, y);
 			   moveInProgress = false;
 	
 		   }
