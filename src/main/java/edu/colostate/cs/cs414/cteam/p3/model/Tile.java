@@ -46,7 +46,7 @@ public class Tile {
 	}
 
 	public String toString() {
-		if (hasCharacter())
+		if(hasCharacter())
 			return getCharacter().toString();
 		return type.toString();
 	}
