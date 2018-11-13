@@ -24,6 +24,7 @@ public class Client{
 					while(open){
 						try{
 							String s = in.readLine();
+							System.out.println("recieved message");
 							if(s==null){
 								open=false;
 								clientListener.disconnected();

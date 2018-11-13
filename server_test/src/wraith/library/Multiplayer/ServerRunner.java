@@ -13,7 +13,7 @@ public class ServerRunner {
 		System.out.println(testServer.getIp());
 		
 		ClientListener cltl = new ClientListenerTester();
-		Client test_client = new Client(testServer.getIp(), 8084, cltl);
+		//Client test_client = new Client(testServer.getIp(), 8084, cltl);
 		
 		while(true) {
 			;

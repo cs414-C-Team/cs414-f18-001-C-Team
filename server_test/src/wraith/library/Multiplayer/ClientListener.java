@@ -1,6 +1,5 @@
 package wraith.library.Multiplayer;
 
-
 public interface ClientListener{
 	public void unknownHost();
 	public void couldNotConnect();
@@ -8,4 +7,6 @@ public interface ClientListener{
 	public void serverClosed();
 	public void disconnected();
 	public void connectedToServer();
+	public boolean recievedMessage();
+	public String getCurrentMessage();
 }

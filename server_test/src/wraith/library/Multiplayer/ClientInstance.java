@@ -1,6 +1,5 @@
 package wraith.library.Multiplayer;
 
-
 import java.net.InetAddress;
 
 public class ClientInstance{
