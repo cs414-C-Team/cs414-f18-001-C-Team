@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 
 
-public class GameLauncher {
+public class GameWindow {
 	
 	/** UI Elements **/
 	JFrame frame;
@@ -29,7 +29,7 @@ public class GameLauncher {
 	
 	// starts a new game window
 	
-	public GameLauncher() {
+	public GameWindow() {
 		moveInProgress = false;
 		system = new FacadeController(); //This is a placeholder and will be replaced once server-client relationship is set up
 		startFrame();
@@ -228,11 +228,6 @@ public class GameLauncher {
 	        
     }
 
-	
-	public static void main(String[] args) {
-		GameLauncher a = new GameLauncher();
-		a.display();
-	}
 	
 	
 //	tile.addMouseListener(new MouseClickListener2() {
