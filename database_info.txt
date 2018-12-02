@@ -1,0 +1,4 @@
+To connect using mysql CLI in a terminal:
+mysql -h cs414-c-team.cvrg8lr7y0hh.us-east-2.rds.amazonaws.com -P 3306 -u jpode -p 830566010
+
+To connect using jdbc in a Java program, use the example Database.java and DBTestDriver.java file in the repo
