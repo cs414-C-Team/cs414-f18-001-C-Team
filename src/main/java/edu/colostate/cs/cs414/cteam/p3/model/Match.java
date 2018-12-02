@@ -7,15 +7,14 @@ import javafx.util.Pair;
 
 public class Match {
 
-	private int matchID;
 	private Tile[][] board;
 	private int player1Pieces; // player 1 starts at the top of the board
 	private int player2Pieces; // player 2 starts at the bottom
 	private int status;
 	private Date date;
 
-	public Match() {
-		date = new Date();
+
+	public Match() { 
 		player1Pieces = player2Pieces = 8;
 		status = 0;
 		board = new Tile[7][9];
