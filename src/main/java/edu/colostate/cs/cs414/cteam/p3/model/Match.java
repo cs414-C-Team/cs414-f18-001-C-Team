@@ -13,6 +13,12 @@ public class Match {
 	private int status;
 	private Date date;
 
+	public Match(Tile[][] board, int player1Peices, int player2Pieces) {
+		this.board = board;
+		this.player1Pieces = player1Pieces;
+		this.player2Pieces = player2Pieces;
+		status = 0;
+	}
 
 	public Match() { 
 		player1Pieces = player2Pieces = 8;
