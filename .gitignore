@@ -1,6 +1,3 @@
 bin/
-target
-target/*
-*.classpath
-*.class
-jgoodies*
+target/
+
