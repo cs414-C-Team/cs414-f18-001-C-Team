@@ -1,4 +1,4 @@
-package edu.colostate.cs.cs414.cteam.p3.view;
+package edu.colostate.cs.cs414.cteam.p4.view;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
