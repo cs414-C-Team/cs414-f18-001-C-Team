@@ -1,6 +1,8 @@
 package edu.colostate.cs.cs414.cteam.p3.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.SpringLayout;
@@ -12,6 +14,12 @@ import javax.swing.JPasswordField;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.UIManager;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 
 public class Register {
 
@@ -19,6 +27,15 @@ public class Register {
 	private JTextField emailID;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
+    // matches valid email addresses
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    // Usernames must start with a letter, followed by any number of alpha-numeric characters
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Z]+[A-Z0-9]*$", Pattern.CASE_INSENSITIVE);
+    private JPasswordField passwordField_1;
+    // matches a string containing at least 6 alpha-numeric, or punctuation characters.
+ 
+	
+	
 
 	/**
 	 * Launch the application.
@@ -29,6 +46,7 @@ public class Register {
 				try {
 					Register window = new Register();
 					window.frame.setVisible(true);
+					UIManager.setLookAndFeel("Metal");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -50,92 +68,150 @@ public class Register {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		SpringLayout springLayout = new SpringLayout();
-		frame.getContentPane().setLayout(springLayout);
+		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Register Page");
+		lblNewLabel.setBounds(98, 32, 219, 30);
 		lblNewLabel.setFont(new Font("Calibri", Font.BOLD, 24));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel, 32, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel, 98, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, lblNewLabel, 62, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel, -115, SpringLayout.EAST, frame.getContentPane());
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Email :");
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 60, SpringLayout.SOUTH, lblNewLabel);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 34, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, lblNewLabel_1, -265, SpringLayout.SOUTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, lblNewLabel_1, 134, SpringLayout.WEST, frame.getContentPane());
+		lblNewLabel_1.setBounds(0, 116, 129, 22);
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Calibri", Font.PLAIN, 20));
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Username :");
+		lblNewLabel_2.setBounds(0, 164, 119, 26);
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setFont(new Font("Calibri", Font.PLAIN, 20));
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_2, 26, SpringLayout.SOUTH, lblNewLabel_1);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_2, 0, SpringLayout.WEST, lblNewLabel_1);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_3 = new JLabel("Password :");
+		lblNewLabel_3.setBounds(0, 213, 123, 26);
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_3.setFont(new Font("Calibri", Font.PLAIN, 20));
-		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_3, 23, SpringLayout.SOUTH, lblNewLabel_2);
-		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_3, 0, SpringLayout.WEST, lblNewLabel_1);
 		frame.getContentPane().add(lblNewLabel_3);
 		
 		emailID = new JTextField();
-		springLayout.putConstraint(SpringLayout.NORTH, emailID, 54, SpringLayout.SOUTH, lblNewLabel);
-		springLayout.putConstraint(SpringLayout.WEST, emailID, 26, SpringLayout.EAST, lblNewLabel_1);
-		springLayout.putConstraint(SpringLayout.EAST, emailID, 218, SpringLayout.EAST, lblNewLabel_1);
+		emailID.setBounds(119, 116, 303, 22);
 		frame.getContentPane().add(emailID);
-		emailID.setColumns(10);
+		String valid = emailID.getText();
+		
+	    
 		
 		usernameField = new JTextField();
-		springLayout.putConstraint(SpringLayout.NORTH, usernameField, 26, SpringLayout.SOUTH, emailID);
-		springLayout.putConstraint(SpringLayout.WEST, usernameField, 0, SpringLayout.WEST, emailID);
-		springLayout.putConstraint(SpringLayout.EAST, usernameField, 0, SpringLayout.EAST, emailID);
+		usernameField.setBounds(119, 164, 303, 22);
 		usernameField.setColumns(10);
 		frame.getContentPane().add(usernameField);
 		
+		
 		passwordField = new JPasswordField();
-		springLayout.putConstraint(SpringLayout.NORTH, passwordField, 2, SpringLayout.NORTH, lblNewLabel_3);
-		springLayout.putConstraint(SpringLayout.WEST, passwordField, 0, SpringLayout.WEST, emailID);
-		springLayout.putConstraint(SpringLayout.EAST, passwordField, 0, SpringLayout.EAST, emailID);
+		passwordField.setBounds(119, 215, 303, 22);
 		frame.getContentPane().add(passwordField);
 		
 		Box horizontalBox = Box.createHorizontalBox();
+		horizontalBox.setBounds(0, 0, 0, 0);
 		frame.getContentPane().add(horizontalBox);
 		
 		Box horizontalBox_1 = Box.createHorizontalBox();
+		horizontalBox_1.setBounds(0, 0, 0, 0);
 		frame.getContentPane().add(horizontalBox_1);
 		
 		Box horizontalBox_2 = Box.createHorizontalBox();
+		horizontalBox_2.setBounds(0, 0, 0, 0);
 		frame.getContentPane().add(horizontalBox_2);
 		
 		Box verticalBox = Box.createVerticalBox();
+		verticalBox.setBounds(0, 0, 0, 0);
 		frame.getContentPane().add(verticalBox);
 		
 		JButton register = new JButton("Register");
-		springLayout.putConstraint(SpringLayout.NORTH, register, 62, SpringLayout.SOUTH, lblNewLabel_3);
+		register.setBounds(56, 333, 89, 25);
+		register.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//System.out.println("1");
+				validRegistration();
+				//System.out.println("2");
+				
+		
+			}
+		});
 		register.setForeground(UIManager.getColor("Button.focus"));
 		register.setFont(new Font("Calibri", Font.BOLD, 13));
 		frame.getContentPane().add(register);
 		
 		JButton btnNewButton = new JButton("Login Page");
-		springLayout.putConstraint(SpringLayout.WEST, btnNewButton, 180, SpringLayout.WEST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.EAST, btnNewButton, -157, SpringLayout.EAST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, register, -111, SpringLayout.WEST, btnNewButton);
-		springLayout.putConstraint(SpringLayout.EAST, register, -22, SpringLayout.WEST, btnNewButton);
-		springLayout.putConstraint(SpringLayout.NORTH, btnNewButton, 64, SpringLayout.SOUTH, passwordField);
+		btnNewButton.setBounds(182, 333, 95, 25);
 		btnNewButton.setForeground(UIManager.getColor("Button.focus"));
 		btnNewButton.setFont(new Font("Calibri", Font.BOLD, 13));
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Cancel");
-		springLayout.putConstraint(SpringLayout.NORTH, btnNewButton_1, 64, SpringLayout.SOUTH, passwordField);
-		springLayout.putConstraint(SpringLayout.WEST, btnNewButton_1, 26, SpringLayout.EAST, btnNewButton);
-		springLayout.putConstraint(SpringLayout.EAST, btnNewButton_1, 107, SpringLayout.EAST, btnNewButton);
+		btnNewButton_1.setBounds(303, 333, 81, 25);
 		btnNewButton_1.setForeground(UIManager.getColor("Button.focus"));
 		btnNewButton_1.setFont(new Font("Calibri", Font.BOLD, 13));
 		frame.getContentPane().add(btnNewButton_1);
+		
+		JLabel lblConfirmPassword = new JLabel("Confirm Password :");
+		lblConfirmPassword.setBounds(10, 266, 150, 23);
+		lblConfirmPassword.setFont(new Font("Calibri", Font.PLAIN, 18));
+		frame.getContentPane().add(lblConfirmPassword);
+		
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setBounds(160, 267, 262, 22);
+		frame.getContentPane().add(passwordField_1);
 	}
+	
+	 boolean validateEmailAddress() {
+		 //System.out.println("va;id email");
+		
+	        String email = emailID.getText();
+	        boolean isEmailValid = EMAIL_PATTERN.matcher(email).matches();
+	        if (isEmailValid) {
+	            emailID.setBackground(Color.white);
+	        } else {
+	            emailID.setBackground(Color.RED);
+	        }
+	        return isEmailValid;
+	    }
+	 
+	 boolean validateUsername() {
+		 System.out.println("valid username");
+	        String nickName = usernameField.getText();
+	        boolean isNickNameValid = USERNAME_PATTERN.matcher(nickName).matches();
+	        if (isNickNameValid) {
+	            usernameField.setBackground(Color.white);
+	        } else {
+	            usernameField.setBackground(Color.RED);
+	        }
+	        return isNickNameValid;
+	    }
+	 
+	 
+	 boolean validatePasswordConfirmation() {
+		 System.out.println("password");
+	        char[] password = passwordField.getPassword();
+	        char[] passwordConfirmed = passwordField_1.getPassword();
+	        boolean isPasswordConfirmed = !passwordConfirmed.equals("") && password.equals(passwordConfirmed);
+	        if (isPasswordConfirmed) {
+	            passwordField_1.setBackground(Color.white);
+	        } else {
+	            passwordField_1.setBackground(Color.RED);
+	        }
+	        return isPasswordConfirmed;
+	    }
+	 
+	 boolean validRegistration() {
+		 //System.out.println("hey");
+		 return(validateEmailAddress()&& validateUsername() && validatePasswordConfirmation());
+	 }
+	 
+	 
+	 
+	 
+
+
 }
