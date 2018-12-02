@@ -66,8 +66,7 @@ public class UserProfile extends JFrame {
 		btnCreateNewMatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				launchGame();
-					
+				launchGame();		
 			}
 		});
 		btnCreateNewMatch.setFont(new Font("Calibri", Font.PLAIN, 13));
