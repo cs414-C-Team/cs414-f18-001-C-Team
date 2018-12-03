@@ -39,7 +39,7 @@ public class UserProfile extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GameLauncher launcher = new GameLauncher();
+                GameWindow launcher = new GameWindow();
                 launcher.display();
             }
         });
