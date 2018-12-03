@@ -3,6 +3,8 @@ import edu.colostate.cs.cs414.cteam.p3.controller.FacadeController;
 import edu.colostate.cs.cs414.cteam.p3.controller.Turn;
 import edu.colostate.cs.cs414.cteam.p3.model.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -18,6 +20,8 @@ public class GameWindow {
 	JPanel tileContainer;
 	TilePanel[][] tiles;
 	Toolkit tk;
+	CardLayout cardLayout;
+	JPanel cards;
 	
 	/** Game components **/
 	private FacadeController system;
@@ -46,7 +50,7 @@ public class GameWindow {
 		int xPos = (screen.width / 2) - frame.getWidth();
 		int yPos = (screen.height / 2) - frame.getHeight();
 		frame.setLocation(xPos,  yPos);
-		frame.setLayout(null);
+		frame.getContentPane().setLayout(null);
 	}
 	
 	// sets up the gameboard display and creates all the game tiles (without pieces)
@@ -54,7 +58,7 @@ public class GameWindow {
         gamePanel = new JLayeredPane();  // layered panel for putting pieces over the game board
         gamePanel.setPreferredSize(new Dimension(500, 600));
         gamePanel.setLayout(null);
-        gamePanel.setBounds(50, 0, 500, 600);
+        gamePanel.setBounds(50, 78, 500, 600);
         ImageIcon icon = createImageIcon("../resources/boardtransparent.png", "gameboard"); // game board image
         boardImage = new JLabel(icon);
         boardImage.setBounds(0, 0, 500, 600);
@@ -72,18 +76,105 @@ public class GameWindow {
 
         	}
         }
-        JButton start = new JButton("New Game");
         message = new JLabel("", null, JLabel.CENTER);
         message.setVerticalTextPosition(JLabel.CENTER);
         message.setHorizontalTextPosition(JLabel.CENTER); 
-        message.setBounds(50, 590, 500, 100);
+        message.setBounds(50, 668, 500, 100);
         message.setFont(new Font("SansSerif", Font.PLAIN, 22));
-        start.setBounds(225, 680, 150, 50);
-        frame.add(gamePanel);
-        frame.add(message);
-        frame.add(start);
-        start.addActionListener(new StartButtonListener());
+        JPanel board = new JPanel(null);
+        cards = new JPanel();
+        cards.setLayout(new CardLayout(0, 0));
+        cards.setPreferredSize(new Dimension(600, 800));
+        cards.setBounds(0, 0, 600, 800); 
+        board.setPreferredSize(new Dimension(600, 800));
+        board.setBounds(0, 0, 600, 800); 
+        board.add(gamePanel);
+        board.add(message);
         
+        JPanel card2 = userProfile();
+		this.cardLayout = (CardLayout) cards.getLayout();
+		cards.add(card2, "user profile");
+        cards.add(board, "game");
+        
+        JButton returnBurron = new JButton("Return");
+        returnBurron.setFont(new Font("Dialog", Font.PLAIN, 13));
+        returnBurron.setBounds(24, 26, 114, 25);
+        board.add(returnBurron);
+        returnBurron.addActionListener(new ReturnButtonListener());
+        frame.getContentPane().add(cards);
+        
+	}
+	
+
+	public void changeCard(int card) {
+		if (card == 0) {
+			cardLayout.show(cards, "user profile"); 
+		} else if (card == 1) {
+			cardLayout.show(cards, "game");
+		}
+	}
+	
+	public JPanel userProfile() {
+		JPanel userPane = new JPanel();
+		userPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		userPane.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Welcome ");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Calibri", Font.BOLD, 20));
+		lblNewLabel.setBounds(0, 0, 588, 39);
+		userPane.add(lblNewLabel);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(12, 89, 576, 353);
+		userPane.add(panel);
+		panel.setLayout(null);
+		
+		JButton btnLocalGame = new JButton("Local Game");
+		btnLocalGame.setBounds(42, 22, 160, 27);
+		btnLocalGame.setFont(new Font("Calibri", Font.PLAIN, 13));
+		panel.add(btnLocalGame);
+		btnLocalGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				changeCard(1);  // starts a game
+				newGame();
+			}
+		});
+		
+		JButton btnSendInvitation = new JButton("Send Invitation");
+		btnSendInvitation.setBounds(350, 22, 160, 27);
+		panel.add(btnSendInvitation);
+		btnSendInvitation.setFont(new Font("Calibri", Font.PLAIN, 13));
+		
+		JButton btnNewButton = new JButton("View Invites");
+		btnNewButton.setBounds(350, 61, 160, 27);
+		panel.add(btnNewButton);
+		btnNewButton.setFont(new Font("Calibri", Font.PLAIN, 13));
+		
+		JButton btnNewButton_1 = new JButton("Match History");
+		btnNewButton_1.setBounds(42, 139, 160, 27);
+		panel.add(btnNewButton_1);
+		btnNewButton_1.setFont(new Font("Calibri", Font.PLAIN, 13));
+		
+		JButton btnNewButton_2 = new JButton("Current Matches");
+		btnNewButton_2.setBounds(42, 61, 160, 27);
+		panel.add(btnNewButton_2);
+		btnNewButton_2.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSendInvitation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		return userPane;
 	}
 
 	// makes the gui visible
@@ -103,6 +194,11 @@ public class GameWindow {
 		system.newMatch();
 		currentPlayer = 1;  // 2 is the top player
 		message.setText("Player " + currentPlayer + ": Make a move");
+		if (currentPlayer == 1) {
+			message.setForeground(new Color(226, 34, 34));
+		} else {
+			message.setForeground(new Color(42, 91, 224));
+		}
 		setUpPieces();
 	}
 	
@@ -179,10 +275,16 @@ public class GameWindow {
 			tiles[toY][toX].setPiece(animal);
 			System.out.println("success");
 			if (turn_result != 0) {
+				message.setForeground(new Color(51,51,51));
 				message.setText("Player " + turn_result + " wins!");
 				currentPlayer = 0;
 			} else {
 				currentPlayer = currentPlayer == 2 ? 1 : 2;
+				if (currentPlayer == 1) {
+					message.setForeground(new Color(226, 34, 34));
+				} else {
+					message.setForeground(new Color(42, 91, 224));
+				}
 				message.setText("Player " + currentPlayer + ": Make a move");
 			}
 			
@@ -202,26 +304,10 @@ public class GameWindow {
 	}
     
 	// start game button handler
-	private class StartButtonListener implements ActionListener {
+	private class ReturnButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			newGame();
+			changeCard(0);
 		}
 	}
-
-	
-	
-//	tile.addMouseListener(new MouseClickListener2() {
-//	@Override
-//	public void mouseEntered(MouseEvent arg0) {
-//			tile.setBackground(new Color(1f, 0f, 0f, 0.5f));
-//		tile.setOpaque(true);
-//		}
-//	@Override
-//		public void mouseExited(MouseEvent arg0) {
-//			tile.setOpaque(false);            			
-//			tile.setBackground(new Color(0,0,0,0));
-//		}
-//});
-
 }

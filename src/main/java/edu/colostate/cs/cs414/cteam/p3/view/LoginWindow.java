@@ -52,7 +52,7 @@ public class LoginWindow {
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 
 		JPanel card1;   // login panel
-		JPanel card2;   // registration panel
+		JPanel card2;   // registration panel 
 		card1 = loginFrame();
 		card2 = registerFrame();
 		frame.getContentPane().add(card1, "login screen");
@@ -218,38 +218,31 @@ public class LoginWindow {
 				// clear all fields
 				String newEmail = email.getText();
 				String newUsername = username.getText();
-				String newPassword = new String(password.getPassword());
-				String newConfirm = new String(confirm.getPassword());
-				//String compare = new String(password.getPassword().equals(confirm.getPassword()));
+				int newPassword = new String(password.getPassword()).hashCode();
+				int newConfirm = new String(confirm.getPassword()).hashCode();
 				
-				
-				if (!newPassword.equals(newConfirm)) {
+				if (newPassword != newConfirm) {
 					password.setText("");
 					confirm.setText("");
 					System.out.println(newPassword);
 					System.out.print(newConfirm);
 					regErrorMsg.setText("Passwords do not match");
 					regErrorMsg.setVisible(true);
-					return;
-				}
-				if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
+			
+				} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
 					email.setText("");
 					regErrorMsg.setText("This is incorrect format for an email ID ");
 					regErrorMsg.setVisible(true);
-					return;	
-				}
-				
-				if(!USERNAME_PATTERN.matcher(newUsername).matches()) {
+			
+				} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
 					username.setText("");
 					regErrorMsg.setText("This is incorrect format for a username ");
 					regErrorMsg.setVisible(true);
-					return;
+			
+				} else {
+					// attempt registration
+					regErrorMsg.setVisible(false);
 				}
-				
-				RegisterUser req = new RegisterUser(newEmail, newUsername, newPassword);
-
-				// attempt registration
-			regErrorMsg.setVisible(false);
 			}
 		});
 		
