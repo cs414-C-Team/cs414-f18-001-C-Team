@@ -1,0 +1,59 @@
+Queries
+*To add any columns to any table :
+
+ALTER TABLE table
+ADD [COLUMN] column_name_1 column_1_definition [FIRST|AFTER existing_column],
+ADD [COLUMN] column_name_2 column_2_definition [FIRST|AFTER existing_column];
+
+1. Check login credentials
+Select Username, Password from table User where Username = "username" and Password = "password";
+
+2. Registeration
+Insert into User values ("emailId” , "username", "password");
+
+3. Send new Invite
+ Insert into values ("sender", "reciever" , "status");
+
+4. View previous invites of a particular user
+Select * from Invites where Reciever = " username ";
+
+5. View invites the user has sent
+Select * from Invites where Sender = " username ";
+
+6. Show all current users
+Select * from Users; 
+
+7. View current matches
+Select *from Match_State;
+
+8. View match in progress
+
+Select *from Match_State where State="in-progress";
+
+9.
+View match present but not being played currently
+
+Select *from Match_State where State="suspended";
+
+11. To check if a match is completed 
+Select *from Match_State where State="finished";
+
+10. If a match is finished, first add the the players individually to the Match_record table :
+Insert into Match_Record (GameID, User )  Select GameID, User1 from Match_State where GameID=1;
+Insert into Match_Record (GameID, User )  Select GameID, User2 from Match_State where GameID=1;
+
+
+11. If player 1 wins 
+update Match_Record set Wins=Wins+1 where User="username" and GameID=2;
+
+update Match_Record set loss=loss+1 where User="username" and GameID=2;
+ 
+//Vice versa for if Player 2 wins.
+
+
+
+
+
+
+
+

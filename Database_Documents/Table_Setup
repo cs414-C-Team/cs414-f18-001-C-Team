@@ -1,0 +1,51 @@
+
+//Stores all the users of the game
+
+Create Table if not exists User (
+EmailID varchar(255) not null unique,
+Username varchar(255) not null unique,
+Password varchar(255) not null,
+Primary Key (Username));
+
+//Stores the on-going matches
+
+Create table if not exists Match_State (         
+GameID int not null unique,
+User1 varchar(30) not null,
+User2 varchar(30) not null,
+State varchar(20) not null,
+createTS Timestamp not null default current_timestamp,
+Primary Key(GameID),
+foreign key(User1) references User(Username),
+foreign key(User2) references User(Username)
+);
+
+//Stores the matches that are completed
+
+Create table Match_Record(          
+GameID int not null ,
+User varchar(30) not null ,
+Wins int Default 0 ,
+Loss int Default 0,
+foreign key(User) references User(Username),
+foreign key(GameID) references Match_State(GameID)
+);
+
+//Stores the invitation log
+
+Create table Invites (
+Sender varchar(30) ,
+Reciever varchar(30) ,
+Status varchar(30) ,
+foreign key(Sender) references User(Username),
+foreign key(Reciever) references User(Username)
+);
+
+
+
+
+
+
+
+
+
