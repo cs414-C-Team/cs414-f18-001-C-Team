@@ -17,6 +17,31 @@ public class Match {
 	public Match() { 
 		player1Pieces = player2Pieces = 8;
 		status = 0;
+		boardSetup();
+		// add animals
+		gamepieceSetup();
+	}
+
+	public void gamepieceSetup() {
+		board[0][2].setCharacter(new GamePiece(0, 2, PieceType.RAT,1));
+		board[6][6].setCharacter(new GamePiece(6, 6, PieceType.RAT,2));
+		board[5][1].setCharacter(new GamePiece(5, 1, PieceType.CAT, 1));
+		board[1][7].setCharacter(new GamePiece(1, 7, PieceType.CAT, 2));
+		board[4][2].setCharacter(new GamePiece(4, 2, PieceType.WOLF, 1));
+		board[2][6].setCharacter(new GamePiece(2, 6, PieceType.WOLF, 2));
+		board[1][1].setCharacter(new GamePiece(1, 1, PieceType.DOG, 1));
+		board[5][7].setCharacter(new GamePiece(5, 7, PieceType.DOG, 2));
+		board[2][2].setCharacter(new GamePiece(2, 2, PieceType.LEOPARD, 1));
+		board[4][6].setCharacter(new GamePiece(4, 6, PieceType.LEOPARD, 2));
+		board[6][0].setCharacter(new GamePiece(6, 0, PieceType.TIGER, 1));
+		board[0][8].setCharacter(new GamePiece(0, 8, PieceType.TIGER, 2));
+		board[0][0].setCharacter(new GamePiece(0, 0, PieceType.LION, 1));
+		board[6][8].setCharacter(new GamePiece(6, 8, PieceType.LION, 2));
+		board[6][2].setCharacter(new GamePiece(6, 2, PieceType.ELEPHANT, 1));
+		board[0][6].setCharacter(new GamePiece(0, 6, PieceType.ELEPHANT, 2));
+	}
+
+	public void boardSetup() {
 		board = new Tile[7][9];
 		for (int i = 0; i < 7; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -42,23 +67,6 @@ public class Match {
 		board[2][8].setType(TileType.TRAP);
 		board[4][8].setType(TileType.TRAP);
 		board[3][7].setType(TileType.TRAP);
-		// add animals
-		board[0][2].setCharacter(new GamePiece(0, 2, PieceType.RAT,1));
-		board[6][6].setCharacter(new GamePiece(6, 6, PieceType.RAT,2));
-		board[5][1].setCharacter(new GamePiece(5, 1, PieceType.CAT, 1));
-		board[1][7].setCharacter(new GamePiece(1, 7, PieceType.CAT, 2));
-		board[4][2].setCharacter(new GamePiece(4, 2, PieceType.WOLF, 1));
-		board[2][6].setCharacter(new GamePiece(2, 6, PieceType.WOLF, 2));
-		board[1][1].setCharacter(new GamePiece(1, 1, PieceType.DOG, 1));
-		board[5][7].setCharacter(new GamePiece(5, 7, PieceType.DOG, 2));
-		board[2][2].setCharacter(new GamePiece(2, 2, PieceType.LEOPARD, 1));
-		board[4][6].setCharacter(new GamePiece(4, 6, PieceType.LEOPARD, 2));
-		board[6][0].setCharacter(new GamePiece(6, 0, PieceType.TIGER, 1));
-		board[0][8].setCharacter(new GamePiece(0, 8, PieceType.TIGER, 2));
-		board[0][0].setCharacter(new GamePiece(0, 0, PieceType.LION, 1));
-		board[6][8].setCharacter(new GamePiece(6, 8, PieceType.LION, 2));
-		board[6][2].setCharacter(new GamePiece(6, 2, PieceType.ELEPHANT, 1));
-		board[0][6].setCharacter(new GamePiece(0, 6, PieceType.ELEPHANT, 2));
 	}
 
 	// use to check for a win
