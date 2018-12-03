@@ -29,6 +29,7 @@ public class GameWindow {
 	private boolean moveInProgress;
 	private int fromX;
 	private int fromY;
+	private UserProfile profile;
 	 
 	
 	// starts a new game window
@@ -36,6 +37,7 @@ public class GameWindow {
 	public GameWindow() {
 		moveInProgress = false;
 		system = new FacadeController(); //This is a placeholder and will be replaced once server-client relationship is set up
+		profile = new UserProfile(this);
 		startFrame();
 		createBoard();
 		display();
@@ -45,6 +47,7 @@ public class GameWindow {
 		frame = new JFrame("Jungle");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(600, 800));
+		frame.setResizable(false);
 		tk = Toolkit.getDefaultToolkit();
 		Dimension screen = tk.getScreenSize();
 		int xPos = (screen.width / 2) - frame.getWidth();
@@ -91,7 +94,7 @@ public class GameWindow {
         board.add(gamePanel);
         board.add(message);
         
-        JPanel card2 = userProfile();
+        JPanel card2 = profile.get();
 		this.cardLayout = (CardLayout) cards.getLayout();
 		cards.add(card2, "user profile");
         cards.add(board, "game");
@@ -114,68 +117,7 @@ public class GameWindow {
 		}
 	}
 	
-	public JPanel userProfile() {
-		JPanel userPane = new JPanel();
-		userPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		userPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Welcome ");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Calibri", Font.BOLD, 20));
-		lblNewLabel.setBounds(0, 0, 588, 39);
-		userPane.add(lblNewLabel);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(12, 89, 576, 353);
-		userPane.add(panel);
-		panel.setLayout(null);
-		
-		JButton btnLocalGame = new JButton("Local Game");
-		btnLocalGame.setBounds(42, 22, 160, 27);
-		btnLocalGame.setFont(new Font("Calibri", Font.PLAIN, 13));
-		panel.add(btnLocalGame);
-		btnLocalGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				changeCard(1);  // starts a game
-				newGame();
-			}
-		});
-		
-		JButton btnSendInvitation = new JButton("Send Invitation");
-		btnSendInvitation.setBounds(350, 22, 160, 27);
-		panel.add(btnSendInvitation);
-		btnSendInvitation.setFont(new Font("Calibri", Font.PLAIN, 13));
-		
-		JButton btnNewButton = new JButton("View Invites");
-		btnNewButton.setBounds(350, 61, 160, 27);
-		panel.add(btnNewButton);
-		btnNewButton.setFont(new Font("Calibri", Font.PLAIN, 13));
-		
-		JButton btnNewButton_1 = new JButton("Match History");
-		btnNewButton_1.setBounds(42, 139, 160, 27);
-		panel.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("Calibri", Font.PLAIN, 13));
-		
-		JButton btnNewButton_2 = new JButton("Current Matches");
-		btnNewButton_2.setBounds(42, 61, 160, 27);
-		panel.add(btnNewButton_2);
-		btnNewButton_2.setFont(new Font("Calibri", Font.PLAIN, 13));
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSendInvitation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
-		return userPane;
-	}
+	
 
 	// makes the gui visible
 	public void display() {       
