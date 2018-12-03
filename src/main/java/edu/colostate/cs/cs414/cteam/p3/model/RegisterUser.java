@@ -48,9 +48,6 @@ public class RegisterUser {
 
 
 	
-	//private String firstName;
-	//private String lastName;
-	
 	
 	
 	

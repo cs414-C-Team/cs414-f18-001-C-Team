@@ -24,8 +24,10 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.SystemColor;
 
-// This is the main launcher for the program which contains to the login and
-//  register screens. Upon login, the main game window is launched.
+/**
+ * This is the main launcher for the program which contains to the login and
+ *  register screens. Upon login, the main game window is launched.
+ */
 
 public class LoginWindow {
 	private JFrame frame;
@@ -34,13 +36,11 @@ public class LoginWindow {
 	private JLabel loginMsg;
 	private JLabel regErrorMsg;
 	private CardLayout cardLayout;
-	 // matches valid email addresses
+	 /** Matches valid email addresses. */
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    // Usernames must start with a letter, followed by any number of alpha-numeric characters
+    /** Username must start with a letter, followed by any number of alpha-numeric characters. */
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Z]+[A-Z0-9]*$", Pattern.CASE_INSENSITIVE);
-	
-	
-	public LoginWindow() {
+			public LoginWindow() {
 		initialize();
 	} 
 
@@ -63,25 +63,17 @@ public class LoginWindow {
            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {}	
 	}
-		
-	
-	public boolean handleLogin() {
+				public boolean handleLogin() {
 		loginMsg.setVisible(false);
 		String username = usernameField.getText();
 		char[] password = passwordField.getPassword();
-		
-		LoginRequest req = new LoginRequest(username, password);
+				LoginRequest req = new LoginRequest(username, password);
 		// verify login info
 
 		// for testing
-		if (username.isEmpty()) {
-			return true;
-		} else {
-			return false;
-		}
+		return username.isEmpty();
 	}
-	
-	// Closes the login/register window and opens the main game
+		/** Closes the login/register window and opens the main game. */
 	public static void launchGame() {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -91,20 +83,17 @@ public class LoginWindow {
             }
         });
     }
-	
-	public JPanel registerFrame() {
+		public JPanel registerFrame() {
 		JPanel registerPanel = new JPanel();
 		registerPanel.setLayout(null);
-		
-		// Center panel for username/password textboxes and labels
+				// Center panel for username/password textboxes and labels
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBackground(SystemColor.window);
 		centerPanel.setBounds(12, 87, 430, 215);
 		centerPanel.setPreferredSize(new Dimension(430, 165));
 		centerPanel.setLayout(null);
 		registerPanel.add(centerPanel);
-		
-		// Username panel
+				// Username panel
 		JPanel panel_1 = new JPanel();    
 		JLabel emailLabel = new JLabel("Email Address:");
 		emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -121,8 +110,7 @@ public class LoginWindow {
 		panel_1.add(emailLabel);
 		panel_1.add(email);
 		centerPanel.add(panel_1);
-		
-		// Email panel
+				// Email panel
 		JPanel panel_2 = new JPanel();    
 		JLabel usernameLabel = new JLabel("Username:");
 		usernameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -139,8 +127,7 @@ public class LoginWindow {
 		panel_2.add(usernameLabel);
 		panel_2.add(username);
 		centerPanel.add(panel_2);
-		
-		// Password panel
+				// Password panel
 		JPanel panel_3 = new JPanel();    
 		JLabel passwordLabel = new JLabel("Password:");
 		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -157,8 +144,7 @@ public class LoginWindow {
 		panel_3.add(passwordLabel);
 		panel_3.add(password);
 		centerPanel.add(panel_3);
-		
-		// Confirm password panel
+				// Confirm password panel
 		JPanel panel_4 = new JPanel();    
 		JLabel confirmLabel = new JLabel("Confirm Password:");
 		confirmLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -183,88 +169,67 @@ public class LoginWindow {
 		buttonPanel.setOpaque(false);
 		registerPanel.add(buttonPanel);
 		buttonPanel.setLayout(null);
-		
-		JButton regButton = new JButton("Register");
+				JButton regButton = new JButton("Register");
 		regButton.setBounds(45, 12, 140, 49);
 		buttonPanel.add(regButton);
-		
-		JButton backButton = new JButton("Cancel");
+				JButton backButton = new JButton("Cancel");
 		backButton.setBounds(245, 12, 140, 49);
 		buttonPanel.add(backButton);		
-		
-		JLabel titleLabel = new JLabel("Register An Account");
+				JLabel titleLabel = new JLabel("Register An Account");
 		titleLabel.setBounds(12, 1, 426, 52);
 		registerPanel.add(titleLabel);
 		titleLabel.setFont(new Font("Calibri", Font.BOLD, 24));
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel descLabel = new JLabel("Enter the following information to create an account");
+				JLabel descLabel = new JLabel("Enter the following information to create an account");
 		descLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
 		descLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		descLabel.setBounds(0, 49, 450, 41);
 		registerPanel.add(descLabel);
-		
-		regErrorMsg = new JLabel("Error label");
+				regErrorMsg = new JLabel("Error label");
 		regErrorMsg.setFont(new Font("Dialog", Font.PLAIN, 15));
 		regErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		regErrorMsg.setForeground(Color.RED);
 		regErrorMsg.setBounds(12, 314, 430, 15);
 		regErrorMsg.setVisible(false);
 		registerPanel.add(regErrorMsg);
-		
-		
-		regButton.addActionListener(new ActionListener() {
+						regButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// clear all fields
 				String newEmail = email.getText();
 				String newUsername = username.getText();
 				int newPassword = new String(password.getPassword()).hashCode();
 				int newConfirm = new String(confirm.getPassword()).hashCode();
-				
-				if (newPassword != newConfirm) {
+								if (newPassword != newConfirm) {
 					password.setText("");
 					confirm.setText("");
 					System.out.println(newPassword);
 					System.out.print(newConfirm);
 					regErrorMsg.setText("Passwords do not match");
 					regErrorMsg.setVisible(true);
-			
-				} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
+							} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
 					email.setText("");
 					regErrorMsg.setText("This is incorrect format for an email ID ");
 					regErrorMsg.setVisible(true);
-			
-				} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
+							} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
 					username.setText("");
 					regErrorMsg.setText("This is incorrect format for a username ");
 					regErrorMsg.setVisible(true);
-			
-				} else {
+							} else {
 					// attempt registration
 					regErrorMsg.setVisible(false);
 				}
 			}
 		});
-		
-		backButton.addActionListener(new ActionListener() {
+				backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// clear all fields
-				
-				
-				// display login screen
+												// display login screen
 				cardLayout.show(frame.getContentPane(), "login screen");
 			}
 		});
-		
-		
-		
-		return registerPanel;
+								return registerPanel;
 	}
-	
-	
-	
-	
-	public JPanel loginFrame() {
+					public JPanel loginFrame() {
 		JPanel loginPanel = new JPanel();
 		loginPanel.setLayout(null);
 		JLabel titleLabel = new JLabel("Login");
@@ -272,15 +237,13 @@ public class LoginWindow {
 		titleLabel.setFont(new Font("Calibri", Font.BOLD, 24));
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		loginPanel.add(titleLabel);
-		
-		// Center panel for username/password textboxes and labels
+				// Center panel for username/password textboxes and labels
 		JPanel centerPanel = new JPanel();
 		centerPanel.setBounds(10, 105, 430, 165);
 		centerPanel.setOpaque(false);
 		centerPanel.setLayout(null);
 		loginPanel.add(centerPanel);
-		
-		// Username panel
+				// Username panel
 		JPanel panel_1 = new JPanel();    
 		JLabel usernameLabel = new JLabel("Username:");
 		this.usernameField = new JTextField();
@@ -294,8 +257,7 @@ public class LoginWindow {
 		panel_1.add(usernameLabel);
 		panel_1.add(usernameField);
 		centerPanel.add(panel_1);
-		
-		// Password panel
+				// Password panel
 		JPanel panel_2 = new JPanel();    
 		JLabel passwordLabel = new JLabel("Password:");
 		this.passwordField = new JPasswordField();
@@ -309,36 +271,29 @@ public class LoginWindow {
 		panel_2.add(passwordLabel);
 		panel_2.add(passwordField);
 		centerPanel.add(panel_2);
-		
-		// Panel for login/register buttons
+				// Panel for login/register buttons
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBounds(10, 276, 430, 136);
 		buttonPanel.setOpaque(false);
 		loginPanel.add(buttonPanel);
 		buttonPanel.setLayout(null);
-		
-		JButton button_1 = new JButton("Log in");
+				JButton button_1 = new JButton("Log in");
 		button_1.setBounds(30, 36, 100, 49);
 		buttonPanel.add(button_1);
-		
-		JButton button_2 = new JButton("Register");
+				JButton button_2 = new JButton("Register");
 		button_2.setBounds(162, 36, 100, 49);
 		buttonPanel.add(button_2);
-		
-		JButton button_3 = new JButton("Cancel");
+				JButton button_3 = new JButton("Cancel");
 		button_3.setBounds(289, 36, 100, 49);
 		buttonPanel.add(button_3);
-				
-		loginMsg = new JLabel("Username or password is incorrect");
+						loginMsg = new JLabel("Username or password is incorrect");
 		loginMsg.setBounds(10, 82, 430, 23);
 		loginMsg.setVisible(false);
 		loginMsg.setFont(new Font("Dialog", Font.PLAIN, 15));
 		loginMsg.setForeground(Color.RED);
 		loginMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		loginPanel.add(loginMsg);
-		
-		
-		// Login event handler
+						// Login event handler
 		button_1.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
 		    	if (handleLogin()) {
@@ -351,16 +306,14 @@ public class LoginWindow {
 		    	}
 		    }
 		});
-		
-		// Register button handler
+				// Register button handler
 		button_2.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
 		    	// switches to registration panel
 		    	cardLayout.show(frame.getContentPane(), "register screen");
 		    }
 		});
-		
-		// Cancel button - exits program
+				// Cancel button - exits program
 		button_3.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
 		    	System.exit(0);
@@ -370,9 +323,7 @@ public class LoginWindow {
 		return loginPanel;
 	}	
 
-
-	
-	public static void main(String[] args) {
+		public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -386,9 +337,4 @@ public class LoginWindow {
 	}	
 }
 
-
-/* TODO
-
-- break into 3 classes- 
-
-*/
+/* TODO - break into 3 classes- */

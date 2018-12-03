@@ -15,12 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class UserProfile extends JFrame {
-
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
+	/** Launch the application. */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -33,8 +30,7 @@ public class UserProfile extends JFrame {
 			}
 		});
 	}
-	
-	//Launches the new game 
+		/** Launches the new game. */
 	public static void launchGame() {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -45,9 +41,7 @@ public class UserProfile extends JFrame {
         });
     }
 
-	/**
-	 * Create the frame.
-	 */
+	/** Create the frame. */
 	public UserProfile() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 400);
@@ -55,25 +49,21 @@ public class UserProfile extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Welcome ");
+				JLabel lblNewLabel = new JLabel("Welcome ");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Calibri", Font.BOLD, 20));
 		lblNewLabel.setBounds(0, 0, 432, 39);
 		contentPane.add(lblNewLabel);
-		
-		JButton btnCreateNewMatch = new JButton("Create New Match");
+				JButton btnCreateNewMatch = new JButton("Create New Match");
 		btnCreateNewMatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				launchGame();		
+								launchGame();		
 			}
 		});
 		btnCreateNewMatch.setFont(new Font("Calibri", Font.PLAIN, 13));
 		btnCreateNewMatch.setBounds(143, 66, 149, 25);
 		contentPane.add(btnCreateNewMatch);
-		
-		JButton btnSendInvitation = new JButton("Send Invitation");
+				JButton btnSendInvitation = new JButton("Send Invitation");
 		btnSendInvitation.setFont(new Font("Calibri", Font.PLAIN, 13));
 		btnSendInvitation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -81,8 +71,7 @@ public class UserProfile extends JFrame {
 		});
 		btnSendInvitation.setBounds(143, 104, 149, 25);
 		contentPane.add(btnSendInvitation);
-		
-		JButton btnNewButton = new JButton("View Invites");
+				JButton btnNewButton = new JButton("View Invites");
 		btnNewButton.setFont(new Font("Calibri", Font.PLAIN, 13));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -90,13 +79,11 @@ public class UserProfile extends JFrame {
 		});
 		btnNewButton.setBounds(143, 145, 149, 25);
 		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Match History");
+				JButton btnNewButton_1 = new JButton("Match History");
 		btnNewButton_1.setFont(new Font("Calibri", Font.PLAIN, 13));
 		btnNewButton_1.setBounds(143, 183, 149, 25);
 		contentPane.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Present Matches");
+				JButton btnNewButton_2 = new JButton("Present Matches");
 		btnNewButton_2.setFont(new Font("Calibri", Font.PLAIN, 13));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
