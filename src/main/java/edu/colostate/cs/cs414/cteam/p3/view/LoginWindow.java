@@ -7,13 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
-
-import edu.colostate.cs.cs414.cteam.p3.model.LoginRequest;
-import edu.colostate.cs.cs414.cteam.p3.model.RegisterUser;
+import edu.colostate.cs.cs414.cteam.p3.model.*;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -34,15 +31,11 @@ public class LoginWindow {
 	private JLabel loginMsg;
 	private JLabel regErrorMsg;
 	private CardLayout cardLayout;
-	 // matches valid email addresses
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    // Usernames must start with a letter, followed by any number of alpha-numeric characters
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Z]+[A-Z0-9]*$", Pattern.CASE_INSENSITIVE);
 	
 	
 	public LoginWindow() {
 		initialize();
-	} 
+	}
 
 	private void initialize() {
 		frame = new JFrame();
@@ -69,7 +62,6 @@ public class LoginWindow {
 		loginMsg.setVisible(false);
 		String username = usernameField.getText();
 		char[] password = passwordField.getPassword();
-		
 		LoginRequest req = new LoginRequest(username, password);
 		// verify login info
 
@@ -86,13 +78,13 @@ public class LoginWindow {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                GameLauncher launcher = new GameLauncher();
+                GameWindow launcher = new GameWindow();
                 launcher.display();
             }
         });
     }
 	
-	public JPanel registerFrame() {
+	public JPanel registerFrame() { 
 		JPanel registerPanel = new JPanel();
 		registerPanel.setLayout(null);
 		
@@ -218,38 +210,22 @@ public class LoginWindow {
 				// clear all fields
 				String newEmail = email.getText();
 				String newUsername = username.getText();
-				String newPassword = new String(password.getPassword());
-				String newConfirm = new String(confirm.getPassword());
-				//String compare = new String(password.getPassword().equals(confirm.getPassword()));
+				String newPassword = password.getPassword().toString();
+				String newConfirm = confirm.getPassword().toString();
+				email.setText("");
+				username.setText("");
+				password.setText("");
+				confirm.setText("");
 				
-				
-				if (!newPassword.equals(newConfirm)) {
-					password.setText("");
-					confirm.setText("");
-					System.out.println(newPassword);
-					System.out.print(newConfirm);
+				if (newPassword != newConfirm) {
 					regErrorMsg.setText("Passwords do not match");
 					regErrorMsg.setVisible(true);
 					return;
 				}
-				if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
-					email.setText("");
-					regErrorMsg.setText("This is incorrect format for an email ID ");
-					regErrorMsg.setVisible(true);
-					return;	
-				}
-				
-				if(!USERNAME_PATTERN.matcher(newUsername).matches()) {
-					username.setText("");
-					regErrorMsg.setText("This is incorrect format for a username ");
-					regErrorMsg.setVisible(true);
-					return;
-				}
-				
-				RegisterUser req = new RegisterUser(newEmail, newUsername, newPassword);
+//				RegisterUser req = new RegisterUser(newEmail, newUsername, newPassword);
 
 				// attempt registration
-			regErrorMsg.setVisible(false);
+				regErrorMsg.setVisible(false);
 			}
 		});
 		
@@ -267,8 +243,6 @@ public class LoginWindow {
 		
 		return registerPanel;
 	}
-	
-	
 	
 	
 	public JPanel loginFrame() {
@@ -348,6 +322,7 @@ public class LoginWindow {
 		// Login event handler
 		button_1.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
+		    	
 		    	if (handleLogin()) {
 			    	launchGame();    // launches new window
 			        frame.dispose(); // closes login window

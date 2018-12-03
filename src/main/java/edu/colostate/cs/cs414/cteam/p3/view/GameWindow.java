@@ -8,7 +8,7 @@ import java.awt.event.*;
 
 
 
-public class GameLauncher {
+public class GameWindow {
 	
 	/** UI Elements **/
 	JFrame frame;
@@ -25,11 +25,11 @@ public class GameLauncher {
 	private boolean moveInProgress;
 	private int fromX;
 	private int fromY;
-	
+	 
 	
 	// starts a new game window
 	
-	public GameLauncher() {
+	public GameWindow() {
 		moveInProgress = false;
 		system = new FacadeController(); //This is a placeholder and will be replaced once server-client relationship is set up
 		startFrame();
@@ -67,7 +67,7 @@ public class GameLauncher {
         tiles = new TilePanel[9][7];
         for (int i = 0; i < 9; i++) {
         	for (int j = 0; j < 7; j++) {
-        		tiles[i][j] = new TilePanel(i, j);
+        		tiles[i][j] = new TilePanel(i, j, this);
         		tileContainer.add(tiles[i][j]);   // adds game tile to ui
 
         	}
@@ -83,7 +83,6 @@ public class GameLauncher {
         frame.add(message);
         frame.add(start);
         start.addActionListener(new StartButtonListener());
-        gamePanel.addMouseListener(new MouseClickListener());        	
         
 	}
 
@@ -143,6 +142,25 @@ public class GameLauncher {
 		tiles[6][0].setPiece(elephant2);  
 	}
 	
+
+	public void clickHandler(int y, int x) {
+
+	   System.out.println("Clicked: " + x + ", " + y);
+	   System.out.println("Move in progress: " + moveInProgress);
+	   
+	   // a click on a piece, starting a move
+	   if (tiles[y][x].hasPiece() && !moveInProgress) {
+		   fromX = x;	   
+		   fromY = y;
+		   moveInProgress = true;
+	   // a click on a second square indicating move destination
+	   } else if (moveInProgress) {
+		   move(fromX, fromY, x, y);
+		   moveInProgress = false;
+	   }
+		
+	}
+	
 	public void move(int startX, int startY, int toX, int toY) {
 		
 		System.out.println(startX + ", " + startY + " to " + toX + ", " + toY);
@@ -191,48 +209,6 @@ public class GameLauncher {
 		}
 	}
 
-	// mouse click on board handler
-	private class MouseClickListener implements MouseListener {
-	   // Called when a mouse button is clicked
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		   int y = (e.getY() - 19) / 70;
-		   int x = (e.getX() - 8) / 65;
-		   // a click on a piece, starting a move
-		   System.out.println("Clicked: " + x + ", " + y);
-		   System.out.println("Move in progress: " + moveInProgress);
-		   System.out.println("Has piece: " + tiles[y][x].hasPiece());
-		   if (tiles[y][x].hasPiece() && !moveInProgress) {
-			   fromX = x;	   
-			   fromY = y;
-			   moveInProgress = true;
-			   System.out.println("Changed moveInProgress to true");
-		   // a click on a second square indicating move destination
-		   } else if (moveInProgress) {
-			   move(fromX, fromY, x, y);
-			   moveInProgress = false;
-	
-		   }
-		}
-		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-	 
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-	 
-		@Override
-    	public void mousePressed(MouseEvent arg0) {}
-	 
-		@Override
-    	public void mouseReleased(MouseEvent arg0) {}
-	        
-    }
-
-	
-	public static void main(String[] args) {
-		GameLauncher a = new GameLauncher();
-		a.display();
-	}
 	
 	
 //	tile.addMouseListener(new MouseClickListener2() {
