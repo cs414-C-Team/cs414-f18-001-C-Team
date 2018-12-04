@@ -74,10 +74,10 @@ public class Match {
 	 * 1 means player 1 wins, 2 means 2 wins, 0 means nobody has yet.
 	 */
 	public void checkStatus() {
-		if (board[3][7].hasCharacter() || player2Pieces == 0) {
+		if (board[3][8].hasCharacter() || player2Pieces == 0) {
 			status = 1;
 		}
-		else if (board[3][8].hasCharacter() || player1Pieces == 0) {
+		else if (board[3][0].hasCharacter() || player1Pieces == 0) {
 			status = 2;
 		}
 	}
