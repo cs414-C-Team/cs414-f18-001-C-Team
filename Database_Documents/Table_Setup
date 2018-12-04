@@ -22,7 +22,7 @@ foreign key(User2) references User(Username)
 
 //Stores the matches that are completed
 
-Create table Match_Record(          
+Create table if not exists Match_Record(          
 GameID int not null ,
 User varchar(30) not null ,
 Wins int Default 0 ,
@@ -32,7 +32,7 @@ foreign key(GameID) references Match_State(GameID)
 );
 
 //Alternate match_record I'm using for now:
-CREATE TABLE Match_Record(
+CREATE TABLE if not exists Match_Record(
 GameID int NOT NULL UNIQUE,
 Winner varchar(30) NOT NULL,
 LOSER varchar(30) NOT NULL,
@@ -43,7 +43,7 @@ primary key(GameID)
 
 //Stores the invitation log
 
-Create table Invites (
+Create table if not exists Invites (
 Sender varchar(30) ,
 Reciever varchar(30) ,
 Status varchar(30) ,
