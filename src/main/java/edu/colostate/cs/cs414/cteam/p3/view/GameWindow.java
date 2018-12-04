@@ -19,7 +19,6 @@ public class GameWindow {
 	JLayeredPane gamePanel;
 	JPanel tileContainer;
 	TilePanel[][] tiles;
-	Toolkit tk;
 	CardLayout cardLayout;
 	JPanel cards;
 	
@@ -48,13 +47,17 @@ public class GameWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(600, 800));
 		frame.setResizable(false);
-		tk = Toolkit.getDefaultToolkit();
-		Dimension screen = tk.getScreenSize();
-		int xPos = (screen.width / 2) - frame.getWidth();
-		int yPos = (screen.height / 2) - frame.getHeight();
-		frame.setLocation(xPos,  yPos);
+		GraphicsConfiguration gc = frame.getGraphicsConfiguration();
+		Rectangle bounds = gc.getBounds();
+		frame.setLocation((int) ((bounds.width / 2) - (600 / 2)),
+                          (int) ((bounds.height / 2) - (800 / 2))); 
 		frame.getContentPane().setLayout(null);
+		try {
+           UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {}	
 	}
+	
+	
 	
 	// sets up the gameboard display and creates all the game tiles (without pieces)
 	public void createBoard() {
@@ -116,7 +119,6 @@ public class GameWindow {
 			cardLayout.show(cards, "game");
 		}
 	}
-	
 	
 
 	// makes the gui visible
@@ -190,11 +192,13 @@ public class GameWindow {
 	   if (tiles[y][x].hasPiece() && !moveInProgress) {
 		   fromX = x;	   
 		   fromY = y;
+		   tiles[fromX][fromY].highlight();
 		   moveInProgress = true;
 	   // a click on a second square indicating move destination
 	   } else if (moveInProgress) {
 		   move(fromX, fromY, x, y);
 		   moveInProgress = false;
+		   tiles[fromX][fromY].unHighlight();
 	   }
 		
 	}

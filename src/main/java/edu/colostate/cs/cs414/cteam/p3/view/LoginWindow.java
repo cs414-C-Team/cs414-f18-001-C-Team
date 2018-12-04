@@ -1,25 +1,13 @@
 package edu.colostate.cs.cs414.cteam.p3.view; 
 
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
-
 import javax.swing.*;
-import javax.swing.text.DefaultCaret;
-
-import edu.colostate.cs.cs414.cteam.p3.model.LoginRequest;
-import edu.colostate.cs.cs414.cteam.p3.model.RegisterUser;
-
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.SystemColor;
@@ -31,6 +19,10 @@ public class LoginWindow {
 	private JFrame frame;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
+	private JTextField regEmail;
+	private JTextField regUsername;
+	private JPasswordField  regPassword;
+	private JPasswordField  regConfirm;
 	private JLabel loginMsg;
 	private JLabel regErrorMsg;
 	private CardLayout cardLayout;
@@ -50,6 +42,7 @@ public class LoginWindow {
 		frame.setBounds(100, 100, 450, 450);
 		frame.setResizable(false);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
+		frame.setLocationRelativeTo(null);
 
 		JPanel card1;   // login panel
 		JPanel card2;   // registration panel 
@@ -70,8 +63,7 @@ public class LoginWindow {
 		String username = usernameField.getText();
 		char[] password = passwordField.getPassword();
 		
-		LoginRequest req = new LoginRequest(username, password);
-		// verify login info
+		// verify login info  - DATABASE
 
 		// for testing
 		if (username.isEmpty()) {
@@ -92,6 +84,16 @@ public class LoginWindow {
         });
     }
 	
+	
+	private void changeCard(int card) {
+		if (card == 0) {   // login screen
+			this.cardLayout.show(frame.getContentPane(), "login screen"); 
+		} else if (card == 1) {  // register screen
+			this.cardLayout.show(frame.getContentPane(), "register screen");
+		}
+	}
+	
+	
 	public JPanel registerFrame() {
 		JPanel registerPanel = new JPanel();
 		registerPanel.setLayout(null);
@@ -110,16 +112,16 @@ public class LoginWindow {
 		emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		emailLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		emailLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		JTextField email = new JTextField();
-		email.setFont(new Font("Dialog", Font.PLAIN, 15));
+		regEmail = new JTextField();
+		regEmail.setFont(new Font("Dialog", Font.PLAIN, 15));
 		panel_1.setOpaque(false);
 		panel_1.setBounds(0, 0, 430, 50);
 		panel_1.setLayout(null);
 		emailLabel.setBounds(0, 20, 163, 30);
 		emailLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
-		email.setBounds(182, 22, 212, 30);
+		regEmail.setBounds(182, 22, 212, 30);
 		panel_1.add(emailLabel);
-		panel_1.add(email);
+		panel_1.add(regEmail);
 		centerPanel.add(panel_1);
 		
 		// Email panel
@@ -128,16 +130,16 @@ public class LoginWindow {
 		usernameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		usernameLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		usernameLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		JTextField username = new JTextField();
-		username.setFont(new Font("Dialog", Font.PLAIN, 15));
+		regUsername = new JTextField();
+		regUsername.setFont(new Font("Dialog", Font.PLAIN, 15));
 		panel_2.setOpaque(false);
 		panel_2.setBounds(0, 49, 430, 50);
 		panel_2.setLayout(null);
 		usernameLabel.setBounds(0, 20, 163, 30);
 		usernameLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
-		username.setBounds(182, 22, 212, 30);
+		regUsername.setBounds(182, 22, 212, 30);
 		panel_2.add(usernameLabel);
-		panel_2.add(username);
+		panel_2.add(regUsername);
 		centerPanel.add(panel_2);
 		
 		// Password panel
@@ -146,16 +148,16 @@ public class LoginWindow {
 		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		passwordLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		passwordLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		JPasswordField password = new JPasswordField();
-		password.setFont(new Font("Dialog", Font.PLAIN, 15));
+		regPassword = new JPasswordField();
+		regPassword.setFont(new Font("Dialog", Font.PLAIN, 15));
 		panel_3.setOpaque(false);
 		panel_3.setBounds(0, 101, 430, 50);
 		panel_3.setLayout(null);
 		passwordLabel.setBounds(0, 20, 163, 30);
 		passwordLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
-		password.setBounds(182, 22, 212, 30);
+		regPassword.setBounds(182, 22, 212, 30);
 		panel_3.add(passwordLabel);
-		panel_3.add(password);
+		panel_3.add(regPassword);
 		centerPanel.add(panel_3);
 		
 		// Confirm password panel
@@ -164,16 +166,16 @@ public class LoginWindow {
 		confirmLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		confirmLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
 		confirmLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		JPasswordField confirm = new JPasswordField();
-		confirm.setFont(new Font("Dialog", Font.PLAIN, 15));
+		regConfirm = new JPasswordField();
+		regConfirm.setFont(new Font("Dialog", Font.PLAIN, 15));
 		panel_4.setOpaque(false);
 		panel_4.setBounds(0, 150, 430, 50);
 		panel_4.setLayout(null);
 		confirmLabel.setBounds(0, 20, 163, 30);
 		confirmLabel.setFont(new Font("Calibri", Font.PLAIN, 16));
-		confirm.setBounds(182, 22, 212, 30);
+		regConfirm.setBounds(182, 22, 212, 30);
 		panel_4.add(confirmLabel);
-		panel_4.add(confirm);
+		panel_4.add(regConfirm);
 		centerPanel.add(panel_4);
 
 		// Panel for login/register buttons
@@ -207,61 +209,20 @@ public class LoginWindow {
 		regErrorMsg = new JLabel("Error label");
 		regErrorMsg.setFont(new Font("Dialog", Font.PLAIN, 15));
 		regErrorMsg.setHorizontalAlignment(SwingConstants.CENTER);
-		regErrorMsg.setForeground(Color.RED);
 		regErrorMsg.setBounds(12, 314, 430, 15);
 		regErrorMsg.setVisible(false);
 		registerPanel.add(regErrorMsg);
 		
-		
-		regButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// clear all fields
-				String newEmail = email.getText();
-				String newUsername = username.getText();
-				int newPassword = new String(password.getPassword()).hashCode();
-				int newConfirm = new String(confirm.getPassword()).hashCode();
-				
-				if (newPassword != newConfirm) {
-					password.setText("");
-					confirm.setText("");
-					System.out.println(newPassword);
-					System.out.print(newConfirm);
-					regErrorMsg.setText("Passwords do not match");
-					regErrorMsg.setVisible(true);
-			
-				} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
-					email.setText("");
-					regErrorMsg.setText("This is incorrect format for an email ID ");
-					regErrorMsg.setVisible(true);
-			
-				} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
-					username.setText("");
-					regErrorMsg.setText("This is incorrect format for a username ");
-					regErrorMsg.setVisible(true);
-			
-				} else {
-					// attempt registration
-					regErrorMsg.setVisible(false);
-				}
-			}
-		});
-		
+		regConfirm.addActionListener(new RegistrationListener());
+		regButton.addActionListener(new RegistrationListener());
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// clear all fields
-				
-				
 				// display login screen
-				cardLayout.show(frame.getContentPane(), "login screen");
+				changeCard(0);
 			}
 		});
-		
-		
-		
 		return registerPanel;
 	}
-	
-	
 	
 	
 	public JPanel loginFrame() {
@@ -320,11 +281,9 @@ public class LoginWindow {
 		JButton button_1 = new JButton("Log in");
 		button_1.setBounds(30, 36, 100, 49);
 		buttonPanel.add(button_1);
-		
 		JButton button_2 = new JButton("Register");
 		button_2.setBounds(162, 36, 100, 49);
 		buttonPanel.add(button_2);
-		
 		JButton button_3 = new JButton("Cancel");
 		button_3.setBounds(289, 36, 100, 49);
 		buttonPanel.add(button_3);
@@ -337,40 +296,96 @@ public class LoginWindow {
 		loginMsg.setHorizontalAlignment(SwingConstants.CENTER);
 		loginPanel.add(loginMsg);
 		
-		
-		// Login event handler
-		button_1.addActionListener(new ActionListener() { 
-		    public void actionPerformed(ActionEvent e) {
-		    	if (handleLogin()) {
-			    	launchGame();    // launches new window
-			        frame.dispose(); // closes login window
-		    	} else {
-		    		loginMsg.setVisible(true);
-		    		usernameField.setText("");
-		    		passwordField.setText("");
-		    	}
-		    }
-		});
-		
+		// Listeners
+		button_1.addActionListener(new LoginListener());
+		passwordField.addActionListener(new LoginListener());
 		// Register button handler
 		button_2.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
-		    	// switches to registration panel
-		    	cardLayout.show(frame.getContentPane(), "register screen");
+		    	changeCard(1);  // switches to registration panel
 		    }
 		});
-		
 		// Cancel button - exits program
 		button_3.addActionListener(new ActionListener() { 
 		    public void actionPerformed(ActionEvent e) {
 		    	System.exit(0);
 		    }
 		});
-
 		return loginPanel;
-	}	
+	}
 
-
+	
+	// Handler for pressing the "Login" button or an enter press in the password field
+	public class LoginListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+	    	if (handleLogin()) {
+	    		loginMsg.setVisible(false);
+		    	launchGame();    // launches new window
+		        frame.dispose(); // closes login window
+	    	} else {
+	    		loginMsg.setVisible(true);
+	    		usernameField.setText("");
+	    		passwordField.setText("");
+	    	}
+	    }
+	}
+	
+	// Handler for pressing the "Register" button or an enter press
+	public class RegistrationListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			regErrorMsg.setForeground(Color.RED);
+			String newEmail = regEmail.getText();
+			String newUsername = regUsername.getText();
+			String newPassword = new String(regPassword.getPassword());
+			String newConfirm = new String(regConfirm.getPassword());
+//			int newPassword = new String(regPassword.getPassword()).hashCode();   // password hashes
+//			int newConfirm = new String(regConfirm.getPassword()).hashCode();
+			
+			if (!newPassword.equals(newConfirm)) {
+				regPassword.setText("");
+				regConfirm.setText("");
+				System.out.println(newPassword);
+				System.out.print(newConfirm);
+				regErrorMsg.setText("Passwords do not match");
+				regErrorMsg.setVisible(true);
+		
+			} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
+				regEmail.setText("");
+				regErrorMsg.setText("This is incorrect format for an email ID ");
+				regErrorMsg.setVisible(true);
+		
+			} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
+				regUsername.setText("");
+				regErrorMsg.setText("This is incorrect format for a username ");
+				regErrorMsg.setVisible(true);
+		
+			} else {
+				// attempt registration  - DATABASE
+				
+				if (true) {  // registration is successful
+					regUsername.setText("");
+					regEmail.setText("");
+					regPassword.setText("");
+					regConfirm.setText("");
+					regErrorMsg.setText("Registration Successful!");
+					regErrorMsg.setVisible(true);
+					regErrorMsg.setForeground(new Color(3, 196, 3));
+					Timer timer = new Timer(1000, new ActionListener() {
+					    @Override
+					    public void actionPerformed( ActionEvent e ){
+					    	changeCard(0);
+							regErrorMsg.setVisible(false);
+					    }
+					});
+					timer.setRepeats(false);
+					timer.start();
+				}
+			}
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -386,9 +401,3 @@ public class LoginWindow {
 	}	
 }
 
-
-/* TODO
-
-- break into 3 classes- 
-
-*/
