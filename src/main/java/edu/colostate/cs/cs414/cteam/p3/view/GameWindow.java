@@ -8,11 +8,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
-
-
 public class GameWindow {
-	
-	/** UI Elements **/
+		/** UI Elements. */
 	JFrame frame;
 	JLabel boardImage;
 	JLabel message;
@@ -22,8 +19,7 @@ public class GameWindow {
 	Toolkit tk;
 	CardLayout cardLayout;
 	JPanel cards;
-	
-	/** Game components **/
+		/** Game components. */
 	private FacadeController system;
 	private int currentPlayer;
 	private boolean moveInProgress;
@@ -33,7 +29,6 @@ public class GameWindow {
 	 
 	
 	// starts a new game window
-	
 	public GameWindow() {
 		moveInProgress = false;
 		system = new FacadeController(); //This is a placeholder and will be replaced once server-client relationship is set up
@@ -42,21 +37,19 @@ public class GameWindow {
 		createBoard();
 		display();
 	}
-	
-	private void startFrame() {
+		private void startFrame() {
 		frame = new JFrame("Jungle");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(600, 800));
 		frame.setResizable(false);
 		tk = Toolkit.getDefaultToolkit();
 		Dimension screen = tk.getScreenSize();
-		int xPos = (screen.width / 2) - frame.getWidth();
-		int yPos = (screen.height / 2) - frame.getHeight();
+		int xPos = screen.width / 2 - frame.getWidth();
+		int yPos = screen.height / 2 - frame.getHeight();
 		frame.setLocation(xPos,  yPos);
 		frame.getContentPane().setLayout(null);
 	}
-	
-	// sets up the gameboard display and creates all the game tiles (without pieces)
+		/** Sets up the gameboard display and creates all the game tiles (without pieces). */
 	public void createBoard() {
         gamePanel = new JLayeredPane();  // layered panel for putting pieces over the game board
         gamePanel.setPreferredSize(new Dimension(500, 600));
@@ -76,7 +69,6 @@ public class GameWindow {
         	for (int j = 0; j < 7; j++) {
         		tiles[i][j] = new TilePanel(i, j, this);
         		tileContainer.add(tiles[i][j]);   // adds game tile to ui
-
         	}
         }
         message = new JLabel("", null, JLabel.CENTER);
@@ -93,40 +85,37 @@ public class GameWindow {
         board.setBounds(0, 0, 600, 800); 
         board.add(gamePanel);
         board.add(message);
-        
         JPanel card2 = profile.get();
+
 		this.cardLayout = (CardLayout) cards.getLayout();
 		cards.add(card2, "user profile");
         cards.add(board, "game");
-        
-        JButton returnBurron = new JButton("Return");
+                JButton returnBurron = new JButton("Return");
         returnBurron.setFont(new Font("Dialog", Font.PLAIN, 13));
         returnBurron.setBounds(24, 26, 114, 25);
         board.add(returnBurron);
         returnBurron.addActionListener(new ReturnButtonListener());
         frame.getContentPane().add(cards);
-        
-	}
-	
-
-	public void changeCard(int card) {
-		if (card == 0) {
-			cardLayout.show(cards, "user profile"); 
-		} else if (card == 1) {
+        	}
+		public void changeCard(int card) {
+		switch (card) {
+		case 0:
+			cardLayout.show(cards, "user profile");
+			break;
+		case 1:
 			cardLayout.show(cards, "game");
+			break;
 		}
 	}
-	
-	
 
-	// makes the gui visible
+
+	/** Makes the gui visible. */
 	public void display() {       
         frame.pack();
         frame.setVisible(true);
 	}
 
-	
-	// starts a new game, setting up gamepiece icons and adding starting pieces to board
+		/** Starts a new game, setting up gamepiece icons and adding starting pieces to board. */
 	public void newGame() {
         for (int i = 0; i < 9; i++) {
         	for (int j = 0; j < 7; j++) {
@@ -143,9 +132,7 @@ public class GameWindow {
 		}
 		setUpPieces();
 	}
-	
-	
-	public void setUpPieces() {
+			public void setUpPieces() {
 		ImageIcon lion1 = createImageIcon("../resources/lion1.png", "lion");
 		ImageIcon lion2 = createImageIcon("../resources/lion2.png", "lion");
 		ImageIcon tiger1 = createImageIcon("../resources/tiger1.png", "tiger");
@@ -179,14 +166,10 @@ public class GameWindow {
 		tiles[2][6].setPiece(elephant1);  
 		tiles[6][0].setPiece(elephant2);  
 	}
-	
-
-	public void clickHandler(int y, int x) {
-
+		public void clickHandler(int y, int x) {
 	   System.out.println("Clicked: " + x + ", " + y);
 	   System.out.println("Move in progress: " + moveInProgress);
-	   
-	   // a click on a piece, starting a move
+	   	   // a click on a piece, starting a move
 	   if (tiles[y][x].hasPiece() && !moveInProgress) {
 		   fromX = x;	   
 		   fromY = y;
@@ -196,21 +179,16 @@ public class GameWindow {
 		   move(fromX, fromY, x, y);
 		   moveInProgress = false;
 	   }
-		
-	}
-	
-	public void move(int startX, int startY, int toX, int toY) {
-		
-		System.out.println(startX + ", " + startY + " to " + toX + ", " + toY);
+			}
+		public void move(int startX, int startY, int toX, int toY) {
+				System.out.println(startX + ", " + startY + " to " + toX + ", " + toY);
 		Turn turn = system.getTurn();
 		System.out.println(turn.getPlayer());
 		currentPlayer = turn.getPlayer();
-		
-		turn.moveFrom(startX, startY);
+				turn.moveFrom(startX, startY);
 		turn.moveTo(toX, toY);
 		int turn_result = system.processTurn(turn);
-		
-		if (turn_result != -1 ) {
+				if (turn_result != -1 ) {
 			System.out.println("updating board");
 			Icon animal = tiles[startY][startX].getIcon();
 			tiles[startY][startX].clear();
@@ -229,13 +207,11 @@ public class GameWindow {
 				}
 				message.setText("Player " + currentPlayer + ": Make a move");
 			}
-			
-		} else {
+					} else {
 			System.out.println("move failed");
 		}
 	}
-	
-	// returns an ImageIcon, or null if the path was invalid. 
+		/** Returns an ImageIcon, or null if the path was invalid. */
 	protected ImageIcon createImageIcon(String path, String description) {
 	    java.net.URL imgURL = getClass().getResource(path);
 	    if (imgURL != null) {
@@ -244,8 +220,7 @@ public class GameWindow {
 	    System.out.println("Can't find " + path);
         return null;
 	}
-    
-	// start game button handler
+    	/** Start game button handler. */
 	private class ReturnButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {

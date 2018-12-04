@@ -23,7 +23,6 @@ import java.awt.Component;
 import javax.swing.UIManager;
 
 
-
 public class UserProfile extends JFrame {
 
 	private JPanel userPane;
@@ -76,7 +75,7 @@ public class UserProfile extends JFrame {
 				window.newGame();
 			}
 		});
-		
+
 		JButton btnNewButton = new JButton("View Invites");
 		btnNewButton.setBounds(321, 108, 160, 27);
 		topPanel.add(btnNewButton);
@@ -117,7 +116,7 @@ public class UserProfile extends JFrame {
 				search();
 			}
 		});
-		
+	
 		userList = new JList<String>();
 		userList.setFont(new Font("Dialog", Font.PLAIN, 14));
 		scrollPane1 = new JScrollPane(userList);
