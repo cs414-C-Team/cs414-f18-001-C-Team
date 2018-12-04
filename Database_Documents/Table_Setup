@@ -10,7 +10,7 @@ Primary Key (Username));
 //Stores the on-going matches
 
 Create table if not exists Match_State (         
-GameID int not null unique,
+GameID int not null unique AUTO_INCREMENT,
 User1 varchar(30) not null,
 User2 varchar(30) not null,
 State varchar(20) not null,
@@ -29,6 +29,16 @@ Wins int Default 0 ,
 Loss int Default 0,
 foreign key(User) references User(Username),
 foreign key(GameID) references Match_State(GameID)
+);
+
+//Alternate match_record I'm using for now:
+CREATE TABLE Match_Record(
+GameID int NOT NULL UNIQUE,
+Winner varchar(30) NOT NULL,
+LOSER varchar(30) NOT NULL,
+foreign key(Winner) references User(Username),
+foreign key(Loser) references User(Username),
+primary key(GameID)
 );
 
 //Stores the invitation log
