@@ -14,66 +14,88 @@ public class TilePanel extends JPanel {
 	int x;
 	int y;
 	boolean hasPiece;
+	boolean selected;
 	GameWindow game;
-		public TilePanel(int y, int x, GameWindow game) {
+	
+	public TilePanel(int y, int x, GameWindow game) {
 		this.x = x;
 		this.y = y;
 		this.game = game;
 		this.hasPiece = false;
+		this.selected = false;
 		icon = new JLabel();
 		setOpaque(false);
 		icon.setBounds(0, 0, 58, 58);  
 		add(icon);
 		addMouseListener(new MouseClickListener());
 	}
-			public int getXPos() {
+	
+	public int getXPos() {
 		return x;
 	}
-		public int getYPos() {
+	
+	public int getYPos() {
 		return y;
 	}
-		public Icon getIcon() {
+	
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
+	public Icon getIcon() {
 		return icon.getIcon();
 	}
-		public void highlight() {
+	
+	public void highlight() {
 		setOpaque(true);
 		setBackground(new Color(255, 135, 135, 125));
 	}
-		public void unHighlight() {
+	
+	public void unHighlight() {
 		setOpaque(false);
 		setBackground(null);
 	}
-		public void setPiece(Icon animal) {
+	
+	public void setPiece(Icon animal) {
 		icon.setIcon(animal);
 		icon.revalidate();
 		hasPiece = true;
 	}
-		public void clear() {
+	
+	public void clear() {
 		icon.setIcon(null);
 		icon.revalidate();
 		hasPiece = false;
 	}
-		public boolean hasPiece() {
+	
+	public boolean hasPiece() {
 		return hasPiece; 
 	}
-	    		/** Mouse click on board handler. */
+	
+	/** Mouse click on board handler. */
 	private class MouseClickListener implements MouseListener {
 	   /** Called when a mouse button is clicked. */
 		@Override
 		public void mouseClicked(MouseEvent e) {
 		   game.clickHandler(getYPos(), getXPos());
 		}
-				@Override
+		
+		@Override
 		public void mouseEntered(MouseEvent arg0) {
 			highlight();
 		}
-	 		@Override 
+		
+ 		@Override 
 		public void mouseExited(MouseEvent arg0) {
-			unHighlight();
+ 			if (!selected) {
+ 				unHighlight();
+ 			}
 		}
-	 		@Override
+ 		
+ 		@Override
     	public void mousePressed(MouseEvent arg0) {}
-	 		@Override
+ 		
+ 		@Override
     	public void mouseReleased(MouseEvent arg0) {}
-	            }
-		}
+    }
+}
