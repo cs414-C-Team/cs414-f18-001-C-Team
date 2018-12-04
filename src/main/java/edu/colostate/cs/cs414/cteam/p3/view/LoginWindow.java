@@ -33,6 +33,7 @@ public class LoginWindow {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     /** Username must start with a letter, followed by any number of alpha-numeric characters. */
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[A-Z]+[A-Z0-9]*$", Pattern.CASE_INSENSITIVE);
+    private JTextField ipField;
 			public LoginWindow() {
 		initialize();
 	} 
@@ -223,7 +224,7 @@ public class LoginWindow {
 		
 		// Center panel for username/password textboxes and labels
 		JPanel centerPanel = new JPanel();
-		centerPanel.setBounds(10, 105, 430, 165);
+		centerPanel.setBounds(10, 94, 430, 196);
 		centerPanel.setOpaque(false);
 		centerPanel.setLayout(null);
 		loginPanel.add(centerPanel);
@@ -231,14 +232,15 @@ public class LoginWindow {
 		// Username panel
 		JPanel panel_1 = new JPanel();    
 		JLabel usernameLabel = new JLabel("Username:");
+		usernameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.usernameField = new JTextField();
 		usernameField.setFont(new Font("Dialog", Font.PLAIN, 16));
 		panel_1.setOpaque(false);
-		panel_1.setBounds(0, 5, 430, 80);
+		panel_1.setBounds(0, 63, 430, 62);
 		panel_1.setLayout(null);
-		usernameLabel.setBounds(12, 25, 130, 30);
+		usernameLabel.setBounds(11, 16, 121, 30);
 		usernameLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
-		usernameField.setBounds(160, 25, 240, 36);
+		usernameField.setBounds(159, 15, 240, 36);
 		panel_1.add(usernameLabel);
 		panel_1.add(usernameField);
 		centerPanel.add(panel_1);
@@ -246,25 +248,42 @@ public class LoginWindow {
 		// Password panel
 		JPanel panel_2 = new JPanel();    
 		JLabel passwordLabel = new JLabel("Password:");
+		passwordLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.passwordField = new JPasswordField();
 		passwordField.setFont(new Font("Dialog", Font.PLAIN, 16));
 		panel_2.setOpaque(false);
-		panel_2.setBounds(0, 85, 430, 80);
+		panel_2.setBounds(0, 122, 430, 62);
 		panel_2.setLayout(null);
-		passwordLabel.setBounds(12, 25, 130, 30);
+		passwordLabel.setBounds(11, 16, 121, 30);
 		passwordLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
-		passwordField.setBounds(160, 25, 241, 36);
+		passwordField.setBounds(157, 15, 241, 36);
 		panel_2.add(passwordLabel);
 		panel_2.add(passwordField);
 		centerPanel.add(panel_2);
 		
+		JPanel panel_3 = new JPanel();
+		JLabel ipLabel = new JLabel("IP Address:");
+		ipLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel_3.setBackground(new Color(220, 220, 220));
+		this.ipField = new JTextField();
+		ipField.setFont(new Font("Dialog", Font.PLAIN, 16));
+		ipField.setBounds(159, 15, 240, 36);
+		panel_3.setBounds(0, 0, 430, 62);
+		panel_3.setLayout(null);
+		ipLabel.setBounds(11, 16, 121, 30);
+		ipLabel.setFont(new Font("Dialog", Font.PLAIN, 20));
+		panel_3.add(ipLabel);
+		panel_3.add(ipField);
+		centerPanel.add(panel_3);
+		
+		
 		// Panel for login/register buttons
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setBounds(10, 276, 430, 136);
+		buttonPanel.setBounds(10, 302, 430, 110);
 		buttonPanel.setOpaque(false);
 		loginPanel.add(buttonPanel);
 		buttonPanel.setLayout(null);
-				JButton button_1 = new JButton("Log in");
+		JButton button_1 = new JButton("Log in");
 		button_1.setBounds(30, 36, 100, 49);
 		buttonPanel.add(button_1);
 		JButton button_2 = new JButton("Register");
@@ -274,7 +293,7 @@ public class LoginWindow {
 		button_3.setBounds(289, 36, 100, 49);
 		buttonPanel.add(button_3);
 		loginMsg = new JLabel("Username or password is incorrect");
-		loginMsg.setBounds(10, 82, 430, 23);
+		loginMsg.setBounds(10, 70, 430, 23);
 		loginMsg.setVisible(false);
 		loginMsg.setFont(new Font("Dialog", Font.PLAIN, 15));
 		loginMsg.setForeground(Color.RED);

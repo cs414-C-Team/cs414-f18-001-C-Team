@@ -10,14 +10,12 @@ import java.awt.event.*;
 
 public class GameWindow {
 	/** UI Elements. */
-	JFrame frame;
-	JLabel boardImage;
-	JLabel message;
-	JLayeredPane gamePanel;
-	JPanel tileContainer;
-	TilePanel[][] tiles;
-	CardLayout cardLayout;
-	JPanel cards;
+	private JFrame frame;
+	private JLabel message;
+	private TilePanel[][] tiles;
+	private CardLayout cardLayout;
+	private JPanel cards;
+	private JButton submitTurnButton;
 	
 	/** Game components. */
 	private FacadeController system;
@@ -26,6 +24,9 @@ public class GameWindow {
 	private int fromX;
 	private int fromY;
 	private UserProfile profile;
+	private boolean localGame;
+	private boolean myTurn;
+	private String opponent;
 	 
 	
 	/** starts a new game window */
@@ -37,7 +38,8 @@ public class GameWindow {
 		createBoard();
 		display();
 	}
-		private void startFrame() {
+	
+	private void startFrame() {
 		frame = new JFrame("Jungle");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(600, 800));
@@ -54,18 +56,18 @@ public class GameWindow {
 
 	/** Sets up the gameboard display and creates all the game tiles (without pieces). */
 	public void createBoard() {
-        gamePanel = new JLayeredPane();  // layered panel for putting pieces over the game board
+		JLayeredPane gamePanel = new JLayeredPane();  // layered panel for putting pieces over the game board
         gamePanel.setPreferredSize(new Dimension(500, 600));
         gamePanel.setLayout(null);
-        gamePanel.setBounds(50, 78, 500, 600);
+        gamePanel.setBounds(50, 63, 500, 600);
         ImageIcon icon = createImageIcon("../resources/boardtransparent.png", "gameboard"); // game board image
-        boardImage = new JLabel(icon);
+        JLabel boardImage = new JLabel(icon);
         boardImage.setBounds(0, 0, 500, 600);
-        tileContainer = new JPanel();		 // panel holding all 63 tiles
+        JPanel tileContainer = new JPanel();		 // panel holding all 63 tiles
         tileContainer.setLayout(new GridLayout(9, 7));
         tileContainer.setBounds(16, 8, 465, 585);
         tileContainer.setOpaque(false);
-        gamePanel.add(this.boardImage, 1, 0);
+        gamePanel.add(boardImage, 1, 0);
         gamePanel.add(tileContainer, 2, 0);    // tileContainer (2) is displayed on top of gamePanel (1)
         tiles = new TilePanel[9][7];
         for (int i = 0; i < 9; i++) {
@@ -74,10 +76,10 @@ public class GameWindow {
         		tileContainer.add(tiles[i][j]);   // adds game tile to ui
         	}
         }
-        message = new JLabel("", null, JLabel.CENTER);
+        message = new JLabel("It's Your Turn", null, JLabel.CENTER);
         message.setVerticalTextPosition(JLabel.CENTER);
         message.setHorizontalTextPosition(JLabel.CENTER); 
-        message.setBounds(50, 668, 500, 100);
+        message.setBounds(50, 670, 500, 44);
         message.setFont(new Font("SansSerif", Font.PLAIN, 22));
         JPanel board = new JPanel(null);
         cards = new JPanel();
@@ -93,13 +95,31 @@ public class GameWindow {
 		this.cardLayout = (CardLayout) cards.getLayout();
 		cards.add(card2, "user profile");
         cards.add(board, "game");
-                JButton returnBurron = new JButton("Return");
+        JButton returnBurron = new JButton("Return");
         returnBurron.setFont(new Font("Dialog", Font.PLAIN, 13));
-        returnBurron.setBounds(24, 26, 114, 25);
+        returnBurron.setBounds(28, 21, 114, 25);
         board.add(returnBurron);
+        
+        submitTurnButton = new JButton("Submit Turn");
+        submitTurnButton.setFont(new Font("DejaVu Sans", Font.PLAIN, 12));
+        submitTurnButton.setBounds(236, 732, 131, 25);
+        board.add(submitTurnButton);
         returnBurron.addActionListener(new ReturnButtonListener());
         frame.getContentPane().add(cards);
+        
+        submitTurnButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+    			/* handle submit turn */
+    			
+//        		if (turn_result != 0) {   // win
+//					message.setText("You win!");
+//				} else {
+					message.setText("It's " + opponent + "'s Turn");
+//				}
         	}
+        });
+	}
 		
 	public void changeCard(int card) {
 		switch (card) {
@@ -118,6 +138,11 @@ public class GameWindow {
         frame.pack();
         frame.setVisible(true);
 	}
+	
+	public void localGame() {
+		this.localGame = true;
+		newGame();
+	}
 
 	/** Starts a new game, setting up gamepiece icons and adding starting pieces to board. */
 	public void newGame() {
@@ -127,15 +152,47 @@ public class GameWindow {
         	}
         }
 		system.newMatch();
-		currentPlayer = 1;  // 2 is the top player
-		message.setText("Player " + currentPlayer + ": Make a move");
-		if (currentPlayer == 1) {
-			message.setForeground(new Color(226, 34, 34));
+		currentPlayer = 1;  // 2 is the top player maybe
+		
+		// Local game
+		if (localGame) {
+	        submitTurnButton.setVisible(false);
+			message.setText("Player " + currentPlayer + ": Make a move");
+			if (currentPlayer == 1) {
+				message.setForeground(new Color(226, 34, 34));
+			} else {
+				message.setForeground(new Color(42, 91, 224));
+			}
+		// Create a new multiplayer game
 		} else {
-			message.setForeground(new Color(42, 91, 224));
+	        submitTurnButton.setVisible(true);
 		}
 		setUpPieces();
 	}
+	
+	/** Loads a preexisting game, setting up gamepieces accordingly */
+	public void loadGame(String game, String opponent, boolean myTurn) {
+		this.myTurn = myTurn;
+		this.opponent = opponent;
+		this.localGame = false;
+		
+		for (int i = 0; i < 9; i++) {
+        	for (int j = 0; j < 7; j++) {
+        		tiles[i][j].clear();
+        	}
+        }
+		if (myTurn) {  // it is our player's turn to make a move
+			message.setText("It's Your Turn!");
+			
+		} else {   // view the board only
+			message.setText("It's " + opponent + "'s Turn");
+		}
+		message.setForeground(Color.BLACK);
+		
+		/* load the game pieces */
+		newGame(); // temporary
+	}
+	
 	
 	public void setUpPieces() {
 		ImageIcon lion1 = createImageIcon("../resources/lion1.png", "lion");
@@ -175,46 +232,60 @@ public class GameWindow {
 	public void clickHandler(int y, int x) {
 	   System.out.println("Clicked: " + x + ", " + y);
 	   System.out.println("Move in progress: " + moveInProgress);
-	   	   // a click on a piece, starting a move
-	   if (tiles[y][x].hasPiece() && !moveInProgress) {
-		   fromX = x;	   
-		   fromY = y;
-		   tiles[fromX][fromY].highlight();
-		   moveInProgress = true;
-	   // a click on a second square indicating move destination
-	   } else if (moveInProgress) {
-		   move(fromX, fromY, x, y);
-		   moveInProgress = false;
-		   tiles[fromX][fromY].unHighlight();
+   	   // a click on a piece, starting a move
+	   if (myTurn || localGame) {
+		   if (tiles[y][x].hasPiece() && !moveInProgress) {
+			   fromX = x;	   
+			   fromY = y;
+			   tiles[fromY][fromX].setSelected(true);
+			   tiles[fromY][fromX].highlight();  // highlights the selected square
+			   moveInProgress = true;
+		   // a click on a second square indicating move destination
+		   } else if (moveInProgress) {
+			   move(fromX, fromY, x, y);
+			   moveInProgress = false;
+			   tiles[fromY][fromX].setSelected(false);
+			   tiles[fromY][fromX].unHighlight();
+		   }
 	   }
-			}
-		public void move(int startX, int startY, int toX, int toY) {
-			System.out.println(startX + ", " + startY + " to " + toX + ", " + toY);
+	}
+	
+	public void move(int startX, int startY, int toX, int toY) {
 		Turn turn = system.getTurn();
-		System.out.println(turn.getPlayer());
 		currentPlayer = turn.getPlayer();
 		turn.moveFrom(startX, startY);
 		turn.moveTo(toX, toY);
 		int turn_result = system.processTurn(turn);
+		
 		if (turn_result != -1 ) {
+			/* change board */
 			System.out.println("updating board");
 			Icon animal = tiles[startY][startX].getIcon();
 			tiles[startY][startX].clear();
 			tiles[toY][toX].setPiece(animal);
 			System.out.println("success");
-			if (turn_result != 0) {
-				message.setForeground(new Color(51,51,51));
-				message.setText("Player " + turn_result + " wins!");
-				currentPlayer = 0;
-			} else {
-				currentPlayer = currentPlayer == 2 ? 1 : 2;
-				if (currentPlayer == 1) {
-					message.setForeground(new Color(226, 34, 34));
+			
+			if (localGame) {
+				// Change displayed message
+				if (turn_result != 0) {   // win
+					message.setForeground(new Color(51,51,51));
+					message.setText("Player " + turn_result + " wins!");
+					currentPlayer = 0;
 				} else {
-					message.setForeground(new Color(42, 91, 224));
+					currentPlayer = currentPlayer == 2 ? 1 : 2;
+					if (currentPlayer == 1) {
+						message.setForeground(new Color(226, 34, 34));
+					} else {
+						message.setForeground(new Color(42, 91, 224));
+					}
+					message.setText("Player " + currentPlayer + ": Make a move");
 				}
-				message.setText("Player " + currentPlayer + ": Make a move");
+			} else {
+				message.setText("Submit turn?");
+				myTurn = false;
 			}
+			// nonlocal game handled in submit turn event
+			
 		} else {
 			System.out.println("move failed");
 		}
@@ -230,7 +301,7 @@ public class GameWindow {
         return null;
 	}
     
-	/** Start game button handler. */
+	/** Return button handler. */
 	private class ReturnButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
