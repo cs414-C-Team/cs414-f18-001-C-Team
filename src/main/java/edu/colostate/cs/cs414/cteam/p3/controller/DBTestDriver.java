@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class DBTestDriver {
 
 	public static void main(String[] args) {
-		DatabaseController db = new DatabaseController();
+		Database db = new Database(); 
 
 		String input = "";
 		System.out.println("Enter queries");
@@ -15,7 +15,7 @@ public class DBTestDriver {
 				break;
 			}
 			
-			System.out.println(db.sendQuery(input));
+//			System.out.println(db.sendQuery(input));
 		}
 	}
 
