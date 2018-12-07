@@ -29,6 +29,7 @@ public class GameWindow {
 	private int fromY;
 	private UserProfile profile;
 	private int opponent;
+	private boolean local = false;
 	
 	// starts a new game window
 	
@@ -117,14 +118,12 @@ public class GameWindow {
         	@Override
         	public void actionPerformed(ActionEvent e) {
     			/* handle submit turn */
-    			if(controller.submitTurn()) {
-					message.setText("It's " + opponent + "'s Turn");
-					submitTurnButton.setEnabled(false);
-    			}
+				message.setText("It's " + opponent + "'s Turn");
+				submitTurnButton.setEnabled(false);
 //        		if (turn_result != 0) {   // win
 //					message.setText("You win!");
 //				} else {
-					message.setText("It's " + opponent + "'s Turn");
+//					message.setText("It's " + opponent + "'s Turn");
 //				}
         	}
         });
@@ -141,6 +140,10 @@ public class GameWindow {
 	public void changeCard(int card) {
 		switch (card) {
 		case 0:
+			if(local == false) {
+				profile.updateCurrentGames();
+			}
+			local = false;
 			cardLayout.show(cards, "user profile");
 			break;
 		case 1:
@@ -158,6 +161,7 @@ public class GameWindow {
 	
 	// starts a new local game, setting up gamepiece icons and adding starting pieces to board
 	public void newLocalGame() {
+		local = true;
 		clearBoard();
 		
 		currentPlayer = 1;  // 1 is the top player
@@ -170,53 +174,28 @@ public class GameWindow {
 		
 		String[] default_setup = new String[16];
 		default_setup[0] = "l100";
-		default_setup[1] = "l286";
-		default_setup[2] = "t106";
-		default_setup[3] = "t280";
+		default_setup[1] = "l268";
+		default_setup[2] = "t160";
+		default_setup[3] = "t208";
 		default_setup[4] = "d111";
-		default_setup[5] = "d275";
-		default_setup[6] = "c115";
+		default_setup[5] = "d257";
+		default_setup[6] = "c151";
 		default_setup[7] = "c271";
-		default_setup[8] = "r120";
+		default_setup[8] = "r102";
 		default_setup[9] = "r266";
 		default_setup[10] = "h122";
-		default_setup[11] = "h264";
-		default_setup[12] = "w124";
-		default_setup[13] = "w262";
-		default_setup[14] = "e126";
-		default_setup[15] = "e260";
+		default_setup[11] = "h246";
+		default_setup[12] = "w142";
+		default_setup[13] = "w226";
+		default_setup[14] = "e162";
+		default_setup[15] = "e206";
 		
 		setUpPieces(default_setup);
 		controller.newLocalMatch();
 	}
 	
-	public void newHostedGame(int playerID) {
-		clearBoard();
-		
-		String[] default_setup = new String[16];
-		default_setup[0] = "l100";
-		default_setup[1] = "l286";
-		default_setup[2] = "t106";
-		default_setup[3] = "t280";
-		default_setup[4] = "d111";
-		default_setup[5] = "d275";
-		default_setup[6] = "c115";
-		default_setup[7] = "c271";
-		default_setup[8] = "r120";
-		default_setup[9] = "r266";
-		default_setup[10] = "h122";
-		default_setup[11] = "h264";
-		default_setup[12] = "w124";
-		default_setup[13] = "w262";
-		default_setup[14] = "e126";
-		default_setup[15] = "e260";
-		
-		setUpPieces(default_setup);
-		controller.newMatch(playerID);
-	}
-	
 	public void loadGame(int user, int matchID) {
-		if(controller.retrieveGame(user, matchID)) {
+		if(controller.retrieveGame(matchID)) {
 			String[] positions = controller.getPositions();
 			this.currentPlayer = controller.getActivePlayer();
 			
@@ -234,7 +213,7 @@ public class GameWindow {
 				message.setForeground(new Color(42, 91, 224));
 			}
 			
-			clearBoard();			
+			clearBoard();	
 			setUpPieces(positions);
 		}
 	}
@@ -257,10 +236,12 @@ public class GameWindow {
 		ImageIcon elephant1 = createImageIcon("/elephant1.png", "elephant");
 		ImageIcon elephant2 = createImageIcon("/elephant2.png", "elephant");  
 		
+		System.out.println("Setting piece positions");
+		System.out.println(piece_positions[0]);
 		for(int i = 0; i < piece_positions.length; i++) {
-			int x = Character.getNumericValue(piece_positions[i].charAt(2));
-			int y = Character.getNumericValue(piece_positions[i].charAt(3));
-			
+			int y = Character.getNumericValue(piece_positions[i].charAt(2));
+			int x = Character.getNumericValue(piece_positions[i].charAt(3));
+			System.out.println("Piece: " + piece_positions[i].charAt(0));
 			switch(piece_positions[i].charAt(0)) {
 				case 'l':
 					if(piece_positions[i].charAt(1) == '1') {
@@ -353,7 +334,10 @@ public class GameWindow {
 			tiles[startY][startX].clear();
 			tiles[toY][toX].setPiece(animal);
 			System.out.println("success");
-			if (result != 0) {
+			if(result == 1111) {
+				message.setForeground(new Color(51,51,51));
+				message.setText("Game not started yet.");
+			} else if (result != 0) {
 				message.setForeground(new Color(51,51,51));
 				message.setText("Player " + result + " wins!");
 				currentPlayer = 0;

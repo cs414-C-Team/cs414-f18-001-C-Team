@@ -63,6 +63,11 @@ public class ClientController {
 		}
 	}
 
+	public void sendInvitation(String players) {
+		client.sendInvitation(players);
+		client.getMessage();
+	}
+	
 	public void launchGame(final int user) {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -73,58 +78,28 @@ public class ClientController {
         });
 	}
 
-	public boolean retrieveGame(int user, int matchID) {
-		client.retrieveGame(user, matchID);
-		
-		//Wait to receive response indicating a turn was successfully received, but only for 10 seconds
-		long startTime = System.currentTimeMillis(); //fetch starting time
-		while(cltl.inputStatus() == false) {
-			if((System.currentTimeMillis()-startTime)>10000) {
-				System.out.println("ClientController:ERROR: turn retrieval timed out.");
-				return false;
-			} 
-		}
-		
-		try {
-			match_control.loadMatch(cltl.getMessage());
-			return true;
-		} catch (InterruptedException e) {
-			System.out.println("ClientController:ERROR: failure retrieving game.");
-			e.printStackTrace();
-			return false;
-		}
-		
-	}
-
-	public boolean newMatch(int playerID) {
+	public int newMatch(String players) {
 		client.getLatestMatchID();
-		
-		//Wait to receive response indicating a turn was successfully received, but only for 10 seconds
-		long startTime = System.currentTimeMillis(); //fetch starting time
-		while(cltl.inputStatus() == false) {
-			if((System.currentTimeMillis()-startTime)>10000) {
-				System.out.println("ClientController:ERROR: turn retrieval timed out.");
-				return false;
-			} 
+		String result = client.getMessage();
+		int id;
+		if(result != null) {
+			id = Integer.parseInt(result);
+			match_control.createMatch(id, Integer.parseInt(players.split("-")[0]), Integer.parseInt(players.split("-")[1]));
+			client.storeMatch(match_control.getMatchString());
+			client.getMessage();
+			return id;
 		}
 		
-		try {
-			match_control.createMatch(Integer.parseInt(cltl.getMessage()), playerID);
-			return true;
-		} catch (InterruptedException e) {
-			System.out.println("ClientController:ERROR: failure retrieving latest match ID.");
-			e.printStackTrace();
-			return false;
-		}
+		return -1;
 	}
 	
 	public void newLocalMatch() {
-		match_control.createMatch(0,1);
-		match_control.startMatch(2);
+		match_control.createMatch(0,1, 2);
+		match_control.startMatch();
 	}
 	
-	public void startMatch(int player2) {
-		match_control.startMatch(player2);
+	public void startMatch() {
+		match_control.startMatch();
 	}
 	
 	public int getActivePlayer() {
@@ -144,26 +119,44 @@ public class ClientController {
 		return match_control.processMove(fromX, fromY, toX, toY, player);
 	}
 	
-	public boolean submitTurn() {
+	public void submitTurn() {
 		client.submitTurn(match_control.getMatchString());
+		client.getMessage();
+	}
+
+	public String queryGames(int user) {
+		client.queryGames(Integer.toString(user));
 		
 		//Wait to receive response indicating a turn was successfully received, but only for 10 seconds
 		long startTime = System.currentTimeMillis(); //fetch starting time
 		while(cltl.inputStatus() == false) {
 			if((System.currentTimeMillis()-startTime)>10000) {
 				System.out.println("ClientController:ERROR: turn retrieval timed out.");
-				return false;
+				return "";
 			} 
 		}
 		
 		try {
-			match_control.loadMatch(cltl.getMessage());
-			return true;
+			String message = cltl.getMessage();
+			return message;
 		} catch (InterruptedException e) {
-			System.out.println("ClientController:ERROR: failure retrieving game.");
+			System.out.println("ClientController:ERROR: invalid games message format");
 			e.printStackTrace();
-			return false;
+			return "";
 		}
+	}
+
+	public boolean retrieveGame(int matchID) {
+		client.getMatch(Integer.toString(matchID));
+	
+		String result = client.getMessage();
+		if(result != null) {
+			System.out.println("Retrieved match: " + result );
+			match_control.loadMatch(result);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public static void main(String[] args) {
@@ -181,5 +174,7 @@ public class ClientController {
 		});
 		
 	}
+
+
 
 }

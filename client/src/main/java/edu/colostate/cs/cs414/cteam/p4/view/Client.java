@@ -83,18 +83,53 @@ public class Client{
 		}catch(Exception exception){ exception.printStackTrace();}
 	}
 	public void send(String msg){ if(open)out.println(msg); }
-	public void newMatch(String userID) {if(open)out.println("1" + userID); }
-	public void getTurn() {if(open)out.println("2"); } //obsolete
+	public void storeMatch(String matchString) {if(open)out.println("1" + matchString);}
+	public void sendInvitation(String players) {if(open)out.println("2" + players); }
 	public void submitTurn(String turn) {if(open)out.println("3" + turn); }
 	public void register(String email, String username, String password) {if(open)out.println("4" + username + "-" + password); }
 	public void login(String username, String password) {if(open)out.println("5" + username + "-" + password); }
-	public void retrieveGame(int user, int matchID) {if(open)out.println("6" + user + "-" + matchID); }
+	public void getMatch(String matchID) {if(open)out.println("6" + matchID);}
 	public void getLatestMatchID() {if(open)out.println("7");}
-	
+	//public void getCurrentMatches() {if(open)out.println("8");}
+	public void queryGames(String user) {if(open)out.println("9" + user);}
+
+		
 	public boolean receivedMessage() {return clientListener.inputStatus(); }
-	public String getMessage() throws InterruptedException {return clientListener.getMessage(); }
+	public String getMessage() {
+		//Wait to receive response indicating a turn was successfully received, but only for 10 seconds
+		long startTime = System.currentTimeMillis(); //fetch starting time
+		while(!clientListener.inputStatus()) {
+			if((System.currentTimeMillis()-startTime)>5000) {
+				if(clientListener.inputStatus()) {
+					break;
+				}
+				System.out.println("Client:ERROR: turn retrieval timed out.");
+				return null;
+			}
+			if(clientListener.inputStatus()) {
+				break;
+			}
+		}
+		
+		try {
+			String result = clientListener.getMessage();
+			if(result.equals("null")) {
+				return null;
+			}
+			return result;
+
+		} catch (InterruptedException e) {
+			System.out.println("Client:ERROR: failed to read message.");
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	public boolean isConnected(){ return open; }
+
+
+
+
 
 
 }
