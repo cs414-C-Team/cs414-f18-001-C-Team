@@ -21,10 +21,13 @@ public class ClientListener{
 				break;
 			} 
 		}
-		System.out.println("Client: recieved new message: " + msg);
-		status = true;
-		System.out.println("Status set to " + status);
-		message = msg;
+		
+		if(msg.length() > 0) {
+			System.out.println("Client: recieved new message: " + msg);
+			status = true;
+			System.out.println("Status set to " + status);
+			message = msg;
+		}
 	}
 	
 	public boolean inputStatus() {

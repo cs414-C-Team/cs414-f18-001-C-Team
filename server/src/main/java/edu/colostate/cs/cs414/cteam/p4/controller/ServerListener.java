@@ -26,14 +26,13 @@ public class ServerListener {
 
 		switch(msg.charAt(0)) {
 		case '1':
-			System.out.println("System: creating match for client " + client.toString());
-			controller.newMatch(Integer.parseInt(msg.substring(1, msg.length())));
-			System.out.println("System: created match for client " + client.toString());
-
+			controller.storeMatch(msg.substring(1,msg.length()));
+			System.out.println("System: stored match for client " + client.toString());
 			return "System: Match created for client " + client.toString();
+			
 		case '2':
-			//return controller.getTurn();
-			return "Not in use";
+			System.out.println("Code 2: Store new invite.");
+			return controller.storeInvite(msg.substring(1, msg.length()));
 		case '3':
 			int result = controller.processTurn(msg.substring(1, msg.length()));
 			if(result == -1) {
@@ -51,6 +50,11 @@ public class ServerListener {
 			return controller.retrieveMatch(msg.substring(1,msg.length()));
 		case '7':
 			return Integer.toString(controller.latestMatchID());
+		case '8':
+			//return controller.getCurrentMatches(msg.substring(1,msg.length()));
+			return "not in use";
+		case '9':
+			return controller.queryMatches(msg.substring(1,msg.length()));
 		default:
 			return "System:ERROR: Unrecognizable message format.";
 		}

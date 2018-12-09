@@ -17,15 +17,15 @@ public class Match {
 	private int status;
 	private Date date;
 
-	public Match(int matchID, int player1ID) {
+	public Match(int matchID, int player1ID, int player2ID) {
 		this.matchID = matchID;
 		this.player1ID = player1ID;
-		this.player2ID = -1; // -1 indicates that no opponent has accepted the match yet
+		this.player2ID = player2ID;
 		this.activeplayer = player1ID;
 		
 		date = new Date();
 		player1Pieces = player2Pieces = 8;
-		status = 0;
+		status = 1111; // game not started
 		createBoard();
 		
 		// add animals
@@ -109,86 +109,88 @@ public class Match {
 		createBoard();
 		
 		for(int i = 0; i < piece_positions.length; i++) {
-			switch(piece_positions[i].charAt(1)) {
+
+			switch(piece_positions[i].charAt(0)) {
 				case 'l':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.LION,1));
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.LION,1));
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.LION,2));
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.LION,2));
 						player2Pieces++;
 					}
 					break;
 				case 't':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.TIGER,1));
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.TIGER,1));
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.TIGER,2));	
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.TIGER,2));	
 						player2Pieces++;
 					}
 					break;
 				case 'd':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.DOG,1));	
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.DOG,1));	
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.DOG,2));
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.DOG,2));
 						player2Pieces++;
 					}
 					break;
 				case 'c':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.CAT,1));	
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.CAT,1));	
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.CAT,2));	
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.CAT,2));	
 						player2Pieces++;
 					}
 					break;
 				case 'r':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.RAT,1));	
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.RAT,1));	
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.RAT,2));	
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.RAT,2));	
 						player2Pieces++;
 					}
 					break;
 				case 'h':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.LEOPARD,1));
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.LEOPARD,1));
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.LEOPARD,2));	
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.LEOPARD,2));	
 						player2Pieces++;
 					}
 					break;
 				case 'w':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.WOLF,1));
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.WOLF,1));
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.WOLF,2));	
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.WOLF,2));	
 						player2Pieces++;
 					}
 					break;
 				case 'e':
-					if(piece_positions[i].charAt(2) == 1) {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.ELEPHANT,1));
+					if(piece_positions[i].charAt(1) == '1') {
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.ELEPHANT,1));
 						player1Pieces++;
 					} else {
-						board[piece_positions[i].charAt(3)][piece_positions[i].charAt(4)].setCharacter(new GamePiece(piece_positions[i].charAt(3), piece_positions[i].charAt(4), PieceType.ELEPHANT,2));
+						board[Character.getNumericValue(piece_positions[i].charAt(2))][Character.getNumericValue(piece_positions[i].charAt(3))].setCharacter(new GamePiece(Character.getNumericValue(piece_positions[i].charAt(2)), Character.getNumericValue(piece_positions[i].charAt(3)), PieceType.ELEPHANT,2));
 						player2Pieces++;
 					}
 					break;
 			}		
 		}
+
 		
 	}
-
+	
 	// use to check for a win
-	// 1 means player 1 wins, 2 means 2 wins, 0 means nobody has yet
+	// 0 means nobody has won yet, otherwise return playerID
 	public void checkStatus() {
 		if (board[3][0].hasCharacter() || player1Pieces == 0) {
 			status = player2ID;
@@ -226,18 +228,16 @@ public class Match {
 	
 	public String[] getBoard(){
 		String[] string_board = new String[player1Pieces + player2Pieces];
+		int counter = 0;
 		for(int i = 0; i < this.board.length; i++) {
 			for(int j = 0; j < this.board[0].length; j++) {
 				if(board[i][j].hasCharacter()) {
-					string_board[i] = this.board[i][j].getCharacter().toString() + this.board[i][j].getCharacter().getTeam() + i + j;
+					string_board[counter] = this.board[i][j].getCharacter().toString() + this.board[i][j].getCharacter().getTeam() + i + j;
+					counter++;
 				}
 			}
 		}
 		return string_board;
-	}
-	
-	public void setPlayer2(int player2) {
-		this.player2ID = player2;
 	}
 	
 	// Two possible return cases:
@@ -401,16 +401,25 @@ public class Match {
 	}
 	
 	//Match string format: <matchID>-<player1>-<player2>-<active player>-<date>-<status>-<pos1:pos2:po3...>
-
+	
 	public String toString() {
 		String result = "";
 		result = this.matchID + "-" + this.player1ID + "-" + this.player2ID + "-" + this.activeplayer + "-" +getDate() + "-" + this.status + "-";
-		
+
 		String[] board = getBoard();
+
 		for(int i = 0; i < board.length; i++) {
 			result += board[i];
+			if(i != board.length -1) {
+				result += ":";
+			}
 		}
 		
 		return result;
+	}
+
+	public int start() {
+		this.status = 0;
+		return this.activeplayer;
 	}
 }

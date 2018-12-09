@@ -38,23 +38,30 @@ public class UserProfile extends JFrame {
 	private JScrollPane scrollPane2;
 	private JList gameList;
 	
-	private GameWindow window;
 	private JButton launchGameButton;
 	private JLabel turnLabel;
 	private JButton rejectInviteButton;
 	private ArrayList<Pair<Integer, String>> currentGames;
+	private String[] users;
+	private boolean local = false;
 	
 	public UserProfile(GameWindow window, ClientController controller, int user) {
 		this.game_window = window;
 		this.controller = controller;
 		this.user = user;
 		System.out.println("User " + user + " loaded.");
-		initialize();
+		if(user == 1) {
+			local = true;
+			initialize(local);
+
+		} else {
+			initialize(local);
+		}
 	}
 	
 	public JPanel get() { return userPane; }
 	
-	public void initialize() {
+	public void initialize(boolean local) {
 		userPane = new JPanel();
 		userPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		userPane.setLayout(null);
@@ -64,9 +71,21 @@ public class UserProfile extends JFrame {
 		//currentGames.add(new Pair<Integer, String>(1, "Game with John")); //test
 		//currentGames.add(new Pair<Integer, String>(2, "Game with Jane")); //test
 		
+		/* search user database for query 
+		 * PLACEHOLDER
+		 * */
+		users = new String[1];
+		if(user == 3) {
+			users[0] = "admin-999";
+		} else {
+			users[0] = "test-3";
+		}
+		
 		initializeTopPanel();
-		initializeSearchPanel();
-		initializeGamePanel();
+		if(local == false) {
+			initializeSearchPanel();
+			initializeGamePanel();
+		}
 	}
 	
 	
@@ -106,8 +125,6 @@ public class UserProfile extends JFrame {
 		btnNewButton_1.setFont(new Font("Calibri", Font.PLAIN, 13));
 		*/
 	}
-	
-	
 	
 	private void initializeSearchPanel() {
 		JPanel panel_1 = new JPanel();
@@ -155,7 +172,9 @@ public class UserProfile extends JFrame {
 		panel_1.add(label);
 		btnSendInvitation_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnSendInvitation_1.setEnabled(false);       
+				btnSendInvitation_1.setEnabled(false);
+				controller.sendInvitation(Integer.toString(user) + "-" + users[userList.getSelectedIndex()].split("-")[1]);
+
 		    }
 	     });
 		
@@ -165,7 +184,6 @@ public class UserProfile extends JFrame {
 			}
 		});
 	}
-	
 	
 	private void initializeGamePanel() {
 		
@@ -205,7 +223,7 @@ public class UserProfile extends JFrame {
 		turnLabel.setFont(new Font("Dialog", Font.PLAIN, 19));
 		turnLabel.setBounds(218, 200, 154, 21);
 		gamePanel.add(turnLabel);
-		
+				
 		updateCurrentGames();
 		
 		launchGameButton.addActionListener(new ActionListener() {
@@ -213,24 +231,27 @@ public class UserProfile extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				GameListObject selected = (GameListObject) gameList.getSelectedValue();
 				if (selected.isInvite()) {
-					/* Accept invite, start new game */
-
+					// Accept invite, start new game 
+					int matchID = controller.newMatch( users[Math.abs(userList.getSelectedIndex()) - 1].split("-")[1]  + "-" + Integer.toString(user));
 					// remove invitation list item
-					String opponent = selected.getOpponent();
-					int index = gameList.getSelectedIndex();
-					DefaultListModel<GameListObject> model = (DefaultListModel<GameListObject>) gameList.getModel();
-					gameList.clearSelection();
-					model.remove(index);  
+					//String opponent = selected.getOpponent();
+					//int index = gameList.getSelectedIndex();
+					//DefaultListModel<GameListObject> model = (DefaultListModel<GameListObject>) gameList.getModel();
+					//gameList.clearSelection();
+					//model.remove(index);  
 					
 					// create new game list item and add it
-					GameListObject newGame = new GameListObject(3, opponent, false);  /* replace 3 with new game id */
-					model.addElement(newGame);
+					//GameListObject newGame = new GameListObject(matchID, opponent, false);
+					//model.addElement(newGame);
+					updateCurrentGames();
 					rejectInviteButton.setVisible(false);
 					
 				} else {
 					/* Load the game board for existing game */
 //					window.loadGame("game representation", selected.getOpponent(), !selected.isTheirTurn());
-//					window.changeCard(1);  
+					System.out.println(selected.getID());
+					game_window.loadGame(user, selected.getID());
+					game_window.changeCard(1);  
 				}
 			}
 		});
@@ -247,9 +268,8 @@ public class UserProfile extends JFrame {
 		});
 	}
 	
-	
-	
 	public void updateCurrentGames() {
+		gameList.clearSelection();
 		DefaultListModel<GameListObject> model = new DefaultListModel<GameListObject>();
 		
 		/* Query user's current games 
@@ -260,13 +280,48 @@ public class UserProfile extends JFrame {
 		gameList = new JList(gameTitles);
 		*/
 		
-		GameListObject game1 = new GameListObject(1, "jack", true);
-		GameListObject game2 = new GameListObject(2, "jill", false);
-		GameListObject game3 = new GameListObject("JohnMccain");
-		model.addElement(game1);
-		model.addElement(game2);
-		model.addElement(game3);
-		
+		//Format: <invite>&<invite>...&<game>&<game>
+		//Games are returned in this format: <matchID>-<user1ID>-<user2ID>-<player turn>-<date>-<board>
+		//Invites are returned in this format: <player1ID>:<player2ID>
+		String games_string = controller.queryGames(user);
+		//Server returns a "null" instead of null object for some reason I can't figure out
+		if(games_string != null && !games_string.equals("null") && games_string.length() > 0) {
+			String[] games = games_string.split("&");
+			int opponent;
+			int current_user;
+			boolean turn;
+			String[] game;
+			
+			for(int i = 0; i < games.length; i++) {
+				game = games[i].split("-");				
+				if(game.length == 1) {
+					System.out.println("UserProfile: Retrieved turn: " + game[0]);
+					if(user == Integer.parseInt(game[0].split(":")[0])){
+						opponent = Integer.parseInt(game[0].split(":")[1]);
+					} else {
+						opponent = Integer.parseInt(game[0].split(":")[0]);
+					}
+					
+					model.addElement(new GameListObject(user, Integer.toString(opponent)));
+				} else {
+					System.out.println("UserProfile: Retrieved game:" + games[i]);
+
+					turn = false;
+					
+					if(user == Integer.parseInt(game[1])){
+						opponent = Integer.parseInt(game[2]);
+					} else {
+						opponent = Integer.parseInt(game[1]);
+					}
+					
+					if(user == Integer.parseInt(game[5])) {
+						turn = true;
+					}
+					model.addElement(new GameListObject(Integer.parseInt(game[0]), Integer.toString(opponent), turn));
+					
+				}
+			}
+		}
 		gameList.setModel(model);
 		scrollPane2.setViewportView(gameList);
 	}
@@ -279,7 +334,8 @@ public class UserProfile extends JFrame {
 		private boolean invite;  // true if object is an invite, false if it's a game
 		
 		// invite constructor
-		public GameListObject(String opponent) {
+		public GameListObject(int id, String opponent) {
+			this.id = id;
 			this.opponent = opponent;
 			this.invite = true;
 		}
@@ -306,7 +362,6 @@ public class UserProfile extends JFrame {
 		}
 	}
 	
-	
 	public class GameSelectionListener implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
@@ -318,7 +373,7 @@ public class UserProfile extends JFrame {
 					launchGameButton.setText("Accept Invitation");
 					turnLabel.setText("");
 					rejectInviteButton.setVisible(true);
-				} else if (selected.isTheirTurn()) {
+				} else if (!selected.isTheirTurn()) {
 					launchGameButton.setText("View Game Board");
 					turnLabel.setText("It's " + selected.getOpponent() + "'s turn");
 					turnLabel.setForeground(new Color(255, 62, 32));
@@ -336,14 +391,9 @@ public class UserProfile extends JFrame {
 	public void search() {
 		String query = userSearchField.getText();
 		DefaultListModel<String> model = new DefaultListModel<String>();
-
-		/* search user database for query */
-		String[] results = {"test-3", "admin-999"};  // test
 		
-		for (int i = 0; i < results.length; i++) {
-			if(!results[i].split("-")[1].equals(Integer.toString(user))) {
-				model.addElement(results[i]);
-			}
+		for (int i = 0; i < users.length; i++) {
+				model.addElement(users[i]);
 		}
 		userList.setModel(model);
 		scrollPane1.setViewportView(userList);

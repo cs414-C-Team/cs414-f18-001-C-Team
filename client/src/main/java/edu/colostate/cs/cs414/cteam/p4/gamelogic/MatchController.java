@@ -4,8 +4,9 @@ public class MatchController {
 	private Match current_match;
 	private int current_turn;
 	
-	public void createMatch(int matchID, int player) {
-		current_match = new Match(matchID, player);
+	public void createMatch(int matchID, int player1, int player2) {
+		System.out.println("Creating new match with players: " + player1 + ", " + player2);
+		current_match = new Match(matchID, player1, player2);
 	}
 	
 	//Match string is in this format: <matchID>-<date>-<status>-<opponent>-<active player>-<pos1:pos2:po3...>
@@ -14,9 +15,9 @@ public class MatchController {
 		current_turn = current_match.getActivePlayer();
 	}
 	
-	public void startMatch(int player2) {
-		current_turn = current_match.getActivePlayer();
-		current_match.setPlayer2(player2);
+	public void startMatch() {
+
+		current_turn = current_match.start();
 	}
 	
 	public String getMatchString() {
@@ -45,7 +46,7 @@ public class MatchController {
 	}
 
 	public int getActivePlayer() {
-		return current_match.getActivePlayer();
+		return this.current_turn;
 	}
 	
 	public String getPlayers() {
