@@ -74,17 +74,20 @@ public class Database {
 				"Username varchar(255) not null unique,\r\n" + 
 				"ID int not null unique AUTO_INCREMENT,\r\n" +
 				"Password varchar(255) not null,\r\n" + 
-				"Primary Key (Username))";
+				"Key (ID),\r\n" +
+				"Primary Key (ID))";
 		update(create);
-		create = "Create table if not exists jungle.Match_State (         \r\n" + 
-				"				GameID int not null unique AUTO_INCREMENT,\r\n" + 
-				"				User1 varchar(30) not null,\r\n" + 
-				"				User2 varchar(30) not null,\r\n" + 
-				"				State varchar(20) not null,\r\n" + 
+		create = "Create table if not exists jungle.Match_State (\r\n" + 
+				"				GameID int not null unique,\r\n" + 
+				"				User1 int not null,\r\n" + 
+				"				User2 int not null,\r\n" + 
+				"               Turn int not null,\r\n" +
+				"				State varchar(300) not null,\r\n" + 
+				"               Status int,\r\n" +
 				"				createTS Timestamp not null default current_timestamp,\r\n" + 
-				"				Primary Key(GameID),\r\n" + 
-				"				foreign key(User1) references User(Username),\r\n" + 
-				"				foreign key(User2) references User(Username)\r\n" + 
+				"				Primary Key(GameID)\r\n" + 
+//				"				Constraint Foreign key(User1) references User(id),\r\n" + 
+//				"				Constraint Foreign key(User2) references User(id)\r\n" +    // I couldn't get foreign keys working
 				"				);";
 		update(create);
 		create = "CREATE TABLE if not exists jungle.Match_Record(\r\n" + 
@@ -110,79 +113,6 @@ public class Database {
 		dropTables();
 		createTables();
 	}
-
-//	public static void main(String[] args) throws SQLException {
-//		Database db = new Database();
-//		
-//		db.resetDB();
-//		
-//		//create four new users:
-//		db.register("user1", "pass", "email1");
-//		db.register("user2", "pass", "email2");
-//		db.register("user3", "pass", "email3");
-//		db.register("user4", "pass", "email4");
-//		
-//		//check deletion and login:
-//		System.out.println(db.login("user4", "pass") + " " + db.deleteAccount("user4", "pass") + " " + !db.login("user4", "pass"));
-//	
-//		//send invites to everyone from user1:
-//		System.out.println("true: " + db.sendInvite("user1", "user2", "pending"));
-//		System.out.println("true: " + db.sendInvite("user1", "user3", "pending"));
-//		System.out.println("false: " + db.sendInvite("user1", "user4", "pending"));
-//		System.out.println("false: " + db.sendInvite("user4", "user2", "pending"));
-//		
-//		//view invites received by user2:
-//		db.printRS(db.viewReceivedInvites("user2"));
-//		
-//		//view invites send by user1:
-//		db.printRS(db.viewSentInvites("user1"));
-//		
-//		//accept from u1 to u2:
-//		System.out.println(db.acceptInvite("user1", "user2"));
-//		//check that the invite was deleted
-//		db.printRS(db.viewSentInvites("user1"));
-//		//check that the game was created:
-//		db.printRS(db.suspendedMatches("user1"));
-//		ResultSet rss = db.suspendedMatches("user2");
-//		rss.next();
-//		int ID1v2 = rss.getInt(rss.findColumn("GameID"));
-//		
-//		//reject from u1 to u3:
-//		System.out.println(db.rejectInvite("user1", "user3"));
-//		//check that the invite was deleted
-//		db.printRS(db.viewSentInvites("user1"));
-//		//check that the game wasn't created:
-//		db.printRS(db.suspendedMatches("user3"));
-//		
-//		db.sendInvite("user1", "user3", "pending");
-//		db.acceptInvite("user1", "user3");
-//		ResultSet rss1 = db.suspendedMatches("user3");
-//		rss1.next();
-//		int ID1v3 = rss1.getInt(rss1.findColumn("GameID"));
-//		
-//		//get users:
-//		db.printRS(db.getUsers());
-//		
-//		//matches for a user, all matches:
-//		db.printRS(db.matches("user3"));
-//		db.printRS(db.allMatches());
-//		
-//		//current, all current:
-//		
-//		//suspended, all suspended:
-//		
-//		//finished, all finished:
-//		
-//		//matchOver:
-//		System.out.println(db.matchOver("user1", "user2", Integer.toString(ID1v2)));
-//		//check match status:
-//		db.printRS(db.finishedMatches("user2"));
-//		//check match record:
-//		db.printRS(db.matchRecord("user1"));
-//		
-//		db.matchOver("user1", "user3", Integer.toString(ID1v3));
-//		db.printRS(db.allMatchRecords());
-//	}
 
 	
 	public void printRS(ResultSet rs) throws SQLException {
@@ -230,15 +160,14 @@ public class Database {
 		return alter(update);
 	}
 
-	public boolean sendInvite(String sender, String receiver, String status) {
+	public boolean sendInvite(int sender, int receiver) {
 		String update = String.format(
-				"INSERT INTO jungle.Invites (Sender, Receiver, Status) VALUES ('%1$s', '%2$s', '%3$s');", sender,
-				receiver, status);
+				"INSERT INTO jungle.Invites (Sender, Receiver) VALUES ('%1$d', '%2$d');", sender, receiver);
 		return alter(update);
 	}
 
-	public ResultSet viewReceivedInvites(String user) throws SQLException {
-		String query = String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$s';", user);
+	public ResultSet receivedInvites(int user) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$d';", user);
 		return sendQuery(query);
 	}
 
@@ -247,20 +176,19 @@ public class Database {
 		return sendQuery(query);
 	}
 	
-	public boolean acceptInvite(String sender, String receiver) {
+	public boolean deleteInvite(int sender, int receiver) {
 		//delete the invite
-		String update = String.format("DELETE FROM jungle.Invites WHERE Receiver = '%1$s' and Sender = '%2$s';", receiver, sender);
-		boolean ret = alter(update);
-		//create the game
-		update = String.format("INSERT INTO jungle.Match_State (User1, User2, State) VALUES ('%1$s', '%2$s', 'suspended');", sender, receiver);
-		return ret && alter(update);
-	}
-	
-	public boolean rejectInvite(String sender, String receiver) {
-		//delete the invite
-		String update = String.format("DELETE FROM jungle.Invites WHERE Receiver = '%1$s' and Sender = '%2$s';", receiver, sender);
+		String update = String.format("DELETE FROM jungle.Invites WHERE Receiver = '%1$d' and Sender = '%2$d';", receiver, sender);
 		return alter(update);
 	}
+		
+	public boolean storeGame(int id, int player1, int player2, int currentPlayer, String state, int status) {
+		String update = String.format("INSERT INTO jungle.Match_State (GameID, User1, User2, Turn, State, Status) " +
+				 				       "VALUES ('%1$d', '%2$d', '%3$d', '%4$d', '%5$s', '%6$d');", 
+				 				         id, player1, player2, currentPlayer, state, status);
+		return alter(update);
+	}
+
 
 	public ResultSet getUser(String username) throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Users WHERE Username = '%1$s';", username);
@@ -282,10 +210,9 @@ public class Database {
 		return sendQuery(query);
 	}
 
-	public ResultSet currentMatches(String user) throws SQLException {
+	public ResultSet currentMatches(int user) throws SQLException {
 		String query = String.format(
-				"SELECT * FROM jungle.Match_State WHERE User1 = '%1$s' OR User2 = '%1$s' AND State = 'in-progress';",
-				user);
+				"SELECT * FROM jungle.Match_State WHERE User1 = '%1$d' OR User2 = '%1$d'", user);
 		return sendQuery(query);
 	}
 	
