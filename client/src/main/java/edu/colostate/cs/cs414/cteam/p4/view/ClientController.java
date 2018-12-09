@@ -34,33 +34,42 @@ public class ClientController {
 
 	public int login(String username, String password) {
 		System.out.println("connecting");
-		if(client.isConnected()) {
+		if (client.isConnected()) {
 			client.login(username, password);
-			
-			//Wait to receive response indicating a turn was successfully received, but only for 10 seconds
-			long startTime = System.currentTimeMillis(); //fetch starting time
-			while(cltl.inputStatus() == false) {
-				if((System.currentTimeMillis()-startTime)>10000) {
-					System.out.println("ClientController:ERROR: turn retrieval timed out.");
-					return -2;
-				} 
-			}
-			
-			try {
-				//Either a -1 for failed authentication, or the user's ID
-				return Integer.parseInt(cltl.getMessage());
-			} catch (NumberFormatException e) {
-				System.out.println("ClientController:ERROR: invalid message received");
-				e.printStackTrace();
-				return -2;
-			} catch (InterruptedException e) {
-				System.out.println("ClientController:ERROR: invalid message received");
-				e.printStackTrace();
-				return -2;
-			}
+			return loginResponse();
 		} else {
 			return -2;
 		}
+	}
+	
+	public int register(String email, String username, String password) {
+		System.out.println("connecting");
+		if(client.isConnected()) {
+			client.register(email, username, password);
+			return loginResponse();
+		} else {
+			return -2;
+		}
+	}
+	
+	//Wait to receive response indicating login/registration was successfully received, but only for 10 seconds
+	public int loginResponse() {
+		long startTime = System.currentTimeMillis(); //fetch starting time
+		while(cltl.inputStatus() == false) {
+			if((System.currentTimeMillis()-startTime)>10000) {
+				System.out.println("ClientController:ERROR: request timed out.");
+				return -2;
+			} 
+		}
+		try {
+			//Either a -1 for failed authentication, or the user's ID
+			return Integer.parseInt(cltl.getMessage());
+		} catch (Exception e) {
+			System.out.println("ClientController:ERROR: invalid response");
+			e.printStackTrace();
+			return -2;
+		}
+		
 	}
 
 	public void sendInvitation(String players) {

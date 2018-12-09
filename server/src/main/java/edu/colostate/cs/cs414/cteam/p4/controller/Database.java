@@ -72,8 +72,8 @@ public class Database {
 		String create = "Create Table if not exists jungle.Users (\r\n" + 
 				"EmailID varchar(255) not null unique,\r\n" + 
 				"Username varchar(255) not null unique,\r\n" + 
-				"Password varchar(255) not null,\r\n" + 
 				"ID int not null unique AUTO_INCREMENT,\r\n" +
+				"Password varchar(255) not null,\r\n" + 
 				"Primary Key (Username))";
 		update(create);
 		create = "Create table if not exists jungle.Match_State (         \r\n" + 

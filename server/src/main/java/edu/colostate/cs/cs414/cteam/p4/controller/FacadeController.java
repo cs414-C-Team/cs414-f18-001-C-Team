@@ -18,7 +18,7 @@ public class FacadeController {
 
 	
 	public FacadeController() {
-		Database db = new Database();
+		db = new Database();
 		players.add(999);
 		players.add(3);
 	}
@@ -34,26 +34,37 @@ public class FacadeController {
 		return 1;
 	}
 
+	
 	public int register(String substring) {
-		return 0;
+		String[] registerInfo = substring.split("-");   //  [email, username, password]
+		try {
+			boolean success = db.register(registerInfo[1], registerInfo[2], registerInfo[0]);
+			if (success) { 
+				ResultSet rs = db.getUser(registerInfo[0]);
+				db.printRS(rs);
+				rs.absolute(1);
+				return rs.getInt("id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
+	
 	
 	public int login(String credentials) {
 		String[] loginInfo = credentials.split("-");
 		try {
 			if (db.login(loginInfo[0], loginInfo[1])) {
-				ResultSet rs = db.getUser(loginInfo[1]);
+				ResultSet rs = db.getUser(loginInfo[0]);
+				db.printRS(rs);
 				rs.absolute(1);
-				int id = rs.getString("id");
-				return id;
-			} else {
-				return -1;
+				return rs.getInt("id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+		return -1;
 	}
 
 	public String retrieveMatch(String match) {
@@ -148,21 +159,23 @@ public class FacadeController {
 	
 
 	public static void main(String[] args) throws SQLException {
-		
+		FacadeController f = new FacadeController();
 		Database db = new Database();
 //		db.resetDB();
-		
+		int result = f.register("california-california");
+//		System.out.println(result);
 		
 		
 //		db.register("ianaf", "california", "ianaf100@gmail.com");
 		ResultSet rs = db.getUsers();
-		ResultSetMetaData rsmd = rs.getMetaData();
-//		System.out.println(users);
+//		ResultSetMetaData rsmd = rs.getMetaData();
+////		System.out.println(users);
+////		
+//		rs.absolute(1);
+//		db.printRS(rs);
+//		System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
 //		
-		rs.absolute(1);
-		System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3));
-		
-		System.out.println(db.login("ianaf", "california"));
+//		System.out.println(db.login("ianaf", "california"));
 		
 	}
 }
