@@ -264,4 +264,32 @@ public class Database {
 		String query = "SELECT * FROM jungle.Match_Record;";
 		return sendQuery(query);
 	}
+	
+	
+	
+	public ResultSet winHistory(String username) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Match_Record WHERE Winner = '%1$s';", username);
+		return sendQuery(query);
+	}
+	
+	public int wins(String username) throws SQLException {
+		ResultSet rs = winHistory(username);
+		if(!rs.first())
+			return 0;
+		rs.last();
+		return rs.getRow();
+	}
+	
+	public ResultSet lossHistory(String username) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Match_Record WHERE Loser = '%1$s';", username);
+		return sendQuery(query);
+	}
+	
+	public int losses(String username) throws SQLException {
+		ResultSet rs = lossHistory(username);
+		if(!rs.first())
+			return 0;
+		rs.last();
+		return rs.getRow();
+	}
 }
