@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -25,6 +26,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Component;
 import javax.swing.UIManager;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UserProfile extends JFrame {
 
@@ -50,6 +53,7 @@ public class UserProfile extends JFrame {
 		this.controller = controller;
 		this.user = user;
 		System.out.println("User " + user + " loaded.");
+		//initialize(local);
 		if(user == 1) {
 			local = true;
 			initialize(local);
@@ -82,6 +86,8 @@ public class UserProfile extends JFrame {
 		}
 		
 		initializeTopPanel();
+		//initializeSearchPanel();
+		//initializeGamePanel();
 		if(local == false) {
 			initializeSearchPanel();
 			initializeGamePanel();
@@ -103,7 +109,7 @@ public class UserProfile extends JFrame {
 		topPanel.setLayout(null);
 		
 		JButton btnLocalGame = new JButton("Play Local Game");
-		btnLocalGame.setBounds(101, 33, 380, 38);
+		btnLocalGame.setBounds(99, 13, 380, 38);
 		btnLocalGame.setFont(new Font("Calibri", Font.PLAIN, 13));
 		topPanel.add(btnLocalGame);
 		btnLocalGame.addActionListener(new ActionListener() {
@@ -129,7 +135,7 @@ public class UserProfile extends JFrame {
 	private void initializeSearchPanel() {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(240, 240, 240));
-		panel_1.setBounds(12, 356, 576, 287);
+		panel_1.setBounds(12, 378, 576, 287);
 		userPane.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -216,13 +222,55 @@ public class UserProfile extends JFrame {
 		gameList.addListSelectionListener(new GameSelectionListener());
 		gamePanel.add(launchGameButton);
 		rejectInviteButton = new JButton("Deny Invitation");
-		rejectInviteButton.setBounds(390, 200, 154, 25);
+		rejectInviteButton.setBounds(201, 200, 154, 25);
 		rejectInviteButton.setVisible(false);
 		gamePanel.add(rejectInviteButton);
 		turnLabel = new JLabel("");
 		turnLabel.setFont(new Font("Dialog", Font.PLAIN, 19));
 		turnLabel.setBounds(218, 200, 154, 21);
 		gamePanel.add(turnLabel);
+		
+		JButton btnNewButton = new JButton("Game Rules");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame jp1 = new JFrame();
+				 JTextArea field = new JTextArea();
+				field.setText(" Movement\r\n" + 
+						"1.Players alternate moves with Blue moving first. \r\n" + 
+						"2.During their turn, a player must move.\r\n" + 
+						"3. All pieces can move one square horizontally or vertically (not diagonally).\r\n" + 
+						"4. A piece may not move into its own den.\r\n" + 
+						"5. Animals of either side can move into and out of any trap square.\r\n" + 
+						"6.There are special rules related to the water squares:\r\n" + 
+						"The rat is the only animal that may go onto a water square.\r\n" + 
+						"The lion and tiger can jump over a river horizontally or vertically. \r\n" + 
+						"They jump from a square on one edge of the river to the next non-water square on the other side.\r\n" + 
+						" If that square contains an enemy piece of equal or lower rank, the lion or tiger capture it as part of their jump.\r\n" + 
+						" A jumping move is blocked (not permitted) if a rat of either colour currently occupies any of the intervening water squares.\r\n" + 
+						"Capturing\r\n" + 
+						"1.Animals capture opponent pieces by \"killing/eating\" them (the attacking piece replaces the captured piece on its square; The captured piece is removed from the game. \r\n" + 
+						"A piece can capture any enemy piece that has the same or lower rank, with the following exceptions:\r\n" + 
+						" The rat can \"kill\" (capture) an elephant, but only from a land square, not from a water square. \r\n" + 
+						"Many published versions of the game say the rat kills the elephant by \"running into its ear and gnawing into its brain\".\r\n" + 
+						"3. A rat in the water is invulnerable to capture by any piece on land.\r\n" + 
+						" (Therefore, a rat in the water can only be killed by another rat in the water.)\r\n" + 
+						"4. A piece that enters one of the opponent's trap squares is reduced in rank to 0.\r\n" + 
+						" Thus, the trapped piece may be captured by the defending side with any piece, regardless of rank. \r\n" + 
+						"A trapped piece has its normal rank restored when it exits an opponent's trap square.\r\n" + 
+						"\r\n" + 
+						"");
+				 field.setEditable(false);
+				 jp1.add(field);
+				 jp1.pack();
+				 jp1.setVisible(true);
+				 jp1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				 
+			}
+		});
+		btnNewButton.setBounds(384, 201, 131, 23);
+		gamePanel.add(btnNewButton);
 				
 		updateCurrentGames();
 		

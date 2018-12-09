@@ -28,6 +28,10 @@ public class Match {
 		status = 1111; // game not started
 		createBoard();
 		
+		pieceSetup();
+	}
+
+	public void pieceSetup() {
 		// add animals
 		board[0][2].setCharacter(new GamePiece(0, 2, PieceType.RAT,1));
 		board[6][6].setCharacter(new GamePiece(6, 6, PieceType.RAT,2));
@@ -198,6 +202,7 @@ public class Match {
 		else if (board[3][8].hasCharacter() || player2Pieces == 0) {
 			status = player1ID;
 		}
+		System.out.println(status);
 	}
 
 	public int status() {
@@ -223,6 +228,7 @@ public class Match {
 	}
 	
 	public String getPlayers() {
+		//System.out.println(this.player1ID + "-" + this.player2ID);
 		return this.player1ID + "-" + this.player2ID;
 	}
 	
@@ -362,7 +368,8 @@ public class Match {
 	
 	//Checks if an attack is valid
 	public boolean validAttack(int fromX, int fromY, int toX, int toY) {
-		if(!board[toX][toY].hasCharacter() || !board[fromX][fromY].hasCharacter()) {
+		if((!board[toX][toY].hasCharacter()) || (!board[fromX][fromY].hasCharacter())) {
+			System.out.println("1**");
 			return false;
 		}
 		
@@ -370,30 +377,37 @@ public class Match {
 		int att_level = board[fromX][fromY].getCharacter().getType().ordinal();
 		
 		if(board[fromX][fromY].getType().equals(TileType.TRAP)) {
+			System.out.println("2**");
 			return false; // can't attack from trap
 		}
 		
 		if(board[fromX][fromY].getType().equals(TileType.WATER) && board[toX][toY].getType().equals(TileType.BLANK)) {
+			System.out.println("3**");
 			return false; // can't attack from water to land
 		}
 		
 		if(board[toX][toY].getCharacter().getTeam() == board[fromX][fromY].getCharacter().getTeam()) {
+			System.out.println("4**");
 			return false; // can't attack friend
 		}
 		
 		if(board[fromX][fromY].getCharacter().getType().equals(PieceType.ELEPHANT) && board[toX][toY].getCharacter().getType().equals(PieceType.RAT)) {
+			System.out.println("5**");
 			return false; //Opponent is an rat, and attacker is a elephant
 		}
 		
 		if(board[toX][toY].getType().equals(TileType.TRAP)) {
+			System.out.println("6**");
 			return true; //Opponent is in a trap
 		}
 		
 		if(board[fromX][fromY].getCharacter().getType().equals(PieceType.RAT) && board[toX][toY].getCharacter().getType().equals(PieceType.ELEPHANT)) {
+			System.out.println("7**");
 			return true; //Opponent is an elephant, and attacker is a rat
 		} 
 		
 		if(att_level > def_level) {
+			System.out.println("8**");
 			return true;
 		}
 		

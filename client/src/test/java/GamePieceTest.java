@@ -1,12 +1,13 @@
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import edu.colostate.cs.cs414.cteam.p4.gamelogic.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
 class GamePieceTest {
-	/*
+
 	Tile[][] board;
 	
 	@BeforeEach
@@ -46,5 +47,5 @@ class GamePieceTest {
 		assertTrue(piece1.getType()==PieceType.RAT);
 		assertTrue(piece1.getTeam()==1);
 	}
-	*/
+	
 }
