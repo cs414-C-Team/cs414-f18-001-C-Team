@@ -86,7 +86,7 @@ public class Client{
 	public void storeMatch(String matchString) {if(open)out.println("1" + matchString);}
 	public void sendInvitation(String players) {if(open)out.println("2" + players); }
 	public void submitTurn(String turn) {if(open)out.println("3" + turn); }
-	public void register(String email, String username, String password) {if(open)out.println("4" + username + "-" + password); }
+	public void register(String email, String username, String password) {if(open)out.println("4" + email + "-" + username + "-" + password); }
 	public void login(String username, String password) {if(open)out.println("5" + username + "-" + password); }
 	public void getMatch(String matchID) {if(open)out.println("6" + matchID);}
 	public void getLatestMatchID() {if(open)out.println("7");}

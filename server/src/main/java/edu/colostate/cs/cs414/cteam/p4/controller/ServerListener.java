@@ -26,7 +26,7 @@ public class ServerListener {
 
 		switch(msg.charAt(0)) {
 		case '1':
-			controller.storeMatch(msg.substring(1,msg.length()));
+			controller.newMatch(msg.substring(1,msg.length()));
 			System.out.println("System: stored match for client " + client.toString());
 			return "System: Match created for client " + client.toString();
 			
@@ -49,7 +49,7 @@ public class ServerListener {
 		case '6':
 			return controller.retrieveMatch(msg.substring(1,msg.length()));
 		case '7':
-			return Integer.toString(controller.latestMatchID());
+			return Integer.toString(controller.newGameID());
 		case '8':
 			//return controller.getCurrentMatches(msg.substring(1,msg.length()));
 			return "not in use";

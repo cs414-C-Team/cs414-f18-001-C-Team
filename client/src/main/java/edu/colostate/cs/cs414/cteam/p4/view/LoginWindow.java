@@ -355,6 +355,9 @@ public class LoginWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int result = handleLogin();
+			
+			System.out.println("Result " + result);
+			
 	    	if (result >= 0) {
 	    		loginMsg.setVisible(false);
 	    		controller.launchGame(result); //Result is the ID of the authenticated user
@@ -376,12 +379,14 @@ public class LoginWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				regErrorMsg.setForeground(Color.RED);
+				regErrorMsg.setVisible(true);
 				String newEmail = regEmail.getText();
 				String newUsername = regUsername.getText();
-				String newPassword = new String(regPassword.getPassword());
-				String newConfirm = new String(regConfirm.getPassword());
 //				int newPassword = new String(regPassword.getPassword()).hashCode();   // password hashes
 //				int newConfirm = new String(regConfirm.getPassword()).hashCode();
+				String newPassword = new String(regPassword.getPassword());
+				String newConfirm = new String(regConfirm.getPassword());
+				String ipaddress = ipField.getText();
 				
 				if (!newPassword.equals(newConfirm)) {
 					regPassword.setText("");
@@ -389,28 +394,28 @@ public class LoginWindow {
 					System.out.println(newPassword);
 					System.out.print(newConfirm);
 					regErrorMsg.setText("Passwords do not match");
-					regErrorMsg.setVisible(true);
 			
 				} else if(!EMAIL_PATTERN.matcher(newEmail).matches()) {
 					regEmail.setText("");
 					regErrorMsg.setText("This is incorrect format for an email ID ");
-					regErrorMsg.setVisible(true);
 			
 				} else if (!USERNAME_PATTERN.matcher(newUsername).matches()) {
 					regUsername.setText("");
-					regErrorMsg.setText("This is incorrect format for a username ");
-					regErrorMsg.setVisible(true);
+
 			
 				} else {
-					// attempt registration  - DATABASE
-					
-					if (true) {  // registration is successful
+					// problem: you need to enter the IP address for registering as well
+					controller.connect(ipaddress);
+					int result = controller.register(newEmail, newUsername, newPassword);
+					if (result < 0) {
+						regErrorMsg.setText("Server error: request failed");
+						
+					} else {     // registration is successful
 						regUsername.setText("");
 						regEmail.setText("");
 						regPassword.setText("");
 						regConfirm.setText("");
 						regErrorMsg.setText("Registration Successful!");
-						regErrorMsg.setVisible(true);
 						regErrorMsg.setForeground(new Color(3, 196, 3));
 						Timer timer = new Timer(1000, new ActionListener() {
 						    @Override
