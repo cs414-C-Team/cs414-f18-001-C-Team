@@ -1,18 +1,24 @@
 package edu.colostate.cs.cs414.cteam.p4.controller;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import java.sql.ResultSetMetaData;
+
 import javafx.util.Pair;
 
 public class FacadeController {
 		
 	int latest_match = 0;
-	
+	Database db;
 	ArrayList<Integer> players = new ArrayList<Integer>();
 	ArrayList<Pair<Integer, String>> matches = new ArrayList<Pair<Integer, String>>();
 	ArrayList<Pair<Integer, Integer>> invites = new ArrayList<Pair<Integer, Integer>>();
 
 	
 	public FacadeController() {
+		Database db = new Database();
 		players.add(999);
 		players.add(3);
 	}
@@ -33,7 +39,21 @@ public class FacadeController {
 	}
 	
 	public int login(String credentials) {
-		return 0;
+		String[] loginInfo = credentials.split("-");
+		try {
+			if (db.login(loginInfo[0], loginInfo[1])) {
+				ResultSet rs = db.getUser(loginInfo[1]);
+				rs.absolute(1);
+				int id = rs.getString("id");
+				return id;
+			} else {
+				return -1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	public String retrieveMatch(String match) {
@@ -126,4 +146,24 @@ public class FacadeController {
 		
 	}
 	
+
+	public static void main(String[] args) throws SQLException {
+		
+		Database db = new Database();
+//		db.resetDB();
+		
+		
+		
+//		db.register("ianaf", "california", "ianaf100@gmail.com");
+		ResultSet rs = db.getUsers();
+		ResultSetMetaData rsmd = rs.getMetaData();
+//		System.out.println(users);
+//		
+		rs.absolute(1);
+		System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3));
+		
+		System.out.println(db.login("ianaf", "california"));
+		
+	}
 }
+

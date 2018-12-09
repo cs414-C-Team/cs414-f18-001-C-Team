@@ -22,7 +22,7 @@ public class Database {
 	 * available filters.
 	 */
 	public Database() {
-		String myDriver = "com.mysql.jdbc.Driver";
+		String myDriver = "com.mysql.cj.jdbc.Driver";
 		String myUrl = "jdbc:mysql://cs414-c-team.cvrg8lr7y0hh.us-east-2.rds.amazonaws.com";
 		String myUser = "jpode";
 		String myPassword = "830566010";
@@ -36,6 +36,7 @@ public class Database {
 			System.out.println("Connected");
 		} catch (Exception e) {
 			System.err.println("Exception in DB Construction: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -72,6 +73,7 @@ public class Database {
 				"EmailID varchar(255) not null unique,\r\n" + 
 				"Username varchar(255) not null unique,\r\n" + 
 				"Password varchar(255) not null,\r\n" + 
+				"ID int not null unique AUTO_INCREMENT,\r\n" +
 				"Primary Key (Username))";
 		update(create);
 		create = "Create table if not exists jungle.Match_State (         \r\n" + 
@@ -109,78 +111,78 @@ public class Database {
 		createTables();
 	}
 
-	public static void main(String[] args) throws SQLException {
-		Database db = new Database();
-		
-		db.resetDB();
-		
-		//create four new users:
-		db.register("user1", "pass", "email1");
-		db.register("user2", "pass", "email2");
-		db.register("user3", "pass", "email3");
-		db.register("user4", "pass", "email4");
-		
-		//check deletion and login:
-		System.out.println(db.login("user4", "pass") + " " + db.deleteAccount("user4", "pass") + " " + !db.login("user4", "pass"));
-	
-		//send invites to everyone from user1:
-		System.out.println("true: " + db.sendInvite("user1", "user2", "pending"));
-		System.out.println("true: " + db.sendInvite("user1", "user3", "pending"));
-		System.out.println("false: " + db.sendInvite("user1", "user4", "pending"));
-		System.out.println("false: " + db.sendInvite("user4", "user2", "pending"));
-		
-		//view invites received by user2:
-		db.printRS(db.viewReceivedInvites("user2"));
-		
-		//view invites send by user1:
-		db.printRS(db.viewSentInvites("user1"));
-		
-		//accept from u1 to u2:
-		System.out.println(db.acceptInvite("user1", "user2"));
-		//check that the invite was deleted
-		db.printRS(db.viewSentInvites("user1"));
-		//check that the game was created:
-		db.printRS(db.suspendedMatches("user1"));
-		ResultSet rss = db.suspendedMatches("user2");
-		rss.next();
-		int ID1v2 = rss.getInt(rss.findColumn("GameID"));
-		
-		//reject from u1 to u3:
-		System.out.println(db.rejectInvite("user1", "user3"));
-		//check that the invite was deleted
-		db.printRS(db.viewSentInvites("user1"));
-		//check that the game wasn't created:
-		db.printRS(db.suspendedMatches("user3"));
-		
-		db.sendInvite("user1", "user3", "pending");
-		db.acceptInvite("user1", "user3");
-		ResultSet rss1 = db.suspendedMatches("user3");
-		rss1.next();
-		int ID1v3 = rss1.getInt(rss1.findColumn("GameID"));
-		
-		//get users:
-		db.printRS(db.getUsers());
-		
-		//matches for a user, all matches:
-		db.printRS(db.matches("user3"));
-		db.printRS(db.allMatches());
-		
-		//current, all current:
-		
-		//suspended, all suspended:
-		
-		//finished, all finished:
-		
-		//matchOver:
-		System.out.println(db.matchOver("user1", "user2", Integer.toString(ID1v2)));
-		//check match status:
-		db.printRS(db.finishedMatches("user2"));
-		//check match record:
-		db.printRS(db.matchRecord("user1"));
-		
-		db.matchOver("user1", "user3", Integer.toString(ID1v3));
-		db.printRS(db.allMatchRecords());
-	}
+//	public static void main(String[] args) throws SQLException {
+//		Database db = new Database();
+//		
+//		db.resetDB();
+//		
+//		//create four new users:
+//		db.register("user1", "pass", "email1");
+//		db.register("user2", "pass", "email2");
+//		db.register("user3", "pass", "email3");
+//		db.register("user4", "pass", "email4");
+//		
+//		//check deletion and login:
+//		System.out.println(db.login("user4", "pass") + " " + db.deleteAccount("user4", "pass") + " " + !db.login("user4", "pass"));
+//	
+//		//send invites to everyone from user1:
+//		System.out.println("true: " + db.sendInvite("user1", "user2", "pending"));
+//		System.out.println("true: " + db.sendInvite("user1", "user3", "pending"));
+//		System.out.println("false: " + db.sendInvite("user1", "user4", "pending"));
+//		System.out.println("false: " + db.sendInvite("user4", "user2", "pending"));
+//		
+//		//view invites received by user2:
+//		db.printRS(db.viewReceivedInvites("user2"));
+//		
+//		//view invites send by user1:
+//		db.printRS(db.viewSentInvites("user1"));
+//		
+//		//accept from u1 to u2:
+//		System.out.println(db.acceptInvite("user1", "user2"));
+//		//check that the invite was deleted
+//		db.printRS(db.viewSentInvites("user1"));
+//		//check that the game was created:
+//		db.printRS(db.suspendedMatches("user1"));
+//		ResultSet rss = db.suspendedMatches("user2");
+//		rss.next();
+//		int ID1v2 = rss.getInt(rss.findColumn("GameID"));
+//		
+//		//reject from u1 to u3:
+//		System.out.println(db.rejectInvite("user1", "user3"));
+//		//check that the invite was deleted
+//		db.printRS(db.viewSentInvites("user1"));
+//		//check that the game wasn't created:
+//		db.printRS(db.suspendedMatches("user3"));
+//		
+//		db.sendInvite("user1", "user3", "pending");
+//		db.acceptInvite("user1", "user3");
+//		ResultSet rss1 = db.suspendedMatches("user3");
+//		rss1.next();
+//		int ID1v3 = rss1.getInt(rss1.findColumn("GameID"));
+//		
+//		//get users:
+//		db.printRS(db.getUsers());
+//		
+//		//matches for a user, all matches:
+//		db.printRS(db.matches("user3"));
+//		db.printRS(db.allMatches());
+//		
+//		//current, all current:
+//		
+//		//suspended, all suspended:
+//		
+//		//finished, all finished:
+//		
+//		//matchOver:
+//		System.out.println(db.matchOver("user1", "user2", Integer.toString(ID1v2)));
+//		//check match status:
+//		db.printRS(db.finishedMatches("user2"));
+//		//check match record:
+//		db.printRS(db.matchRecord("user1"));
+//		
+//		db.matchOver("user1", "user3", Integer.toString(ID1v3));
+//		db.printRS(db.allMatchRecords());
+//	}
 
 	
 	public void printRS(ResultSet rs) throws SQLException {
@@ -260,6 +262,11 @@ public class Database {
 		return alter(update);
 	}
 
+	public ResultSet getUser(String username) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Users WHERE Username = '%1$s';", username);
+		return sendQuery(query);
+	}
+	
 	public ResultSet getUsers() throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Users;");
 		return sendQuery(query);
