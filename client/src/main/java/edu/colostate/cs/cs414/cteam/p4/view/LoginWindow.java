@@ -247,7 +247,7 @@ public class LoginWindow {
 		
 		// Center panel for username/password textboxes and labels
 		JPanel centerPanel = new JPanel();
-		centerPanel.setBounds(10, 94, 430, 196);
+		centerPanel.setBounds(10, 105, 430, 196);
 		centerPanel.setOpaque(false);
 		centerPanel.setLayout(null);
 		loginPanel.add(centerPanel);
@@ -324,7 +324,7 @@ public class LoginWindow {
 		loginPanel.add(loginMsg);
 		
 		loginMsg2 = new JLabel("Login failed due to server connection issue");
-		loginMsg2.setBounds(10, 82, 430, 23);
+		loginMsg2.setBounds(20, 70, 430, 23);
 		loginMsg2.setVisible(false);
 		loginMsg2.setFont(new Font("Dialog", Font.PLAIN, 15));
 		loginMsg2.setForeground(Color.RED);

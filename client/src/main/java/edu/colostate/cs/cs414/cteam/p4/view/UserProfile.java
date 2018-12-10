@@ -56,13 +56,13 @@ public class UserProfile extends JFrame {
 		this.user = user;
 		System.out.println("User " + user + " loaded.");
 		initialize(local);
-////		if(user == 1) {
-////			local = true;
-////			initialize(local);
-////
-////		} else {
-////			initialize(local);
-////		}
+		if(user == 1) {
+			local = true;
+			initialize(local);
+
+		} else {
+			initialize(local);
+		}
 	}
 	
 	public JPanel get() { return userPane; }
@@ -90,10 +90,10 @@ public class UserProfile extends JFrame {
 		initializeTopPanel();
 		initializeSearchPanel();
 		initializeGamePanel();
-////		if(local == false) {
-////			initializeSearchPanel();
-////			initializeGamePanel();
-////		}
+		if(local == false) {
+			initializeSearchPanel();
+			initializeGamePanel();
+		}
 	}
 	
 	
@@ -102,16 +102,17 @@ public class UserProfile extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 24));
 		lblNewLabel.setBounds(12, 7, 588, 39);
-		userPane.add(lblNewLabel);
-		
 		JPanel topPanel = new JPanel();
+		topPanel.add(lblNewLabel);
+		
 		topPanel.setOpaque(false);
-		topPanel.setBounds(10, 51, 576, 149);
+		topPanel.setBounds(10, 0, 576, 170);
 		userPane.add(topPanel);
 		topPanel.setLayout(null);
 		
 		JButton btnLocalGame = new JButton("Play Local Game");
-		btnLocalGame.setBounds(99, 23, 380, 38);
+		btnLocalGame.setBounds(98, 58, 380, 38);
+		btnLocalGame.requestFocus();
 		btnLocalGame.setFont(new Font("Dialog", Font.PLAIN, 14));
 		topPanel.add(btnLocalGame);
 		btnLocalGame.addActionListener(new ActionListener() {
@@ -121,11 +122,25 @@ public class UserProfile extends JFrame {
 			}
 		});
 		
+		JButton btnViewProfile = new JButton("View Profile");
+		btnViewProfile.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnViewProfile.setBounds(98, 125, 160, 34);
+		topPanel.add(btnViewProfile);
+		
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.setBounds(12, 5, 84, 27);
+		topPanel.add(btnRefresh);
+		btnRefresh.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateCurrentGames();
+			}
+		});
+		
 		JButton btnNewButton = new JButton("Game Rules");
 		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 13));
 		btnNewButton.addMouseListener(new MouseAdapter() {
-			
-			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFrame jp1 = new JFrame();
 				JTextArea field = new JTextArea();
@@ -172,25 +187,8 @@ public class UserProfile extends JFrame {
 		                          (int) ((bounds.height / 2) - (800 / 2))); 
 			}
 		});
-		btnNewButton.setBounds(319, 90, 160, 35);
+		btnNewButton.setBounds(318, 125, 160, 35);
 		topPanel.add(btnNewButton);
-		
-		JButton btnViewProfile = new JButton("View Profile");
-		btnViewProfile.setFont(new Font("Dialog", Font.PLAIN, 13));
-		btnViewProfile.setBounds(99, 90, 160, 34);
-		topPanel.add(btnViewProfile);
-		
-		/*
-		JButton btnNewButton = new JButton("View Invites");
-		btnNewButton.setBounds(321, 108, 160, 27);
-		topPanel.add(btnNewButton);
-		btnNewButton.setFont(new Font("Calibri", Font.PLAIN, 13));
-		
-		JButton btnNewButton_1 = new JButton("Match History");
-		btnNewButton_1.setBounds(101, 108, 160, 27);
-		topPanel.add(btnNewButton_1);
-		btnNewButton_1.setFont(new Font("Calibri", Font.PLAIN, 13));
-		*/
 	}
 	
 	private void initializeSearchPanel() {
@@ -237,7 +235,7 @@ public class UserProfile extends JFrame {
 		btnSendInvitation_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnSendInvitation_1.setEnabled(false);
-				controller.sendInvitation(Integer.toString(user) + "-" + users[userList.getSelectedIndex()].split("-")[1]);
+				controller.sendInvitation(Integer.toString(user) + "-" + users[userList.getSelectedIndex()].split(":")[1]);
 
 		    }
 	     });
@@ -254,7 +252,7 @@ public class UserProfile extends JFrame {
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(null);
 		gamePanel.setBackground(new Color(240, 240, 240));
-		gamePanel.setBounds(12, 224, 576, 237);
+		gamePanel.setBounds(10, 203, 576, 237);
 		userPane.add(gamePanel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Multiplayer Games");
@@ -288,7 +286,7 @@ public class UserProfile extends JFrame {
 		turnLabel.setBounds(218, 200, 154, 21);
 		gamePanel.add(turnLabel);
 								
-////	updateCurrentGames();
+		updateCurrentGames();
 		
 		launchGameButton.addActionListener(new ActionListener() {
 			@Override
@@ -335,14 +333,6 @@ public class UserProfile extends JFrame {
 	public void updateCurrentGames() {
 		gameList.clearSelection();
 		DefaultListModel<GameListObject> model = new DefaultListModel<GameListObject>();
-		
-		/* Query user's current games 
-		String[] gameTitles = new String[currentGames.size()];
-		for(int i = 0; i < currentGames.size(); i++) {
-			gameTitles[i] = currentGames.get(i).getValue();
-		}
-		gameList = new JList(gameTitles);
-		*/
 		
 		//Format: <invite>&<invite>...&<game>&<game>
 		//Games are returned in this format: <matchID>-<user1ID>-<user2ID>-<player turn>-<date>-<board>
@@ -463,7 +453,7 @@ public class UserProfile extends JFrame {
 
 			if (!users[0].equals(" ")) {
 				for (int i = 0; i < users.length; i++) {
-						model.addElement(users[i]);
+						model.addElement(users[i].split(":")[0]);
 				}
 			}
 			userList.setModel(model);

@@ -203,9 +203,9 @@ public class FacadeController {
 			if (!rs.next()) {
 				return " ";
 			}
-			String result = rs.getString(1);
+			String result = rs.getString("username") + ":" + rs.getString("id");
 			while (rs.next()) {
-				result += "&" + rs.getString(1);
+				result += "&" + rs.getString("username") + ":" + rs.getString("id");
 			}
 			return result;
 		} catch (SQLException e) {

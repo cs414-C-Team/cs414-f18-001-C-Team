@@ -87,6 +87,7 @@ public class Server{
 			serverThread.setName("Server");
 			serverThread.start();
 			
+		}catch(SocketException e){  //Do nothing
 		}catch(IOException e){ e.printStackTrace(); }
 	}
 	public void dispose(){

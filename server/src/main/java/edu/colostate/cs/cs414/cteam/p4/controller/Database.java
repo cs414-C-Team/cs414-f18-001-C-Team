@@ -171,7 +171,7 @@ public class Database {
 	}
 	
 	public ResultSet searchUsers(String search) throws SQLException {
-		String query = "SELECT Username FROM jungle.Users WHERE Username LIKE '%" + search + "%';";
+		String query = "SELECT Username, id FROM jungle.Users WHERE Username LIKE '%" + search + "%';";
 		return sendQuery(query);
 	}
 
