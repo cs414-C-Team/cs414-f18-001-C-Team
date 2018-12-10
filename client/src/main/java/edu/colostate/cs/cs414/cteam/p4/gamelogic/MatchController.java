@@ -16,7 +16,6 @@ public class MatchController {
 	}
 	
 	public void startMatch() {
-
 		current_turn = current_match.start();
 	}
 	
@@ -54,13 +53,8 @@ public class MatchController {
 		return current_match.getPlayers();
 	}
 	
-	public int nextTurn(int current_turn) {		
-		if(current_turn == 1) {
-			return 2;
-		} else {
-			return 1;
-		}
-			
+	public int getStatus() {
+		return current_match.status();
 	}
 	
 }

@@ -55,6 +55,7 @@ public class ServerListener {
 		case '8':
 			return controller.searchUsers(msg.substring(1,msg.length()));
 		case '9':
+			System.out.println("Code 9: Query matches");
 			return controller.queryMatches(msg.substring(1,msg.length()));
 		default:
 			return "System:ERROR: Unrecognizable message format.";
