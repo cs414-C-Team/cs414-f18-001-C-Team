@@ -7,6 +7,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GraphicsConfiguration;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -25,6 +28,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.Component;
 import javax.swing.UIManager;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UserProfile extends JFrame {
 
@@ -50,13 +55,14 @@ public class UserProfile extends JFrame {
 		this.controller = controller;
 		this.user = user;
 		System.out.println("User " + user + " loaded.");
-		if(user == 1) {
-			local = true;
-			initialize(local);
-
-		} else {
-			initialize(local);
-		}
+		initialize(local);
+////		if(user == 1) {
+////			local = true;
+////			initialize(local);
+////
+////		} else {
+////			initialize(local);
+////		}
 	}
 	
 	public JPanel get() { return userPane; }
@@ -67,7 +73,7 @@ public class UserProfile extends JFrame {
 		userPane.setLayout(null);
 		setContentPane(userPane);
 
-		currentGames = new ArrayList<Pair<Integer, String>>();
+//		currentGames = new ArrayList<Pair<Integer, String>>();
 		//currentGames.add(new Pair<Integer, String>(1, "Game with John")); //test
 		//currentGames.add(new Pair<Integer, String>(2, "Game with Jane")); //test
 		
@@ -82,10 +88,12 @@ public class UserProfile extends JFrame {
 		}
 		
 		initializeTopPanel();
-		if(local == false) {
-			initializeSearchPanel();
-			initializeGamePanel();
-		}
+		initializeSearchPanel();
+		initializeGamePanel();
+////		if(local == false) {
+////			initializeSearchPanel();
+////			initializeGamePanel();
+////		}
 	}
 	
 	
@@ -93,7 +101,7 @@ public class UserProfile extends JFrame {
 		JLabel lblNewLabel = new JLabel("Welcome to the Jungle");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 24));
-		lblNewLabel.setBounds(0, 0, 588, 39);
+		lblNewLabel.setBounds(12, 7, 588, 39);
 		userPane.add(lblNewLabel);
 		
 		JPanel topPanel = new JPanel();
@@ -103,8 +111,8 @@ public class UserProfile extends JFrame {
 		topPanel.setLayout(null);
 		
 		JButton btnLocalGame = new JButton("Play Local Game");
-		btnLocalGame.setBounds(101, 33, 380, 38);
-		btnLocalGame.setFont(new Font("Calibri", Font.PLAIN, 13));
+		btnLocalGame.setBounds(99, 23, 380, 38);
+		btnLocalGame.setFont(new Font("Dialog", Font.PLAIN, 14));
 		topPanel.add(btnLocalGame);
 		btnLocalGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -112,6 +120,65 @@ public class UserProfile extends JFrame {
 					game_window.newLocalGame();
 			}
 		});
+		
+		JButton btnNewButton = new JButton("Game Rules");
+		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame jp1 = new JFrame();
+				JTextArea field = new JTextArea();
+				field.setText(" Movement\r\n\n" + 
+						"1.  Players alternate moves with Blue moving first. \r\n" + 
+						"2.  During a turn, a player must move.\r\n" + 
+						"3.  All pieces can move one square horizontally or vertically (not diagonally).\r\n" + 
+						"4.  A piece may not move into its own den.\r\n" + 
+						"5.  Animals of either side can move into and out of any trap square.\r\n" + 
+						"6.  The rat is the only animal that can enter a water square.\r\n" + 
+						"7.  Lions and tigers can jump over water squares to the opposite land square (horizontally/vertically). \r\n" + 
+						"8.  If that square contains an enemy piece of equal or lower rank, the lion or tiger capture it as part \r\n" + 
+						"    of their jump.\r\n" + 
+						"9.  A jumping move is blocked (not permitted) if a rat of either colour currently occupies any of the \r\n" + 
+						"    intervening water squares.\r\n" + 
+						"\nAnimal Ranks\r\n\n" +
+						"8 - Elephant\r\n" + 
+						"7 - Lion\r\n" + 
+						"6 - Tiger\r\n" + 
+						"5 - Leopard\r\n" + 
+						"4 - Dog\r\n" + 
+						"3 - Wolf\r\n" + 
+						"2 - Cat\r\n" + 
+						"1 - Rat\r\n" + 
+						"\nCapturing\r\n\n" + 
+						"1. Animals capture opponent pieces by replacing their spot on the board. \r\n" + 
+						"2. A piece can capture any enemy piece that has the same or lower rank, with the following exceptions:\r\n" + 
+						"        •  A piece that enters an opponent's trap squares is reduced in rank to 0.\r\n" + 
+						"           Thus, the trapped piece may be captured by the defending side with any piece, regardless of rank. \r\n" + 
+						"        •  A trapped piece has its normal rank restored when it exits an opponent's trap square.\r\n" + 
+						"        •  The rat can \"kill\" (capture) an elephant, but only from a land square, not from a water square. \r\n" + 
+						"           Many published versions of the game say the rat kills the elephant by \"running into its ear and \r\n" + 
+						"           gnawing into its brain\".\r\n" + 
+						"        •  A rat in the water is invulnerable to capture by any piece on land. Rats in water are only vulnerable \r\n" + 
+						"           to another rat in water.\r\n"); 
+				 field.setEditable(false);
+				 jp1.getContentPane().add(field);
+				 jp1.pack();
+				 jp1.setVisible(true);
+				 jp1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				 GraphicsConfiguration gc = jp1.getGraphicsConfiguration();
+				 Rectangle bounds = gc.getBounds();
+				 jp1.setLocation((int) ((bounds.width / 2) - (600 / 2)),
+		                          (int) ((bounds.height / 2) - (800 / 2))); 
+			}
+		});
+		btnNewButton.setBounds(319, 90, 160, 35);
+		topPanel.add(btnNewButton);
+		
+		JButton btnViewProfile = new JButton("View Profile");
+		btnViewProfile.setFont(new Font("Dialog", Font.PLAIN, 13));
+		btnViewProfile.setBounds(99, 90, 160, 34);
+		topPanel.add(btnViewProfile);
 		
 		/*
 		JButton btnNewButton = new JButton("View Invites");
@@ -129,7 +196,7 @@ public class UserProfile extends JFrame {
 	private void initializeSearchPanel() {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(240, 240, 240));
-		panel_1.setBounds(12, 356, 576, 287);
+		panel_1.setBounds(10, 473, 576, 287);
 		userPane.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -190,7 +257,7 @@ public class UserProfile extends JFrame {
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(null);
 		gamePanel.setBackground(new Color(240, 240, 240));
-		gamePanel.setBounds(10, 115, 576, 237);
+		gamePanel.setBounds(12, 224, 576, 237);
 		userPane.add(gamePanel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Multiplayer Games");
@@ -223,8 +290,8 @@ public class UserProfile extends JFrame {
 		turnLabel.setFont(new Font("Dialog", Font.PLAIN, 19));
 		turnLabel.setBounds(218, 200, 154, 21);
 		gamePanel.add(turnLabel);
-				
-		updateCurrentGames();
+								
+////	updateCurrentGames();
 		
 		launchGameButton.addActionListener(new ActionListener() {
 			@Override
@@ -343,7 +410,7 @@ public class UserProfile extends JFrame {
 		// game constructor
 		public GameListObject(int id, String opponent, boolean turn) {
 			this.id = id;
-			this.opponent = opponent;
+			this.opponent = opponent;  
 			this.turn = turn;
 			this.invite = false;
 		}
