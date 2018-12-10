@@ -163,6 +163,22 @@ public class FacadeController {
 		return result;
 	}
 		
+	/** Search users in database. Returns a string in the format: user1&user2&user3  */
+	public String searchUsers(String keyword) {
+		try {
+			ResultSet rs = db.searchUsers(keyword);
+			rs.absolute(1);
+			String result = rs.getString(1);
+			while (rs.next()) {
+				result += "&" + rs.getString(1);
+			}
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
+		
+	}
 	
 /*		System.out.println("System: number of total invites: " + invites.size());
 		System.out.println("System: number of total matches: " + matches.size());
@@ -203,6 +219,9 @@ public class FacadeController {
 		FacadeController f = new FacadeController();
 		Database db = f.db;
 //		db.resetDB();
+//		System.out.println(String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$s';", "piss"));
+
+//		f.login("ian-california");
 		
 		
 		
@@ -210,12 +229,12 @@ public class FacadeController {
 		
 		
 //		db.register("ianaf", "california", "ianaf100@gmail.com");
-		ResultSet rs = db.getUsers();
-		ResultSetMetaData rsmd = rs.getMetaData();
-		rs.absolute(1);
-		rs.next();
+		String result = f.searchUsers("user");
+//		ResultSetMetaData rsmd = rs.getMetaData();
+//		rs.absolute(2);
+//		rs.next();
 //		db.printRS(rs);
-		System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
+		System.out.println(result);
 //		
 //		System.out.println(db.login("ianaf", "california"));
 		

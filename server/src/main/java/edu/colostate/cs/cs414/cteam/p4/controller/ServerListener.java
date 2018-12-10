@@ -22,8 +22,10 @@ public class ServerListener {
 
 	public String recivedInput(ClientInstance client, String msg) {
 		// TODO Auto-generated method stub
+		if (msg == null || msg.equals("")) {
+			return "";
+		}
 		System.out.println("System: recieved message: " + msg);
-
 		switch(msg.charAt(0)) {
 		case '1':
 			controller.newMatch(msg.substring(1,msg.length()));
@@ -51,8 +53,7 @@ public class ServerListener {
 		case '7':
 			return Integer.toString(controller.newGameID());
 		case '8':
-			//return controller.getCurrentMatches(msg.substring(1,msg.length()));
-			return "not in use";
+			return controller.searchUsers(msg.substring(1,msg.length()));
 		case '9':
 			return controller.queryMatches(msg.substring(1,msg.length()));
 		default:

@@ -390,8 +390,10 @@ public class UserProfile extends JFrame {
 	
 	public void search() {
 		String query = userSearchField.getText();
-		DefaultListModel<String> model = new DefaultListModel<String>();
+		String results = controller.search(query);
+		users = results.split("&");
 		
+		DefaultListModel<String> model = new DefaultListModel<String>();
 		for (int i = 0; i < users.length; i++) {
 				model.addElement(users[i]);
 		}

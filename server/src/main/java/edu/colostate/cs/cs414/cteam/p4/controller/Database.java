@@ -22,7 +22,7 @@ public class Database {
 	 * available filters.
 	 */
 	public Database() {
-		String myDriver = "com.mysql.cj.jdbc.Driver";
+		String myDriver = "com.mysql.jdbc.Driver";
 		String myUrl = "jdbc:mysql://cs414-c-team.cvrg8lr7y0hh.us-east-2.rds.amazonaws.com";
 		String myUser = "jpode";
 		String myPassword = "830566010";
@@ -164,6 +164,11 @@ public class Database {
 		String update = String.format(
 				"INSERT INTO jungle.Invites (Sender, Receiver) VALUES ('%1$d', '%2$d');", sender, receiver);
 		return alter(update);
+	}
+	
+	public ResultSet searchUsers(String search) throws SQLException {
+		String query = "SELECT Username FROM jungle.Users WHERE Username LIKE '%" + search + "%';";
+		return sendQuery(query);
 	}
 
 	public ResultSet receivedInvites(int user) throws SQLException {
