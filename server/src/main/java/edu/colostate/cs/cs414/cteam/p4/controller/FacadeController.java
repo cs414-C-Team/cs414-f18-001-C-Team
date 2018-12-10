@@ -167,7 +167,9 @@ public class FacadeController {
 	public String searchUsers(String keyword) {
 		try {
 			ResultSet rs = db.searchUsers(keyword);
-			rs.absolute(1);
+			if (!rs.next()) {
+				return " ";
+			}
 			String result = rs.getString(1);
 			while (rs.next()) {
 				result += "&" + rs.getString(1);
