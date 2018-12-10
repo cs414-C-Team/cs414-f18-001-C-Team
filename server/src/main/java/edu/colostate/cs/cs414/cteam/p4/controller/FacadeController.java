@@ -214,65 +214,6 @@ public class FacadeController {
 		return "";
 		
 	}
-	
-/*		System.out.println("System: number of total invites: " + invites.size());
-		System.out.println("System: number of total matches: " + matches.size());
-		String result = "";
-		boolean first = true;
-		for(int i = 0; i < invites.size(); i++) {
-			if(Integer.parseInt(substring) == invites.get(i).getValue()) {
-				if(!first) {
-					result += "&";
-					result += invites.get(i).getKey() + ":" + invites.get(i).getValue(); 
-				} else {
-					result += invites.get(i).getKey() + ":" + invites.get(i).getValue(); 
-					first = false;
-				}
-			}
-		}
-		first = true;
-		for(int i = 0; i < matches.size(); i++) {
-			if(Integer.parseInt(matches.get(i).getValue().split("-")[1]) == user || Integer.parseInt(matches.get(i).getValue().split("-")[2]) == user) {
-				if(!first) {
-					result += "&" + matches.get(i).getValue();
-				} else {
-					result += matches.get(i).getValue();
-					first = false;
-				}
-			}
-		}
-		if(result.length() == 0) {
-			return null;
-		}
-		System.out.println("System: Returning turns/matches for user " + substring + ": " + result);
-		return result;
-*/
-	
-	
-	
-	public static void main(String[] args) throws SQLException {
-		FacadeController f = new FacadeController();
-		Database db = f.db;
-//		db.resetDB();
-//		System.out.println(String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$s';", "piss"));
 
-//		f.login("ian-california");
-		
-		
-		
-//		System.out.println(f.storeInvite("3-2"));
-		
-		
-//		db.register("ianaf", "california", "ianaf100@gmail.com");
-		String result = f.searchUsers("user");
-//		ResultSetMetaData rsmd = rs.getMetaData();
-//		rs.absolute(2);
-//		rs.next();
-//		db.printRS(rs);
-		System.out.println(result);
-//		
-//		System.out.println(db.login("ianaf", "california"));
-		
-	}
 }
 

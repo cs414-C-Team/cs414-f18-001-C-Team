@@ -84,7 +84,7 @@ public class Database {
 				"               Turn int not null,\r\n" +
 				"				State varchar(300) not null,\r\n" + 
 				"               Status int,\r\n" +
-				"				date varchar(30), not null,\r\n" + 
+				"				date varchar(30) not null,\r\n" + 
 				"				Primary Key(GameID)\r\n" + 
 //				"				Constraint Foreign key(User1) references User(id),\r\n" + 
 //				"				Constraint Foreign key(User2) references User(id)\r\n" +    // I couldn't get foreign keys working

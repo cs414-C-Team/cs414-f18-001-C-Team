@@ -56,13 +56,13 @@ public class UserProfile extends JFrame {
 		this.user = user;
 		System.out.println("User " + user + " loaded.");
 		initialize(local);
-		if(user == 1) {
-			local = true;
-			initialize(local);
-
-		} else {
-			initialize(local);
-		}
+    		if(user == 1) {
+    			local = true;
+    			initialize(local);
+    
+    		} else {
+    			initialize(local);
+    		}
 	}
 	
 	public JPanel get() { return userPane; }
@@ -88,12 +88,10 @@ public class UserProfile extends JFrame {
 		}
 		
 		initializeTopPanel();
-		initializeSearchPanel();
-		initializeGamePanel();
-		if(local == false) {
-			initializeSearchPanel();
-			initializeGamePanel();
-		}
+    		if(local == false) {
+    			initializeSearchPanel();
+    			initializeGamePanel();
+    		}
 	}
 	
 	
@@ -141,6 +139,8 @@ public class UserProfile extends JFrame {
 		JButton btnNewButton = new JButton("Game Rules");
 		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 13));
 		btnNewButton.addMouseListener(new MouseAdapter() {
+			
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				JFrame jp1 = new JFrame();
 				JTextArea field = new JTextArea();
@@ -187,8 +187,9 @@ public class UserProfile extends JFrame {
 		                          (int) ((bounds.height / 2) - (800 / 2))); 
 			}
 		});
-		btnNewButton.setBounds(318, 125, 160, 35);
+		btnNewButton.setBounds(319, 90, 160, 35);
 		topPanel.add(btnNewButton);
+		
 	}
 	
 	private void initializeSearchPanel() {
@@ -215,6 +216,7 @@ public class UserProfile extends JFrame {
 		panel_1.add(searchButton);
 		searchButton.addActionListener(new searchListener());
 		userSearchField.addActionListener(new searchListener());
+
 	
 		userList = new JList<String>();
 		userList.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -252,7 +254,7 @@ public class UserProfile extends JFrame {
 		JPanel gamePanel = new JPanel();
 		gamePanel.setLayout(null);
 		gamePanel.setBackground(new Color(240, 240, 240));
-		gamePanel.setBounds(10, 203, 576, 237);
+		gamePanel.setBounds(12, 224, 576, 237);
 		userPane.add(gamePanel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Multiplayer Games");
@@ -286,7 +288,7 @@ public class UserProfile extends JFrame {
 		turnLabel.setBounds(218, 200, 154, 21);
 		gamePanel.add(turnLabel);
 								
-		updateCurrentGames();
+    	updateCurrentGames();
 		
 		launchGameButton.addActionListener(new ActionListener() {
 			@Override
@@ -333,6 +335,14 @@ public class UserProfile extends JFrame {
 	public void updateCurrentGames() {
 		gameList.clearSelection();
 		DefaultListModel<GameListObject> model = new DefaultListModel<GameListObject>();
+		
+		/* Query user's current games 
+		String[] gameTitles = new String[currentGames.size()];
+		for(int i = 0; i < currentGames.size(); i++) {
+			gameTitles[i] = currentGames.get(i).getValue();
+		}
+		gameList = new JList(gameTitles);
+		*/
 		
 		//Format: <invite>&<invite>...&<game>&<game>
 		//Games are returned in this format: <matchID>-<user1ID>-<user2ID>-<player turn>-<date>-<board>
@@ -443,7 +453,7 @@ public class UserProfile extends JFrame {
 			}
 		}
 	}
-	
+
 	public class searchListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String query = userSearchField.getText();
