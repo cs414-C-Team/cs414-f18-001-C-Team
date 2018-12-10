@@ -54,6 +54,7 @@ public class ServerListener {
 			//return controller.getCurrentMatches(msg.substring(1,msg.length()));
 			return "not in use";
 		case '9':
+			System.out.println("Code 9: Query matches");
 			return controller.queryMatches(msg.substring(1,msg.length()));
 		default:
 			return "System:ERROR: Unrecognizable message format.";

@@ -21,7 +21,7 @@ public class Match {
 		this.matchID = matchID;
 		this.player1ID = player1ID;
 		this.player2ID = player2ID;
-		this.activeplayer = player1ID;
+		this.activeplayer = player2ID; //Player 2 does not actually start, this is a workaround with how the active player check works.
 		
 		date = new Date();
 		player1Pieces = player2Pieces = 8;
@@ -54,13 +54,16 @@ public class Match {
 		this.player1ID = Integer.parseInt(match_parts[1]);
 		this.player2ID = Integer.parseInt(match_parts[2]);
 		this.activeplayer = Integer.parseInt(match_parts[3]);
+
 		
-		 //this is necessary for the rest of the game logic, which only deals with player numbers of 1 and 2
 		if(this.activeplayer == player1ID) {
-			this.activeplayer = 1;
-		} else {
+			System.out.println("Setting active player to 2/user " + player2ID);
 			this.activeplayer = 2;
+		} else {
+			System.out.println("Setting active player to 1/user " + player1ID);
+			this.activeplayer = 1;
 		}
+		
 		
 		this.player1Pieces = 0;
 		this.player2Pieces = 0;
@@ -219,7 +222,11 @@ public class Match {
 	}
 
 	public int getActivePlayer() {
-		return activeplayer;
+		if(this.activeplayer == player1ID || this.activeplayer == 1) {
+			return player1ID;
+		} else {
+			return player2ID;
+		}
 	}
 	
 	public String getPlayers() {
@@ -245,7 +252,11 @@ public class Match {
 	//  1 : Moving (and attacking, if applicable) are possible
 	public boolean validMove(int fromX, int fromY, int toX, int toY, int player) {
 		boolean valid = false;
-		
+		if(player == player1ID) {
+			player = 1;
+		} else {
+			player = 2;
+		}
 		//If the destination contains the other player's piece, it is an attack. Otherwise, it is a move
 		if(board[toX][toY].hasCharacter() && board[toX][toY].getCharacter().getTeam() != player) {
 			System.out.println("System.Match: Move Type: Attack");
@@ -404,6 +415,11 @@ public class Match {
 	
 	public String toString() {
 		String result = "";
+		if(this.activeplayer == 1) {
+			activeplayer = player1ID;
+		} else {
+			activeplayer = player2ID;
+		}
 		result = this.matchID + "-" + this.player1ID + "-" + this.player2ID + "-" + this.activeplayer + "-" +getDate() + "-" + this.status + "-";
 
 		String[] board = getBoard();

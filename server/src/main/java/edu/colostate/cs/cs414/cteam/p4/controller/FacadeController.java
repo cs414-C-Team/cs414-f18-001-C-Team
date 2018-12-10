@@ -56,22 +56,45 @@ public class FacadeController {
 
 	/** TODO */
 	public int processTurn(String turn) {
-		for(int i = 0; i < matches.size(); i++) {
-			if(matches.get(i).getKey() == Integer.parseInt(turn.split("-")[0])) {
-				matches.remove(matches.get(i));
-				matches.add(new Pair<Integer,String>(Integer.parseInt(turn.split("-")[0]), turn));
-				return 0;
+		String[] match = turn.split("-");
+	//  [id, player1_id, player2_id, current_player_id, date, status(int), board_state]
+		int gameid = Integer.parseInt(match[0]);
+		int player1 = Integer.parseInt(match[1]);
+		int player2 = Integer.parseInt(match[2]);
+		int currentPlayer = Integer.parseInt(match[3]);
+		String date = match[4];
+		int status = Integer.parseInt(match[5]);
+		String boardState = match[6];
+		
+		if(status != 1111 && status > 0) {
+			if(status == player1) {
+				db.matchOver(Integer.toString(player1), Integer.toString(player2), Integer.toString(gameid));
+				return status;
+			} else {
+				db.matchOver(Integer.toString(player2), Integer.toString(player1), Integer.toString(gameid));
+				return status;
 			}
 		}
-		return 1;
+		
+		if(db.storeGame(gameid, player1, player2, currentPlayer, date, boardState, status)) {
+			return 0;
+		} else {
+			return 1111;
+		}
 	}
 
-	/** TODO */
 	public String retrieveMatch(String match) {
-		for(int i = 0; i < matches.size(); i++) {
-			if(matches.get(i).getKey() == Integer.parseInt(match)) {
-				return matches.get(i).getValue();
+		System.out.println("Controller: retrieving matches " + match);
+		try {
+			ResultSet retrieved_match = db.retrieveMatch(match);
+			if(retrieved_match.next()){
+				String result = retrieved_match.getInt("gameid") + "-" + retrieved_match.getInt("user1") + "-" + retrieved_match.getInt("user2") + "-" 
+	            					+ retrieved_match.getInt("turn") + "-" + retrieved_match.getString("date") + "-" + retrieved_match.getString("status") + "-" + retrieved_match.getString("state");
+				return result;
 			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -103,14 +126,15 @@ public class FacadeController {
 		int gameid = Integer.parseInt(match[0]);
 		int player1 = Integer.parseInt(match[1]);
 		int player2 = Integer.parseInt(match[2]);
-		int currentPlayer = Integer.parseInt(match[3]); 
+		int currentPlayer = Integer.parseInt(match[3]);
+		String date = match[4];
 		int status = Integer.parseInt(match[5]);
 		String boardState = match[6];
 		
 		if(status == 1111)
 			db.deleteInvite(player1, player2);  // removes the invite from the db  (player 1 is the sender)
 		
-		boolean result = db.storeGame(gameid, player1, player2, currentPlayer, boardState, status);
+		boolean result = db.storeGame(gameid, player1, player2, currentPlayer, date, boardState, status);
 	}
 	
 	
@@ -125,42 +149,51 @@ public class FacadeController {
      //  Games are returned in this format: <matchID>-<user1ID>-<user2ID>-<player turn>-<date>-<board>
      //  Invites are returned in this format: <senderID>   
 	public String queryMatches(String substring) {
+		System.out.println("Controller: querying matches for user " + substring);
 		int user = Integer.parseInt(substring);
 		String result = "";
 		try {
 			ResultSet inviteSet = db.receivedInvites(user);
-			inviteSet.absolute(1);
+			db.printRS(inviteSet);
+			inviteSet.absolute(0);
+			
 			boolean first = true;
-			do {
+			while (inviteSet.next()){
 				if (!first) {
 					result += "&" + inviteSet.getInt("sender") + ":" + inviteSet.getInt("receiver");
 				} else {
 					result += inviteSet.getInt("sender") + ":" + inviteSet.getInt("receiver");
 					first = false;
 				}
-			} while (inviteSet.next());
+			}
 			
 			ResultSet matchSet = db.currentMatches(user);
-			matchSet.absolute(1);
+			db.printRS(matchSet);
+			matchSet.absolute(0);
 			first = true;
-			do {
+			while (matchSet.next()){
+				System.out.println("System: adding match to return list");
 				String match = matchSet.getInt("gameid") + "-" + matchSet.getInt("user1") + "-" + matchSet.getInt("user2") + "-" 
-	            					+ matchSet.getInt("turn") + "-" + matchSet.getInt("current_timestamp") + "-" + matchSet.getInt("state");
+	            					+ matchSet.getInt("turn") + "-" + matchSet.getString("date") + "-" + matchSet.getInt("Status") + "-" + matchSet.getString("state");
 				if(!first) {
 					result += "&" + match;
 				} else {
 					result += match;
 					first = false;
 				}
-			} while (matchSet.next());
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		if(result.length() == 0) return null;
-		System.out.println("System: Returning turns/matches for user " + substring + ": " + result);
-		return result;
+		if(result.length() == 0) {
+			System.out.println("System: no invites/matches found for user " + substring);
+			return null;
+		} else {
+			System.out.println("System: Returning invites/matches for user " + substring + ": " + result);
+			return result;
+		}
 	}
 		
 	

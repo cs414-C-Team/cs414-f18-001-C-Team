@@ -314,7 +314,9 @@ public class UserProfile extends JFrame {
 						opponent = Integer.parseInt(game[1]);
 					}
 					
-					if(user == Integer.parseInt(game[5])) {
+					if(user == Integer.parseInt(game[3])) {
+						turn = false;
+					} else {
 						turn = true;
 					}
 					model.addElement(new GameListObject(Integer.parseInt(game[0]), Integer.toString(opponent), turn));
