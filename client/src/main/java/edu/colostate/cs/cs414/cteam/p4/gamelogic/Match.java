@@ -369,7 +369,12 @@ public class Match {
 	//Checks if an attack is valid
 	public boolean validAttack(int fromX, int fromY, int toX, int toY) {
 		if((!board[toX][toY].hasCharacter()) || (!board[fromX][fromY].hasCharacter())) {
-			System.out.println("1**");
+			//System.out.println(board[toX][toY].hasCharacter());
+			//System.out.println(board[0][5].hasCharacter());
+			
+			//System.out.println("tox, toy, fromx, fromy" + toX + "," + toY + "," + fromX + "," + fromY);
+
+			//System.out.println("1**");
 			return false;
 		}
 		
