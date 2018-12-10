@@ -6,7 +6,6 @@ import java.net.UnknownHostException;
 
 import edu.colostate.cs.cs414.cteam.p4.gamelogic.Match;
 import edu.colostate.cs.cs414.cteam.p4.gamelogic.MatchController;
-import edu.colostate.cs.cs414.cteam.p4.gamelogic.Turn;
 
 public class ClientController {
 	static ClientController self;
@@ -70,6 +69,11 @@ public class ClientController {
 			return -2;
 		}
 		
+	}
+	
+	public String search(String query) {
+		client.search(query);
+		return client.getMessage();
 	}
 
 	public void sendInvitation(String players) {

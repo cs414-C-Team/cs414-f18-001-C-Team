@@ -90,7 +90,7 @@ public class Client{
 	public void login(String username, String password) {if(open)out.println("5" + username + "-" + password); }
 	public void getMatch(String matchID) {if(open)out.println("6" + matchID);}
 	public void getLatestMatchID() {if(open)out.println("7");}
-	//public void getCurrentMatches() {if(open)out.println("8");}
+	public void search(String query) {if(open)out.println("8" + query);}
 	public void queryGames(String user) {if(open)out.println("9" + user);}
 
 		

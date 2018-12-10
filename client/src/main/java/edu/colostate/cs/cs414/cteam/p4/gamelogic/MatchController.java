@@ -20,6 +20,7 @@ public class MatchController {
 	}
 	
 	public String getMatchString() {
+		System.out.print(current_match.toString());
 		return current_match.toString();
 	}
 	

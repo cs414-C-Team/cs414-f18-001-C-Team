@@ -1,20 +1,22 @@
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import edu.colostate.cs.cs414.cteam.p4.gamelogic.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.util.Pair;
 
 class MatchTest {
-	/*
-	Tile[][] board;
-	Match m;
+/*
+	//Tile[][] board;
+	//Match m;
 	
 	@BeforeEach
 	final void initializeMatch() {
-		m = new Match();
-		board = m.getBoard();
+		Match m1 = new Match(12, 1, 2);
+		m1.createBoard();
+		String []= 
 	}
 	
 	@Test
@@ -182,6 +184,6 @@ class MatchTest {
 		assertFalse(m.validAttack(new Pair<Integer, Integer>(1,8), new Pair<Integer, Integer>(0,8)));
 	} 
 
-	*/
+*/
 	
 }
