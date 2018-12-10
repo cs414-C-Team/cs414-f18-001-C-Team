@@ -215,11 +215,8 @@ public class UserProfile extends JFrame {
 		searchButton.setFont(new Font("Dialog", Font.PLAIN, 12));
 		searchButton.setBounds(362, 69, 81, 25);
 		panel_1.add(searchButton);
-		searchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				search();
-			}
-		});
+		searchButton.addActionListener(new searchListener());
+		userSearchField.addActionListener(new searchListener());
 	
 		userList = new JList<String>();
 		userList.setFont(new Font("Dialog", Font.PLAIN, 14));
@@ -457,18 +454,23 @@ public class UserProfile extends JFrame {
 		}
 	}
 	
-	public void search() {
-		String query = userSearchField.getText();
-		String results = controller.search(query);
-		users = results.split("&");
-		
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		for (int i = 0; i < users.length; i++) {
-				model.addElement(users[i]);
+	public class searchListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			String query = userSearchField.getText();
+			String results = controller.search(query);
+			users = results.split("&");
+			DefaultListModel<String> model = new DefaultListModel<String>();
+
+			if (!users[0].equals(" ")) {
+				for (int i = 0; i < users.length; i++) {
+						model.addElement(users[i]);
+				}
+			}
+			userList.setModel(model);
+			scrollPane1.setViewportView(userList);		
 		}
-		userList.setModel(model);
-		scrollPane1.setViewportView(userList);
 	}
+	
 }
 
 	
