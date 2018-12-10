@@ -1,8 +1,14 @@
 package edu.colostate.cs.cs414.cteam.p4.view;
 
 public class ClientListener{
-	boolean status = false;
-	String message = "";
+	
+	private volatile boolean status;
+	private String message;
+	
+	public ClientListener() {
+		status = false;
+		message = "";
+	}
 	
 	public void unknownHost() {
 		

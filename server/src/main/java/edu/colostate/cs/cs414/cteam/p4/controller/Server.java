@@ -63,7 +63,10 @@ public class Server{
 												return;
 											}
 										}
-									}catch(Exception exception){ exception.printStackTrace(); }
+									} catch(java.net.BindException e) {  
+									} catch (Exception e) {
+										e.printStackTrace(); 
+									}
 									try{ s.close();
 									}catch(Exception exception){ exception.printStackTrace(); }
 									clients.remove(s);

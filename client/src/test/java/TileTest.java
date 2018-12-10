@@ -3,10 +3,10 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-
+import edu.colostate.cs.cs414.cteam.p4.gamelogic.*;
 
 class TileTest {
-	/*
+	
 	
 	GamePiece piece1 = new GamePiece(0,0,PieceType.RAT ,1);
 	Tile T= new Tile(TileType.BLANK,piece1);
@@ -41,8 +41,8 @@ class TileTest {
 	@Test
 	final void testToString() {
 		System.out.println(T.toString());
-		assertTrue(T.toString().equals("R"));
+		assertTrue(T.toString().equals("r"));
 	}
-	*/
+	
 
 }

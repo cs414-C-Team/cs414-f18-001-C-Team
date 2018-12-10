@@ -169,6 +169,11 @@ public class Database {
 				"INSERT INTO jungle.Invites (Sender, Receiver) VALUES ('%1$d', '%2$d');", sender, receiver);
 		return alter(update);
 	}
+	
+	public ResultSet searchUsers(String search) throws SQLException {
+		String query = "SELECT Username FROM jungle.Users WHERE Username LIKE '%" + search + "%';";
+		return sendQuery(query);
+	}
 
 	public ResultSet receivedInvites(int user) throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$d';", user);
@@ -281,8 +286,35 @@ public class Database {
 		String query = "SELECT * FROM jungle.Match_Record;";
 		return sendQuery(query);
 	}
+		
 	
-	public ResultSet retrieveMatch(String matchID) throws SQLException {
+	public ResultSet winHistory(String username) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Match_Record WHERE Winner = '%1$s';", username);
+		return sendQuery(query);
+	}
+	
+	public int wins(String username) throws SQLException {
+		ResultSet rs = winHistory(username);
+		if(!rs.first())
+			return 0;
+		rs.last();
+		return rs.getRow();
+	}
+	
+	public ResultSet lossHistory(String username) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Match_Record WHERE Loser = '%1$s';", username);
+		return sendQuery(query);
+	}
+	
+	public int losses(String username) throws SQLException {
+		ResultSet rs = lossHistory(username);
+		if(!rs.first())
+			return 0;
+		rs.last();
+		return rs.getRow();
+	}
+
+  public ResultSet retrieveMatch(String matchID) throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Match_State WHERE GameID = '%1$s';", matchID);
 		return sendQuery(query);
 	}

@@ -71,6 +71,11 @@ public class ClientController {
 		}
 		
 	}
+	
+	public String search(String query) {
+		client.search(query);
+		return client.getMessage();
+	}
 
 	public void sendInvitation(String players) {
 		client.sendInvitation(players);
