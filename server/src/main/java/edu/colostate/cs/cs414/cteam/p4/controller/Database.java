@@ -50,13 +50,13 @@ public class Database {
 	 */
 
 	public ResultSet sendQuery(String search) throws SQLException {
-		//System.out.println(search);
+		System.out.println("DB query:" + search);
 		Statement stQuery = conn.createStatement();
 		return stQuery.executeQuery(search);
 	}
 
 	public int update(String update) throws SQLException {
-		//System.out.println(update);
+		System.out.println("DB update: " + update);
 		Statement stUpdate = conn.createStatement();
 		return stUpdate.executeUpdate(update);
 	}
@@ -84,7 +84,7 @@ public class Database {
 				"               Turn int not null,\r\n" +
 				"				State varchar(300) not null,\r\n" + 
 				"               Status int,\r\n" +
-				"				createTS Timestamp not null default current_timestamp,\r\n" + 
+				"				date varchar(30), not null,\r\n" + 
 				"				Primary Key(GameID)\r\n" + 
 //				"				Constraint Foreign key(User1) references User(id),\r\n" + 
 //				"				Constraint Foreign key(User2) references User(id)\r\n" +    // I couldn't get foreign keys working
@@ -94,8 +94,8 @@ public class Database {
 				"				GameID int NOT NULL UNIQUE,\r\n" + 
 				"				Winner varchar(30) NOT NULL,\r\n" + 
 				"				Loser varchar(30) NOT NULL,\r\n" + 
-				"				foreign key(Winner) references User(Username),\r\n" + 
-				"				foreign key(Loser) references User(Username),\r\n" + 
+				"				foreign key(Winner) references Users(ID),\r\n" + 
+				"				foreign key(Loser) references Users(ID),\r\n" + 
 				"				primary key(GameID)\r\n" + 
 				"				);";
 		update(create);
@@ -103,9 +103,13 @@ public class Database {
 				"				Sender varchar(30) ,\r\n" + 
 				"				Receiver varchar(30) ,\r\n" + 
 				"				Status varchar(30) ,\r\n" + 
-				"				foreign key(Sender) references User(Username),\r\n" + 
-				"				foreign key(Receiver) references User(Username)\r\n" + 
+				"				foreign key(Sender) references Users(ID),\r\n" + 
+				"				foreign key(Receiver) references Users(ID)\r\n" + 
 				"				);";
+		update(create);
+		create = "INSERT INTO jungle.Users VALUES (admin@admin.com, admin, 999, );";
+		update(create);
+		create = "INSERT INTO jungle.Users VALUES (test@test.com, test, 3, );";
 		update(create);
 	}
 	
@@ -173,6 +177,7 @@ public class Database {
 
 	public ResultSet receivedInvites(int user) throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Invites WHERE Receiver = '%1$d';", user);
+		System.out.println("DB: Sending query: " + query);
 		return sendQuery(query);
 	}
 
@@ -187,10 +192,22 @@ public class Database {
 		return alter(update);
 	}
 		
-	public boolean storeGame(int id, int player1, int player2, int currentPlayer, String state, int status) {
-		String update = String.format("INSERT INTO jungle.Match_State (GameID, User1, User2, Turn, State, Status) " +
-				 				       "VALUES ('%1$d', '%2$d', '%3$d', '%4$d', '%5$s', '%6$d');", 
-				 				         id, player1, player2, currentPlayer, state, status);
+	public boolean storeGame(int id, int player1, int player2, int currentPlayer, String date, String state, int status) {
+		try {
+			if(sendQuery(String.format("SELECT * FROM jungle.Match_State WHERE GameID = '%1$d'", id)).next() == true) {
+				String update = String.format("REPLACE INTO jungle.Match_State (GameID, User1, User2, Turn, Date, State, Status) " +
+	 				       "VALUES ('%1$d', '%2$d', '%3$d', '%4$d', '%5$s','%6$s', '%7$d');", 
+	 				         id, player1, player2, currentPlayer, date, state, status);
+				return alter(update);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String update = String.format("INSERT INTO jungle.Match_State (GameID, User1, User2, Turn, date, State, Status) " +
+				 				       "VALUES ('%1$d', '%2$d', '%3$d', '%4$d', '%5$s','%6$s', '%7$d');", 
+				 				         id, player1, player2, currentPlayer, date, state, status);
 		return alter(update);
 	}
 
@@ -245,7 +262,7 @@ public class Database {
 		return sendQuery(query);
 	}
 	
-	public ResultSet allFinihedMatches() throws SQLException {
+	public ResultSet allFinishedMatches() throws SQLException {
 		String query = "SELECT * FROM jungle.Match_State WHERE State = 'finished';";
 		return sendQuery(query);
 	}
@@ -269,8 +286,7 @@ public class Database {
 		String query = "SELECT * FROM jungle.Match_Record;";
 		return sendQuery(query);
 	}
-	
-	
+		
 	
 	public ResultSet winHistory(String username) throws SQLException {
 		String query = String.format("SELECT * FROM jungle.Match_Record WHERE Winner = '%1$s';", username);
@@ -296,5 +312,10 @@ public class Database {
 			return 0;
 		rs.last();
 		return rs.getRow();
+	}
+
+  public ResultSet retrieveMatch(String matchID) throws SQLException {
+		String query = String.format("SELECT * FROM jungle.Match_State WHERE GameID = '%1$s';", matchID);
+		return sendQuery(query);
 	}
 }

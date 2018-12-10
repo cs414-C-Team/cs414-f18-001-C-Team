@@ -83,10 +83,11 @@ public class ClientController {
 	}
 	
 	public void launchGame(final int user) {
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                gw = new GameWindow(self, user);
+                gw = new GameWindow(self, user );
                 gw.display();
             }
         });
@@ -114,6 +115,8 @@ public class ClientController {
 	
 	public void startMatch() {
 		match_control.startMatch();
+		client.storeMatch(match_control.getMatchString());
+		client.getMessage();
 	}
 	
 	public int getActivePlayer() {
@@ -133,9 +136,11 @@ public class ClientController {
 		return match_control.processMove(fromX, fromY, toX, toY, player);
 	}
 	
-	public void submitTurn() {
-		client.submitTurn(match_control.getMatchString());
-		client.getMessage();
+	public void submitTurn(int currentplayer) {
+		if(currentplayer == match_control.getActivePlayer()) {
+			client.submitTurn(match_control.getMatchString());
+			client.getMessage();
+		}
 	}
 
 	public String queryGames(int user) {
@@ -145,8 +150,10 @@ public class ClientController {
 		long startTime = System.currentTimeMillis(); //fetch starting time
 		while(cltl.inputStatus() == false) {
 			if((System.currentTimeMillis()-startTime)>10000) {
-				System.out.println("ClientController:ERROR: turn retrieval timed out.");
-				return "";
+				if(cltl.inputStatus() != true) {
+					System.out.println("ClientController:ERROR: turn retrieval timed out.");
+					return "";
+				}
 			} 
 		}
 		
@@ -167,6 +174,11 @@ public class ClientController {
 		if(result != null) {
 			System.out.println("Retrieved match: " + result );
 			match_control.loadMatch(result);
+			
+			if(match_control.getStatus() == 0) {
+			} else if (match_control.getStatus() == 1111) {
+				match_control.startMatch();
+			}
 			return true;
 		}
 		

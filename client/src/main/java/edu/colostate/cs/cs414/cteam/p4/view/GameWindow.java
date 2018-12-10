@@ -24,6 +24,7 @@ public class GameWindow {
 	
 	/** Game components **/
 	private int currentPlayer;
+	private boolean isPlayersTurn;
 	private boolean moveInProgress;
 	private int fromX;
 	private int fromY;
@@ -36,6 +37,7 @@ public class GameWindow {
 	public GameWindow(ClientController controller, int user) {
 		this.controller = controller;
 		this.currentPlayer = user;
+		isPlayersTurn = false;
 		moveInProgress = false;
 		profile = new UserProfile(this, controller, user);		
 		startFrame();
@@ -114,10 +116,12 @@ public class GameWindow {
         returnBurron.addActionListener(new ReturnButtonListener());
         frame.getContentPane().add(cards);
         
+        
         submitTurnButton.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
     			/* handle submit turn */
+        		controller.submitTurn(currentPlayer);
 				message.setText("It's " + opponent + "'s Turn");
 				submitTurnButton.setEnabled(false);
 //        		if (turn_result != 0) {   // win
@@ -180,7 +184,7 @@ public class GameWindow {
 		default_setup[4] = "d111";
 		default_setup[5] = "d257";
 		default_setup[6] = "c151";
-		default_setup[7] = "c271";
+		default_setup[7] = "c217";
 		default_setup[8] = "r102";
 		default_setup[9] = "r266";
 		default_setup[10] = "h122";
@@ -198,6 +202,7 @@ public class GameWindow {
 		if(controller.retrieveGame(matchID)) {
 			String[] positions = controller.getPositions();
 			this.currentPlayer = controller.getActivePlayer();
+			System.out.println("Current player : " + this.currentPlayer);
 			
 			String[] players = controller.getPlayers().split("-");
 			if(user == Integer.parseInt(players[0])) {
@@ -206,11 +211,17 @@ public class GameWindow {
 				this.opponent = Integer.parseInt(players[0]);
 			}
 	        
-			message.setText("Player " + currentPlayer + ": Make a move");
-			if (currentPlayer == 1) {
+			System.out.println("Current Player = " + this.currentPlayer + ", User = " + user);
+			if(user == this.currentPlayer) {
+				isPlayersTurn = true;
+				message.setText("Your Turn!");
 				message.setForeground(new Color(226, 34, 34));
+
 			} else {
+				message.setText("Opponents Turn!");
+				isPlayersTurn = false;
 				message.setForeground(new Color(42, 91, 224));
+
 			}
 			
 			clearBoard();	
@@ -334,6 +345,12 @@ public class GameWindow {
 			tiles[startY][startX].clear();
 			tiles[toY][toX].setPiece(animal);
 			System.out.println("success");
+			
+			if (result != 0) {
+				message.setForeground(new Color(51,51,51));
+				message.setText("Player " + result + " wins!");
+				currentPlayer = 0;
+			/*
 			if(result == 1111) {
 				message.setForeground(new Color(51,51,51));
 				message.setText("Game not started yet.");
@@ -350,6 +367,9 @@ public class GameWindow {
 				}
 				message.setText("Player " + currentPlayer + ": Make a move");
 			}
+			*/
+			}
+			
 			
 		} else {
 			System.out.println("move failed");
